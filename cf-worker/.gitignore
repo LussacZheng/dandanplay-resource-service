@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# https://github.com/cloudflare/wrangler/issues/1046
+worker/
+
