@@ -4,13 +4,13 @@
  * @param {String} templateStr
  * Use `${KEY}` as placeholder, use `\${KEY}` if in `template literals`
  * @param {Object<string,string>} payload
- * Corresponding to `templateStr`, pass `{ KEY:'VALUE'}`
+ * Corresponding to `templateStr`, pass `{ KEY: 'VALUE' }`
  * @example
  * const templateStr = 'python.org/${str1}/${str2}/python-${str2}.exe'
- * const payload = {str1: 'ftp/python',str2: '3.8.2'}
+ * const payload = { str1: 'ftp/python', str2: '3.8.2' }
  * let result = template(templateStr, payload)
+ * result === 'python.org/ftp/python/3.8.2/python-3.8.2.exe'
  * @return {String}
- * `python.org/ftp/python/3.8.2/python-3.8.2.exe`
  */
 export function template(templateStr, payload) {
   let computed = templateStr.replace(/\$\{(\w+)\}/gi, (match, key) => {

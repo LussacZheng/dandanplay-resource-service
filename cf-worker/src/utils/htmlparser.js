@@ -8,12 +8,13 @@
  *   If `receivers` is empty, directly returns the first captured value.
  * @param {'first' | 'last' | 'all'} whichMatch 'first' default
  * @example
- * let regex = /Latest (Python 3) Release - Python ([\d\.]+)/gim
- * let info = extractInfo(SomeHtmlText, regex, ['name','version'] )
- * info === {name: 'Python 3', version: '3.8.2' }
+ * const html = 'The Latest Python 3 Release - Python 3.8.2 on Feb. 24, 2020'
+ * const regex = /Latest (Python 3) Release - Python ([\d\.]+)/gim
+ * let info = htmlparser(html, regex, ['name', 'version'])
+ * info === { name: 'Python 3', version: '3.8.2' }
  * @return {String | Object<string, string> | Array<Object<string, string>> | null}
  * - returns `null` if nothing matched;
- * - returns `String` if `receivers` is empty;
+ * - returns `String` if `receivers` is empty `[]`;
  * - returns `Object<string, string>` if `whichMatch` != 'all';
  * - returns `Array<Object<string, string>>` if `whichMatch` == 'all'.
  */
@@ -26,6 +27,7 @@ function htmlparser(html, regex, receivers, whichMatch = 'first') {
     default:
       return getFirstMatch(html, regex, receivers)
   }
+  // don't forget to `break` in `switch-case` if returns here
 }
 
 /**
@@ -43,7 +45,6 @@ function getFirstMatch(html, regex, receivers) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec
   regex.lastIndex = 0
 
-  // console.log(result)
   return result === null ? null : load(result, receivers)
 }
 

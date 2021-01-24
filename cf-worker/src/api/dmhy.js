@@ -158,7 +158,7 @@ function extractList(html) {
 }
 
 /**
- *
+ * Extract item info from a single HTML element
  * @param {String} element
  * @returns {Object<string, number | string>}
  */
