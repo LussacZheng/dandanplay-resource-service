@@ -7,11 +7,14 @@ API implementations for "dandanplay" resource search service.
 
 由于暂未实现 [缓存机制](https://developers.cloudflare.com/workers/runtime-apis/cache) ，且 Cloudflare Workers 免费版账户有每日 100,000 的请求次数限制，目前暂不提供演示站点。可以自行部署体验。
 
-### 部署到 Cloudflare Workers
+### 部署
 
-复制 [`worker.js`](https://pastebin.ubuntu.com/p/7Zvtzxxhc9/) 内容到 [workers.dev 脚本编辑页面](https://dash.cloudflare.com/) 中，部署即可。
+> - 注册一个 Cloudflare 免费账户即可部署，**无需 远程服务器 或 常驻任何本地程序** 。
+> - 可在搜索引擎中搜索 "`Cloudflare Workers部署教程`" ，参照进行。
 
-### Development
+复制 [`worker.js`](https://pastebin.ubuntu.com/p/7Zvtzxxhc9/) 内容到 [workers.dev 脚本编辑页面](https://workers.cloudflare.com/) 中，部署即可。
+
+### 开发
 
 若需修改源码，可以依照以下步骤自行生成 `worker.js` :
 
@@ -22,7 +25,7 @@ API implementations for "dandanplay" resource search service.
 
    ```shell
    $ git clone https://github.com/LussacZheng/dandanplay-resource-service.git
-   $ cd cf-worker
+   $ cd dandanplay-resource-service/cf-worker
 
    # 按需修改源码
 
@@ -37,18 +40,18 @@ API implementations for "dandanplay" resource search service.
 
 ..._todo_...
 
-## Node.js
-
-..._maybe_...
-
-## PHP & Python
-
-[Gitee - lianxun/dandan: dandan搜索节点API实现](https://gitee.com/lianxun/dandan)
-
 ---
 
-## References
+## 相关项目
 
-1. API Specification: [弹弹play资源搜索节点API规范](https://github.com/kaedei/dandanplay-libraryindex/blob/master/api/ResourceService.md)
-1. [关于“资源搜索”功能即将下线的通知](https://mp.weixin.qq.com/s/0xzIJX2LWnncc2YKpe6sfw)
-2. [资源搜索相关问题的解答](https://mp.weixin.qq.com/s/OSsk6tuj4lXMcKq2S4s1Kg)
+### Python & PHP
+
+- https://pastebin.ubuntu.com/p/mGP7JRpBtd/
+- [lianxun/dandan - Gitee](https://gitee.com/lianxun/dandan)
+- https://support.qq.com/products/104929/post/161035286010443896/
+
+## 参考资料
+
+1. **API Specification** - [弹弹play资源搜索节点API规范](https://github.com/kaedei/dandanplay-libraryindex/blob/master/api/ResourceService.md)
+2. [关于“资源搜索”功能即将下线的通知](https://mp.weixin.qq.com/s/0xzIJX2LWnncc2YKpe6sfw)
+3. [资源搜索相关问题的解答](https://mp.weixin.qq.com/s/OSsk6tuj4lXMcKq2S4s1Kg)
