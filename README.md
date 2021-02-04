@@ -14,7 +14,7 @@ API implementations for "dandanplay" resource search service.
 > - 注册一个 Cloudflare 免费账户即可部署，**无需 远程服务器 或 常驻任何本地程序** 。
 > - 可在搜索引擎中搜索 "`Cloudflare Workers部署教程`" ，参照进行。
 
-复制 [`worker.js`](https://pastebin.ubuntu.com/p/7Zvtzxxhc9/) 内容到 [workers.dev 脚本编辑页面](https://workers.cloudflare.com/) 中，部署即可。
+复制 [`worker.js`](https://github.com/LussacZheng/dandanplay-resource-service/blob/dist/cf-worker/worker.js) 内容到 [workers.dev 脚本编辑页面](https://workers.cloudflare.com/) 中，部署即可。
 
 ### 开发
 
