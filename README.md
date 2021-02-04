@@ -1,5 +1,8 @@
 # dandanplay-resource-service
 
+![GitHub release](https://img.shields.io/github/v/release/LussacZheng/dandanplay-resource-service?include_prereleases&label=version&color=important)
+[![GitHub All Releases](https://img.shields.io/github/downloads/LussacZheng/dandanplay-resource-service/total?logo=github&color=green)](https://github.com/LussacZheng/dandanplay-resource-service/releases)
+
 API implementations for "dandanplay" resource search service.  
 [弹弹play](http://www.dandanplay.com/) 资源搜索节点的 API 实现。
 
