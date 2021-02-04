@@ -1,7 +1,9 @@
 # dandanplay-resource-service
 
 API implementations for "dandanplay" resource search service.  
-[弹弹play](http://www.dandanplay.com/) 资源搜索节点 API 实现。
+[弹弹play](http://www.dandanplay.com/) 资源搜索节点的 API 实现。
+
+提供基于 **Cloudflare Workers** 和 **Golang** 的两种实现。
 
 ## Cloudflare Workers
 
@@ -38,7 +40,61 @@ API implementations for "dandanplay" resource search service.
 
 ## Golang
 
-..._todo_...
+### 部署
+
+从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件，运行即可。
+
+
+### 运行
+
+```shell
+$ dandanplay-resource-service -h
+API implementations for "dandanplay" resource search service, in Golang.
+
+Usage:
+  dandanplay-resource-service [flags]
+
+Flags:
+  -h, --help           help for dandanplay-resource-service
+  -H, --host string    Listen address for the API, such as "127.0.0.1", "0.0.0.0", or "localhost"
+  -P, --port string    Listen address for the API (default "8080")
+  -x, --proxy string   Proxy address for web scraper, "http" and "socks5" are supported
+  -V, --version        Print the version number of dandanplay-resource-service
+```
+
+例如：
+
+```shell
+# 无参数，默认运行在 0.0.0.0:8080 (Windows 为 "localhost:8080")
+$ dandanplay-resource-service
+
+# 自定义端口 和 代理地址(可省略 "http://")
+$ dandanplay-resource-service -P 9000 -x 127.0.0.1:10809
+
+# 运行在 34543 端口并暴露服务到公网
+$ dandanplay-resource-service -H 0.0.0.0 -P 34543
+```
+
+访问根路径可以看到简易的测试页面。
+
+### 开发
+
+若需修改源码或自行编译，需要 [Go 语言](https://golang.google.cn/) 开发环境。
+
+```shell
+$ git clone https://github.com/LussacZheng/dandanplay-resource-service.git
+$ cd dandanplay-resource-service/golang
+
+# go env -w GO111MODULE=on
+# go env -w GOPROXY=https://goproxy.cn,direct
+
+# 直接编译
+$ go build
+
+# 优化可执行文件大小
+$ go build -ldflags="-s -w"
+$ upx --lzma --best dandanplay-resource-service.exe
+```
 
 ---
 
@@ -55,3 +111,13 @@ API implementations for "dandanplay" resource search service.
 1. **API Specification** - [弹弹play资源搜索节点API规范](https://github.com/kaedei/dandanplay-libraryindex/blob/master/api/ResourceService.md)
 2. [关于“资源搜索”功能即将下线的通知](https://mp.weixin.qq.com/s/0xzIJX2LWnncc2YKpe6sfw)
 3. [资源搜索相关问题的解答](https://mp.weixin.qq.com/s/OSsk6tuj4lXMcKq2S4s1Kg)
+
+---
+
+## Contributing
+
+Issues, pull requests, and discussions are always welcome.
+
+## License
+
+This project is licensed under the [Apache-2.0 License](./LICENSE).

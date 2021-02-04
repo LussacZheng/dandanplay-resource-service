@@ -1,0 +1,9 @@
+# Binaries
+.dist/*
+!.dist/build.cmd
+dandanplay-resource-service*
+*.exe
+
+# Content:
+#   @go run main.go %*
+main.cmd
