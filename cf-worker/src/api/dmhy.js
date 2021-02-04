@@ -17,7 +17,8 @@ const REGEX = {
   Subgroups: /<option value="(\d+)">(.+?)<\/option>/gim,
 
   // <option value="31" style="color: red">季度全集</option>
-  Types: /<option value="(\d+)" style="color: \w+">(.+?)<\/option>/gim,
+  // or: <option value="9" style="color: #0eb9e7">遊戲</option>
+  Types: /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
 
   List: {
     // <a href="/topics/list/page/2?keyword=xxx">下一頁</a>
@@ -132,7 +133,7 @@ function extractTypes(html) {
   types.unshift({ Id: 0, Name: '全部' })
 
   // uncomment to return the ordered array
-  types.sort((a, b) => a['Id'] - b['Id'])
+  // types.sort((a, b) => a['Id'] - b['Id'])
 
   return types
 }
