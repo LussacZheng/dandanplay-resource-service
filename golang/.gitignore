@@ -1,6 +1,6 @@
 # Binaries
 .dist/*
-!.dist/build.cmd
+!.dist/build.*
 dandanplay-resource-service*
 *.exe
 
