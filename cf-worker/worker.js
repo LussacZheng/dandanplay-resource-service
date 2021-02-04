@@ -120,7 +120,7 @@
         unknown_subgroup_name: '未知字幕组',
       },
       l = /<option value="(\d+)">(.+?)<\/option>/gim,
-      d = /<option value="(\d+)" style="color: \w+">(.+?)<\/option>/gim,
+      d = /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
       p = {
         HasMore: /下一頁/g,
         Resources: /<tr class="">(.*?)<\/tr>/gis,
@@ -208,12 +208,7 @@
     }
     function f(e) {
       let t = o(e, d, ['Id', 'Name'], 'all')
-      return (
-        t.forEach(e => (e.Id = parseInt(e.Id))),
-        t.unshift({ Id: 0, Name: '全部' }),
-        t.sort((e, t) => e.Id - t.Id),
-        t
-      )
+      return t.forEach(e => (e.Id = parseInt(e.Id))), t.unshift({ Id: 0, Name: '全部' }), t
     }
     const y = e => t => t.method.toLowerCase() === e.toLowerCase(),
       m = y('connect'),
