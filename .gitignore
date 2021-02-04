@@ -1,1 +1,6 @@
+# Editor
+.vscode
+.idea
+
+# Test
 .test*

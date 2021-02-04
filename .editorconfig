@@ -13,9 +13,12 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{js,mjs,jsx,ts,tsx}]
+[*.{js,json,mjs,jsx,ts,tsx}]
 indent_size = 2
 max_line_length = 100
+
+[*.go]
+indent_style = tab
 
 [*.{bat,cmd}]
 end_of_line = crlf
