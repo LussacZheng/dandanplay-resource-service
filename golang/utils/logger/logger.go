@@ -5,25 +5,21 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/gookit/color"
+	"dandanplay-resource-service/utils/colorize"
 )
 
 var (
-	infoColor, warnColor, errorColor    color.Style
 	infoLogger, warnLogger, errorLogger *log.Logger
 )
 
 func init() {
-	infoColor = color.New(color.FgGreen)
-	warnColor = color.New(color.FgRed, color.OpBold)
-	errorColor = color.New(color.FgRed)
-
-	infoLogger = log.New(os.Stderr, infoColor.Sprint("[API]")+" ", log.Ldate|log.Ltime)
-	warnLogger = log.New(os.Stderr, warnColor.Sprint("[API]")+" ", log.Ldate|log.Ltime)
-	errorLogger = log.New(os.Stderr, errorColor.Sprint("[API]")+" ", log.Ldate|log.Ltime)
+	// or infoLogger = log.New(os.Stderr, replace("{{[API]}} ", &colorize.Info), log.Ldate|log.Ltime)
+	infoLogger = log.New(os.Stderr, colorize.Info.Sprint("[API]")+" ", log.Ldate|log.Ltime)
+	warnLogger = log.New(os.Stderr, colorize.Warn.Sprint("[API]")+" ", log.Ldate|log.Ltime)
+	errorLogger = log.New(os.Stderr, colorize.Error.Sprint("[API]")+" ", log.Ldate|log.Ltime)
 }
 
-func replace(format string, style *color.Style) (colorized string) {
+func replace(format string, style *colorize.Style) (colorized string) {
 	reg, err := regexp.Compile("{{(.*?)}}")
 	if err != nil {
 		panic(err)
@@ -34,18 +30,18 @@ func replace(format string, style *color.Style) (colorized string) {
 
 // Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
 func Infof(format string, v ...interface{}) {
-	format = replace(format, &infoColor)
+	format = replace(format, &colorize.Info)
 	infoLogger.Printf(format, v...)
 }
 
 // Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
 func Warnf(format string, v ...interface{}) {
-	format = replace(format, &infoColor)
+	format = replace(format, &colorize.Warn)
 	warnLogger.Printf(format, v...)
 }
 
 // Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
 func Errorf(format string, v ...interface{}) {
-	format = replace(format, &errorColor)
+	format = replace(format, &colorize.Error)
 	errorLogger.Printf(format, v...)
 }

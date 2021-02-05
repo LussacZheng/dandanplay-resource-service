@@ -15,7 +15,6 @@ import (
 
 var (
 	isVersion bool
-	cfgFile   string
 )
 
 var rootCmd = &cobra.Command{

@@ -2,18 +2,18 @@ package colorize
 
 import "github.com/gookit/color"
 
-type colorStyle color.Style
+type Style color.Style
 
 var (
-	Info  = colorStyle(color.New(color.FgGreen))
-	Warn  = colorStyle(color.New(color.FgRed, color.OpBold))
-	Error = colorStyle(color.New(color.FgRed))
+	Info  = Style(color.New(color.FgGreen))
+	Warn  = Style(color.New(color.FgRed, color.OpBold))
+	Error = Style(color.New(color.FgRed))
 
-	Name     = colorStyle(color.New(color.FgCyan, color.OpBold))
-	Version  = colorStyle(color.New(color.FgYellow))
-	Emphasis = colorStyle(color.New(color.FgGreen, color.OpUnderscore))
+	Name    = Style(color.New(color.FgCyan, color.OpBold))
+	Version = Style(color.New(color.FgYellow))
+	//Emphasis = Style(color.New(color.FgGreen, color.OpUnderscore))
 )
 
-func (c colorStyle) Sprint(a ...interface{}) string {
+func (c Style) Sprint(a ...interface{}) string {
 	return color.Style(c).Sprint(a...)
 }
