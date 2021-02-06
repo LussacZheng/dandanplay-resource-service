@@ -110,7 +110,15 @@ func GenerateList(c *gin.Context) {
 	if err != nil {
 		logger.Errorf("{{Failed when binding query string.}} %v\n", err)
 	}
+
 	query.Keyword = url.QueryEscape(query.Keyword)
+	if query.Team < 0 {
+		query.Team = 0
+	}
+	if query.Sort < 0 {
+		query.Sort = 0
+	}
+
 	list, err := getList(&query)
 	c.JSON(getStatus(err), list)
 }

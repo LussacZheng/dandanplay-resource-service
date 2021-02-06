@@ -105,11 +105,13 @@ async function generateType() {
  */
 async function generateList(request) {
   const params = new URL(encodeURI(request.url)).searchParams
+  const type = params.get('type') || 0
+  const subgroup = params.get('subgroup') || 0
   const fetchURL = encodeURI(
     template(DMHY.list_url, {
       keyword: params.get('keyword'),
-      type: params.get('type') || 0,
-      subgroup: params.get('subgroup') || 0,
+      type: type < 0 ? 0 : type,
+      subgroup: subgroup < 0 ? 0 : subgroup,
     }),
   )
 
