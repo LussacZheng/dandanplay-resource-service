@@ -2,6 +2,7 @@ package dmhy
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 
@@ -105,7 +106,11 @@ func GenerateSubgroup(c *gin.Context) {
 
 func GenerateList(c *gin.Context) {
 	var query listQuery
-	_ = c.ShouldBindQuery(&query)
+	err := c.ShouldBindQuery(&query)
+	if err != nil {
+		logger.Errorf("{{Failed when binding query string.}} %v\n", err)
+	}
+	query.Keyword = url.QueryEscape(query.Keyword)
 	list, err := getList(&query)
 	c.JSON(getStatus(err), list)
 }
