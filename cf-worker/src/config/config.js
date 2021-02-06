@@ -17,6 +17,16 @@ export const ResInitJson = {
  * @readonly
  * @type {ResponseInit}
  */
+export const ResInitHtml = {
+  headers: {
+    'content-type': 'text/html;charset=utf-8',
+  },
+}
+
+/**
+ * @readonly
+ * @type {ResponseInit}
+ */
 export const ResInitText = {
   headers: {
     'content-type': 'text/plain;charset=utf-8',

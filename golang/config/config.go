@@ -19,8 +19,39 @@ const HtmlStringIndex = `
     <title>弹弹play资源搜索节点API</title>
     <style>
       body {
-        padding: 1em;
+        padding: 0 1.5em 3em;
       }
+
+      p,
+      span,
+      li {
+        margin: 0.5em;
+        color: dimgrey;
+      }
+
+      a {
+        text-decoration: none;
+        color: cadetblue;
+      }
+      a:hover {
+        color: dodgerblue;
+      }
+
+      h1 > a {
+        font-size: 1.5em;
+      }
+      h1 > span a {
+        color: dimgrey;
+        font-size: 1em;
+      }
+      h1 > span a:hover {
+        color: grey;
+      }
+
+      p {
+        font-size: 2em;
+      }
+
       ul {
         list-style: none;
       }
@@ -31,19 +62,7 @@ const HtmlStringIndex = `
       }
       li {
         word-break: break-all;
-      }
-      li,
-      p {
-        margin: 0.5em;
-        font-size: 2em;
-        color: dimgrey;
-      }
-      a {
-        text-decoration: none;
-        color: cadetblue;
-      }
-      a:hover {
-        color: dodgerblue;
+        font-size: 1.5em;
       }
 
       li#clip * {
@@ -54,7 +73,7 @@ const HtmlStringIndex = `
         height: 2em;
         margin: 0 1em;
         border-width: 0;
-        border-radius: 0.3em;
+        border-radius: 1em;
         background: #1e90ff;
         cursor: pointer;
         outline: none;
@@ -67,12 +86,33 @@ const HtmlStringIndex = `
       button:hover {
         background: #5599ff;
       }
+
+      .success {
+        color: #28a745;
+      }
+      .empty {
+        color: #ffc107;
+      }
+      .fail {
+        color: #dc3545;
+      }
     </style>
   </head>
 
   <body>
+    <h1>
+      <a href="https://github.com/LussacZheng/dandanplay-resource-service"
+        >dandanplay-resource-service</a
+      >
+      <span>
+        <i
+          ><a href="https://github.com/LussacZheng/dandanplay-resource-service/releases">v0.0.1</a>
+          (go-impl)</i
+        ></span
+      >
+    </h1>
     <div>
-      <p>资源搜索节点地址：</p>
+      <p>资源搜索节点地址</p>
       <ul>
         <li id="clip">
           <a href="/" id="uri">/</a>
@@ -89,14 +129,38 @@ const HtmlStringIndex = `
       </ul>
     </div>
     <div>
-      <p>测试链接：</p>
+      <p>测试链接</p>
       <ul>
         <li>
+          <span class="success">仅搜索词：</span>
           <a href="/list?keyword=fate" target="_blank">/list?keyword=fate</a>
         </li>
         <li>
+          <span class="success">字幕组和类型：</span>
           <a href="/list?keyword=fate&subgroup=619&type=2&r=1234321" target="_blank"
             >/list?keyword=fate&subgroup=619&type=2&r=1234321</a
+          >
+        </li>
+        <li>
+          <span class="empty">无结果：</span>
+          <a href="/list?keyword=abcdefghijklmnopqrstuvwxyz" target="_blank"
+            >/list?keyword=abcdefghijklmnopqrstuvwxyz</a
+          >
+        </li>
+        <li>
+          <span class="success">无磁链：</span>
+          <a href="/list?keyword=%E4%BD%A0%E5%A5%BD%E5%AE%89%E5%A6%AE" target="_blank"
+            >/list?keyword=你好安妮</a
+          >
+        </li>
+        <li>
+          <span class="empty">不合法参数1：</span>
+          <a href="/list?keyword=%" target="_blank">/list?keyword=%</a>
+        </li>
+        <li>
+          <span class="success">不合法参数2：</span>
+          <a href="/list?keyword=fate&subgroup=-123&type=-456&r=-1234321" target="_blank"
+            >/list?keyword=fate&subgroup=-123&type=-456&r=-78987</a
           >
         </li>
       </ul>
@@ -105,7 +169,7 @@ const HtmlStringIndex = `
       var e = document.getElementById('uri')
       e.innerHTML = e.href.slice(0, -1)
       function copy() {
-        const input = document.createElement('input')
+        var input = document.createElement('input')
         input.setAttribute('readonly', 'readonly')
         input.setAttribute('value', e.innerHTML)
         document.body.appendChild(input)
