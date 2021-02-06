@@ -8,8 +8,30 @@ const BASE = 'https://share.dmhy.org'
 const DMHY = {
   type_and_subgroup_url: `${BASE}/topics/advanced-search?team_id=0&sort_id=0&orderby=`,
   list_url: `${BASE}/topics/list/page/1?keyword=\${keyword}&sort_id=\${type}&team_id=\${subgroup}&order=date-desc`,
-  unknown_subgroup_id: -1,
-  unknown_subgroup_name: '未知字幕组',
+}
+/**
+ * Return a predefined special value if certain fields failed to parse.
+ *
+ * Note: These "predefined special values" are not officially defined by dandanplay.
+ *       Just some temporary placeholders.
+ */
+const UNKNOWN = {
+  Title: '未能成功解析标题',
+  TypeId: -2,
+  TypeName: '未能成功解析类别',
+  SubgroupId: -1,
+  SubgroupName: '未知字幕组',
+  /**
+   * If some expired resource didn't provide the magnetic link,
+   *   only by returning the string with certain format (with prefix "magnet"),
+   * can the `java.lang.StringIndexOutOfBoundsException` on Android client be avoided.
+   *
+   * For example, try to search "你好安妮"
+   */
+  Magnet: 'magnet_not_found_未能成功解析磁力链接',
+  PageUrl: '未能成功解析资源发布页面',
+  FileSize: '未能成功解析资源大小',
+  PublishDate: '1970-01-05 08:00:00',
 }
 
 const REGEX = {
@@ -109,6 +131,12 @@ async function generateList(request) {
 function extractSubgroups(html) {
   const decodedHtml = html.replace(/&amp;/gi, '&')
   let subgroups = htmlparser(decodedHtml, REGEX.Subgroups, ['Id', 'Name'], 'all')
+
+  // If parsing fails, return an empty array
+  if (subgroups === null) {
+    return []
+  }
+
   subgroups.forEach(item => (item['Id'] = parseInt(item['Id'])))
 
   // duplicate matched strings: '<option value="0">全部</option>'
@@ -127,6 +155,12 @@ function extractSubgroups(html) {
  */
 function extractTypes(html) {
   let types = htmlparser(html, REGEX.Types, ['Id', 'Name'], 'all')
+
+  // If parsing fails, return an empty array
+  if (types === null) {
+    return []
+  }
+
   types.forEach(item => (item['Id'] = parseInt(item['Id'])))
 
   // lost matched string: '<option value="0">全部</option>'
@@ -151,6 +185,12 @@ function extractList(html) {
 
   // Get all research results in `table#topic_list tbody tr`
   const elements = htmlparser(html, REGEX.List.Resources, [], 'all')
+
+  // If there are no search results, return an empty array
+  if (elements === null) {
+    return result
+  }
+
   elements.forEach(e => {
     result.Resources.push(extractListFromElement(e))
   })
@@ -167,24 +207,24 @@ function extractListFromElement(element) {
   const Title = htmlparser(element, REGEX.List.Title, [])
   const TypeId = htmlparser(element, REGEX.List.TypeId, [])
   const TypeName = htmlparser(element, REGEX.List.TypeName, [])
-  const SubgroupId = htmlparser(element, REGEX.List.SubgroupId, []) || DMHY.unknown_subgroup_id
-  const SubgroupName =
-    htmlparser(element, REGEX.List.SubgroupName, []) || DMHY.unknown_subgroup_name
+  const SubgroupId = htmlparser(element, REGEX.List.SubgroupId, [])
+  const SubgroupName = htmlparser(element, REGEX.List.SubgroupName, [])
   const Magnet = htmlparser(element, REGEX.List.Magnet, [])
   const PageUrl = BASE + htmlparser(element, REGEX.List.PageUrl, [])
   const FileSize = htmlparser(element, REGEX.List.FileSize, [])
-  const PublishDate = formatLocaleString(htmlparser(element, REGEX.List.PublishDate, []))
+  const PublishDate = htmlparser(element, REGEX.List.PublishDate, [])
 
   return {
-    Title: Title.trim().replace(REGEX.List.TitleReplacer, '$1'),
-    TypeId: parseInt(TypeId),
-    TypeName,
-    SubgroupId: parseInt(SubgroupId),
-    SubgroupName,
-    Magnet,
-    PageUrl,
-    FileSize,
-    PublishDate,
+    // `htmlparser` may return `null` if parsing fails. If so, give them a default value
+    Title: Title === null ? UNKNOWN.Title : Title.trim().replace(REGEX.List.TitleReplacer, '$1'),
+    TypeId: parseInt(TypeId) || UNKNOWN.TypeId,
+    TypeName: TypeName || UNKNOWN.TypeName,
+    SubgroupId: parseInt(SubgroupId) || UNKNOWN.SubgroupId,
+    SubgroupName: SubgroupName || UNKNOWN.SubgroupName,
+    Magnet: Magnet || UNKNOWN.Magnet,
+    PageUrl: PageUrl === null ? UNKNOWN.PageUrl : BASE + PageUrl,
+    FileSize: FileSize || UNKNOWN.FileSize,
+    PublishDate: PublishDate === null ? UNKNOWN.PublishDate : formatLocaleString(PublishDate),
   }
 }
 

@@ -12,11 +12,9 @@ import (
 )
 
 const (
-	base                = "https://share.dmhy.org"
-	typeAndSubgroupUrl  = base + "/topics/advanced-search?team_id=0&sort_id=0&orderby="
-	listUrl             = base + "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
-	unknownSubgroupId   = -1
-	unknownSubgroupName = "未知字幕组"
+	base               = "https://share.dmhy.org"
+	typeAndSubgroupUrl = base + "/topics/advanced-search?team_id=0&sort_id=0&orderby="
+	listUrl            = base + "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
 )
 
 func newCollector() *colly.Collector {
@@ -63,7 +61,14 @@ func getTypes() (Types, error) {
 		})
 	})
 
-	return types, visit(c, typeAndSubgroupUrl)
+	err := visit(c, typeAndSubgroupUrl)
+
+	// If there are no search results, return an empty slice (empty array in JSON)
+	if types.Types == nil {
+		types.Types = []sort{}
+	}
+
+	return types, err
 }
 
 func getSubgroups() (Subgroups, error) {
@@ -79,7 +84,14 @@ func getSubgroups() (Subgroups, error) {
 		})
 	})
 
-	return subgroups, visit(c, typeAndSubgroupUrl)
+	err := visit(c, typeAndSubgroupUrl)
+
+	// If there are no search results, return an empty slice (empty array in JSON)
+	if subgroups.Subgroups == nil {
+		subgroups.Subgroups = []team{}
+	}
+
+	return subgroups, err
 }
 
 func getList(query *listQuery) (List, error) {
@@ -117,8 +129,8 @@ func getList(query *listQuery) (List, error) {
 			)
 			PageUrl = e.ChildAttr("td:nth-child(3) a:nth-child(2)[href]", "href")
 		} else {
-			SubgroupId = unknownSubgroupId
-			SubgroupName = unknownSubgroupName
+			//SubgroupId = unknown["SubgroupId"].(int)
+			//SubgroupName = unknown["SubgroupName"].(string)
 			Title = titleAndSubgroup[0]
 			PageUrl = e.ChildAttr("td:nth-child(3) a", "href")
 		}
@@ -138,7 +150,7 @@ func getList(query *listQuery) (List, error) {
 			logger.Errorf("{{Failed when formatting time string.}} %v\n", err)
 		}
 
-		list.Resources = append(list.Resources, resource{
+		res := resource{
 			Title:        strings.TrimSpace(Title),
 			TypeId:       TypeId,
 			TypeName:     TypeName,
@@ -148,9 +160,17 @@ func getList(query *listQuery) (List, error) {
 			PageUrl:      base + PageUrl,
 			FileSize:     FileSize,
 			PublishDate:  PublishDate.Format("2006-01-02 15:04:05"),
-		})
-
+		}
+		res.fill()
+		list.Resources = append(list.Resources, res)
 	})
 
-	return list, visit(c, url)
+	err = visit(c, url)
+
+	// If there are no search results, return an empty slice (empty array in JSON)
+	if list.Resources == nil {
+		list.Resources = []resource{}
+	}
+
+	return list, err
 }
