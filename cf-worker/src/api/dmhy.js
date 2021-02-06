@@ -104,7 +104,7 @@ async function generateType() {
  * @param {Request} request
  */
 async function generateList(request) {
-  const params = new URL(request.url).searchParams
+  const params = new URL(encodeURI(request.url)).searchParams
   const fetchURL = encodeURI(
     template(DMHY.list_url, {
       keyword: params.get('keyword'),
