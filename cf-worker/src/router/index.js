@@ -22,7 +22,7 @@ const Host = host => Header('host', host.toLowerCase())
 const Referrer = host => Header('referrer', host.toLowerCase())
 
 const Path = regExp => req => {
-  const url = new URL(req.url)
+  const url = new URL(encodeURI(req.url))
   const path = url.pathname
   const match = path.match(regExp) || []
   return match[0] === path
