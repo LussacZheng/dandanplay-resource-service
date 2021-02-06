@@ -5,7 +5,7 @@ const (
 	ShortDescription = `API implementations for "dandanplay" resource search service.`
 	LongDescription  = `API implementations for "dandanplay" resource search service, in Golang.`
 
-	Version = "0.0.1"
+	Version = "0.0.2"
 )
 
 var Host, Port, Proxy string
@@ -106,7 +106,7 @@ const HtmlStringIndex = `
       >
       <span>
         <i
-          ><a href="https://github.com/LussacZheng/dandanplay-resource-service/releases">v0.0.1</a>
+          ><a href="https://github.com/LussacZheng/dandanplay-resource-service/releases">v0.0.2</a>
           (go-impl)</i
         ></span
       >

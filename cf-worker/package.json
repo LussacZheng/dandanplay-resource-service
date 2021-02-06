@@ -1,6 +1,6 @@
 {
   "name": "dandanplay-resource-service",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "API for 'dandanplay' resource search service, based on Cloudflare Workers.",
   "main": "src/index.js",
   "scripts": {
