@@ -143,7 +143,7 @@
       m = 'magnet_not_found_未能成功解析磁力链接',
       b = '未能成功解析资源发布页面',
       w = '未能成功解析资源大小',
-      _ = '1970-01-05 08:00:00',
+      _ = '1970-01-01 08:00:00',
       v = /<option value="(\d+)">(.+?)<\/option>/gim,
       I = /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
       S = {
