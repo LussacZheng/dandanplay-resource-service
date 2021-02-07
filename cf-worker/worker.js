@@ -150,7 +150,7 @@
         HasMore: /下一頁/g,
         Resources: /<tr class="">(.*?)<\/tr>/gis,
         TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
-        TypeName: /<font color=\w+>(.+)<\/font>/gim,
+        TypeName: /<font color=[\w#]+>(.+)<\/font>/gim,
         SubgroupId: /href="\/topics\/list\/team_id\/(\d+)"/gim,
         SubgroupName: /\s+(.*)<\/a><\/span>/gim,
         Magnet: /href="(magnet:\?xt=urn:btih:.+?)"/gim,
@@ -190,7 +190,7 @@
                   s = o(e, S.SubgroupId, []),
                   i = o(e, S.SubgroupName, []),
                   u = o(e, S.Magnet, []),
-                  c = l + o(e, S.PageUrl, []),
+                  c = o(e, S.PageUrl, []),
                   d = o(e, S.FileSize, []),
                   v = o(e, S.PublishDate, [])
                 return {
