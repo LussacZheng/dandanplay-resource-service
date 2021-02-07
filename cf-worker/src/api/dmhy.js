@@ -31,7 +31,7 @@ const UNKNOWN = {
   Magnet: 'magnet_not_found_未能成功解析磁力链接',
   PageUrl: '未能成功解析资源发布页面',
   FileSize: '未能成功解析资源大小',
-  PublishDate: '1970-01-05 08:00:00',
+  PublishDate: '1970-01-01 08:00:00',
 }
 
 const REGEX = {

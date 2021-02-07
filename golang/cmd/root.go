@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"dandanplay-resource-service/config"
-	"dandanplay-resource-service/rotuers"
+	"dandanplay-resource-service/routers"
 	"dandanplay-resource-service/utils"
 	"dandanplay-resource-service/utils/logger"
 )
@@ -38,27 +38,27 @@ func init() {
 	//rootCmd.PersistentFlags().BoolVarP()
 
 	// Define local flags
-	rootCmd.PersistentFlags().BoolVarP(
+	rootCmd.Flags().BoolVarP(
 		&isVersion, "version", "V", false,
 		fmt.Sprintf("Print the version number of %s", config.Name),
 	)
-	rootCmd.PersistentFlags().StringVarP(&config.Host, "host", "H", "",
+	rootCmd.Flags().StringVarP(&config.Host, "host", "H", "",
 		`Listen address for the API, such as "127.0.0.1", "0.0.0.0", or "localhost"`)
-	rootCmd.PersistentFlags().StringVarP(&config.Port, "port", "P", "8080",
+	rootCmd.Flags().StringVarP(&config.Port, "port", "P", "8080",
 		"Listen address for the API")
-	rootCmd.PersistentFlags().StringVarP(&config.Proxy, "proxy", "x", "",
+	rootCmd.Flags().StringVarP(&config.Proxy, "proxy", "x", "",
 		`Proxy address for web scraper, "http" and "socks5" are supported`)
 }
 
 func rootHandler(cmd *cobra.Command, args []string) {
-	if isVersion == true {
+	if isVersion {
 		utils.PrintVersionInfo()
 		return
 	}
 
 	gin.SetMode(gin.ReleaseMode)
 
-	r := rotuers.InitRouter()
+	r := routers.InitRouter()
 
 	if config.Port != "" {
 		config.Port = ":" + config.Port

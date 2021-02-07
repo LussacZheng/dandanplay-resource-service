@@ -1,4 +1,4 @@
-package rotuers
+package routers
 
 import (
 	"net/http"

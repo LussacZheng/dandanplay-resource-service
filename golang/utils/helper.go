@@ -12,6 +12,7 @@ import (
 	"dandanplay-resource-service/utils/logger"
 )
 
+// PrintVersionInfo prints the version number
 func PrintVersionInfo() {
 	fmt.Printf("%s: version %s . \n%s\n",
 		colorize.Name.Sprint(config.Name),

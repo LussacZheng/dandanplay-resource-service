@@ -10,19 +10,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/**
+ * Use `Error` if the methods are going to be used across different tests.
+ * Use `Fatal` if continuing to run the test can't possibly give you any more
+ *   information useful in debugging.
+ * Using `Error` instead of `Fatal` for each check means your test will always
+ *   run them all and report which ones failed.
+ *
+ * https://stackoverflow.com/questions/24593115/error-vs-fatal-in-tests
+ */
+
 func TestTemplate(t *testing.T) {
 	const (
-		addr        = ":60808"
-		url         = "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
-		expectedUrl = "/topics/list/page/1?keyword=Hello&sort_id=789&team_id=123&order=date-desc"
+		addr     = "localhost:60808"
+		url      = "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
+		expected = "/topics/list/page/1?keyword=Hello&sort_id=789&team_id=123&order=date-desc"
 	)
-	requestUrl := fmt.Sprintf("http://localhost%s/list?keyword=Hello&subgroup=123&type=789&resp=1234321", addr)
+	requestURL := fmt.Sprintf("http://%s/list?keyword=Hello&subgroup=123&type=789&resp=1234321", addr)
 
 	type query struct {
 		Keyword string `form:"keyword"`
 		Team    int    `form:"subgroup"`
 		Sort    int    `form:"type"`
-		Random  string `form:"resp"`
+		Random  string `form:"r"`
 	}
 
 	type respBody struct {
@@ -36,8 +46,7 @@ func TestTemplate(t *testing.T) {
 			_ = c.ShouldBindQuery(&q)
 			result, err := Template(url, q)
 			if err != nil {
-				t.Log(err)
-				t.FailNow()
+				t.Error(err)
 			}
 			c.JSON(200, gin.H{
 				"result": result,
@@ -46,9 +55,9 @@ func TestTemplate(t *testing.T) {
 		_ = r.Run(addr)
 	}()
 
-	resp, err := http.Get(requestUrl)
+	resp, err := http.Get(requestURL)
 	if err != nil || resp.StatusCode != http.StatusOK {
-		t.Fatal("Unable to send a request.", err)
+		t.Error("Unable to send a request.", err)
 	}
 	defer resp.Body.Close()
 
@@ -56,14 +65,13 @@ func TestTemplate(t *testing.T) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(body, &rb)
 	if err != nil {
-		t.Fatal("Unable to unmarshal the response body.", err)
+		t.Error("Unable to unmarshal the response body.", err)
 	}
 
-	t.Log("Expected url:   ", expectedUrl)
+	t.Log("Expected url:   ", expected)
 	t.Log("Returned result:", rb.Result)
 
-	if rb.Result != expectedUrl {
-		t.Log("The returned result is not as expected")
-		t.FailNow()
+	if rb.Result != expected {
+		t.Fatal("The returned result is not as expected")
 	}
 }
