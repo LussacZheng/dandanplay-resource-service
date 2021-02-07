@@ -52,7 +52,8 @@ const REGEX = {
     // href="/topics/list/sort_id/2">
     TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
     // <font color=red>動畫</font></a>
-    TypeName: /<font color=\w+>(.+)<\/font>/gim,
+    // or: <font color=#0eb9e7>遊戲</font>
+    TypeName: /<font color=[\w#]+>(.+)<\/font>/gim,
     // <a  href="/topics/list/team_id/123" >
     SubgroupId: /href="\/topics\/list\/team_id\/(\d+)"/gim,
     // XX字幕组</a></span>
@@ -212,7 +213,7 @@ function extractListFromElement(element) {
   const SubgroupId = htmlparser(element, REGEX.List.SubgroupId, [])
   const SubgroupName = htmlparser(element, REGEX.List.SubgroupName, [])
   const Magnet = htmlparser(element, REGEX.List.Magnet, [])
-  const PageUrl = BASE + htmlparser(element, REGEX.List.PageUrl, [])
+  const PageUrl = htmlparser(element, REGEX.List.PageUrl, [])
   const FileSize = htmlparser(element, REGEX.List.FileSize, [])
   const PublishDate = htmlparser(element, REGEX.List.PublishDate, [])
 
