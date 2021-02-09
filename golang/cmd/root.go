@@ -42,10 +42,10 @@ func init() {
 		&isVersion, "version", "V", false,
 		fmt.Sprintf("Print the version number of %s", config.Name),
 	)
-	rootCmd.Flags().StringVarP(&config.Host, "host", "H", "",
-		`Listen address for the API, such as "127.0.0.1", "0.0.0.0", or "localhost"`)
+	rootCmd.Flags().StringVarP(&config.Host, "host", "H", "localhost",
+		`IP address the API listens on, such as "0.0.0.0", "127.0.0.1", or "192.168.0.100"`)
 	rootCmd.Flags().StringVarP(&config.Port, "port", "P", "8080",
-		"Listen address for the API")
+		"Listen port of the API")
 	rootCmd.Flags().StringVarP(&config.Proxy, "proxy", "x", "",
 		`Proxy address for web scraper, "http" and "socks5" are supported`)
 }
@@ -60,10 +60,17 @@ func rootHandler(cmd *cobra.Command, args []string) {
 
 	r := routers.InitRouter()
 
+	// https://pkg.go.dev/net#Dial , https://pkg.go.dev/net#Listen
 	if config.Port != "" {
 		config.Port = ":" + config.Port
 	}
-	logger.Infof("{{Listening and serving HTTP on %s%s}}", config.Host, config.Port)
+	displayedHost := config.Host
+	if config.Host == "" {
+		// Only when running: dandanplay-resource-service -H '""'
+		displayedHost = "0.0.0.0"
+	}
+
+	logger.Infof("{{Listening and serving HTTP on http://%s%s}}", displayedHost, config.Port)
 
 	if err := r.Run(config.Host + config.Port); err != nil {
 		logger.Errorf("{{Server start failed.}} %v\n", err)

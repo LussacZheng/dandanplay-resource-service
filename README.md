@@ -47,7 +47,6 @@ API implementations for "dandanplay" resource search service.
 
 从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件，运行即可。
 
-
 ### 运行
 
 ```shell
@@ -59,8 +58,8 @@ Usage:
 
 Flags:
   -h, --help           help for dandanplay-resource-service
-  -H, --host string    Listen address for the API, such as "127.0.0.1", "0.0.0.0", or "localhost"
-  -P, --port string    Listen address for the API (default "8080")
+  -H, --host string    IP address the API listens on, such as "0.0.0.0", "127.0.0.1", or "192.168.0.100" (default "localhost")
+  -P, --port string    Listen port of the API (default "8080")
   -x, --proxy string   Proxy address for web scraper, "http" and "socks5" are supported
   -V, --version        Print the version number of dandanplay-resource-service
 ```
@@ -68,7 +67,7 @@ Flags:
 例如：
 
 ```shell
-# 无参数，默认运行在 0.0.0.0:8080 (Windows 为 "localhost:8080")
+# 无参数，默认运行在 localhost:8080
 $ dandanplay-resource-service
 
 # 自定义端口 和 代理地址(可省略 "http://")
