@@ -102,11 +102,35 @@ $ upx --lzma --best dandanplay-resource-service.exe
 
 ## 相关项目
 
-### Python & PHP
+### Python
 
-- https://pastebin.ubuntu.com/p/mGP7JRpBtd/
+- [源代码](https://pastebin.ubuntu.com/p/mGP7JRpBtd/) / [参考](https://support.qq.com/products/104929/post/161035286010443896/)
+
+<details>
+<summary>个人推荐使用 <a href="https://github.com/python-poetry/poetry">poetry</a> 进行依赖管理。</summary>
+
+```shell
+$ cd python
+
+# 安装依赖
+$ poetry install
+# 或
+$ poetry install --no-dev
+
+# 运行脚本，如
+$ poetry run python dandanapi.py proxy=http://127.0.0.1:10809
+# 或
+$ poetry run python dandanapi.py host=0.0.0.0 port=34543 proxy=""
+
+# 打包
+$ poetry run poe build
+```
+
+</details>
+
+### PHP
+
 - [lianxun/dandan - Gitee](https://gitee.com/lianxun/dandan)
-- https://support.qq.com/products/104929/post/161035286010443896/
 
 ## 参考资料
 

@@ -1,0 +1,8 @@
+# Project
+__pycache__
+.venv
+
+# PyInstaller
+*.spec
+build/
+dist/

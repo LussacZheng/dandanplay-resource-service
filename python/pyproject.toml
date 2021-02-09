@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "dandanplay-resource-service"
+version = "0.0.1"
+description = "API implementations for 'dandanplay' resource search service, in Python."
+authors = ["伊诺"]
+
+[tool.poetry.urls]
+"Original Code" = "https://pastebin.ubuntu.com/p/mGP7JRpBtd/"
+"Reference" = "https://support.qq.com/products/104929/post/161035286010443896/"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+uvicorn = "^0.13.3"
+fastapi = "^0.63.0"
+arrow = "^0.17.0"
+requests = "^2.25.1"
+bs4 = "^0.0.1"
+
+[tool.poetry.dev-dependencies]
+pyinstaller = "^4.0"
+poethepoet = "^0.10.0"
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+default = true
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+secondary = true
+
+# https://github.com/nat-n/poethepoet
+[tool.poe.tasks]
+# `$ poetry run poe build`
+build = """
+  pyinstaller -F
+      --noupx
+      --distpath ./dist
+      --specpath ./build
+      --hidden-import=uvicorn.logging
+      --hidden-import=uvicorn.loops
+      --hidden-import=uvicorn.loops.auto
+      --hidden-import=uvicorn.protocols
+      --hidden-import=uvicorn.protocols.http
+      --hidden-import=uvicorn.protocols.http.auto
+      --hidden-import=uvicorn.protocols.websockets
+      --hidden-import=uvicorn.protocols.websockets.auto
+      --hidden-import=uvicorn.lifespan
+      --hidden-import=uvicorn.lifespan.on
+      dandanplay-resource-service.py
+"""
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
