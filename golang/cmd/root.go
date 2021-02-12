@@ -34,6 +34,11 @@ func Execute() {
 }
 
 func init() {
+	// Allow this program to be started by double-clicking under Windows
+	//   https://github.com/spf13/cobra/issues/844
+	// remove this if there are subcommands in the future
+	cobra.MousetrapHelpText = ""
+
 	// Define global flags
 	//rootCmd.PersistentFlags().BoolVarP()
 
