@@ -10,14 +10,14 @@ API implementations for "dandanplay" resource search service.
 
 ## Cloudflare Workers
 
-由于暂未实现 [缓存机制](https://developers.cloudflare.com/workers/runtime-apis/cache) ，且 Cloudflare Workers 免费版账户有每日 100,000 的请求次数限制，目前暂不提供演示站点。可以自行部署体验。
+注册一个 Cloudflare 免费账户即可部署，**无需 远程服务器 或 常驻任何本地程序** 。
 
 ### 部署
 
-> - 注册一个 Cloudflare 免费账户即可部署，**无需 远程服务器 或 常驻任何本地程序** 。
-> - 可在搜索引擎中搜索 "`Cloudflare Workers部署教程`" ，参照进行。
-
 复制 [`worker.js`](https://github.com/LussacZheng/dandanplay-resource-service/blob/dist/cf-worker/worker.js) 内容到 [workers.dev 脚本编辑页面](https://workers.cloudflare.com/) 中，部署即可。
+
+> - 可在搜索引擎中搜索 "`Cloudflare Workers部署教程`" ，参照进行。
+> - 由于暂未实现 [缓存机制](https://developers.cloudflare.com/workers/runtime-apis/cache) ，且 Cloudflare Workers 免费版账户有每日 100,000 的请求次数限制，目前暂不提供演示站点。可以自行部署体验。
 
 ### 开发
 
@@ -81,7 +81,7 @@ $ dandanplay-resource-service -H 0.0.0.0 -P 34543
 
 ### 开发
 
-若需修改源码或自行编译，需要 [Go 语言](https://golang.google.cn/) 开发环境。
+若需修改源码或自行编译，则需要 [Go 语言](https://golang.google.cn/) 开发环境。
 
 ```shell
 $ git clone https://github.com/LussacZheng/dandanplay-resource-service.git
@@ -95,7 +95,7 @@ $ go build
 
 # 优化可执行文件大小
 $ go build -ldflags="-s -w"
-$ upx --lzma --best dandanplay-resource-service.exe
+$ upx --lzma --best dandanplay-resource-service*
 ```
 
 ---
@@ -118,9 +118,9 @@ $ poetry install
 $ poetry install --no-dev
 
 # 运行脚本，如
-$ poetry run python dandanapi.py proxy=http://127.0.0.1:10809
+$ poetry run python dandanplay-resource-service.py proxy=http://127.0.0.1:10809
 # 或
-$ poetry run python dandanapi.py host=0.0.0.0 port=34543 proxy=""
+$ poetry run python dandanplay-resource-service.py host=0.0.0.0 port=34543 proxy=""
 
 # 打包
 $ poetry run poe build
