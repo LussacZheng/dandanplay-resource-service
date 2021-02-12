@@ -141,13 +141,21 @@
           >
         </li>
         <li>
-          <span class="empty">不合法参数1：</span>
+          <span class="empty">非法参数1：</span>
           <a href="/list?keyword=%" target="_blank">/list?keyword=%</a>
         </li>
         <li>
-          <span class="success">不合法参数2：</span>
+          <span class="success">非法参数2：</span>
           <a href="/list?keyword=fate&subgroup=-123&type=-456&r=-1234321" target="_blank"
             >/list?keyword=fate&subgroup=-123&type=-456&r=-78987</a
+          >
+        </li>
+        <li>
+          <span class="success">非法参数3：</span>
+          <a
+            href="/list?keyword=fate&subgroup=%E4%BD%A0%E5%A5%BD&type=%E4%BD%A0%E5%A5%BD&r=%E4%BD%A0%E5%A5%BD"
+            target="_blank"
+            >/list?keyword=fate&subgroup=你好&type=你好&r=你好</a
           >
         </li>
       </ul>
