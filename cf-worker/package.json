@@ -1,6 +1,6 @@
 {
   "name": "dandanplay-resource-service",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "API for 'dandanplay' resource search service, based on Cloudflare Workers.",
   "main": "src/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "cloudflare-workers",
     "api-service",
     "resource-search",
-    "web-spider"
+    "web-scraper"
   ],
   "author": "Lussac Zheng",
   "license": "Apache-2.0",
