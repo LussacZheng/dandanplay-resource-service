@@ -1,7 +1,7 @@
 # dandanplay-resource-service._dist_
 
-![cfw impl version](https://img.shields.io/badge/cfw--impl-v0.0.2-f1e05a?logo=cloudflare)
-![go impl version](https://img.shields.io/badge/go--impl-v0.0.2-00add8?logo=go)
+![cfw impl version](https://img.shields.io/badge/cfw--impl-v0.0.3-f1e05a?logo=cloudflare)
+![go impl version](https://img.shields.io/badge/go--impl-v0.0.3-00add8?logo=go)
 
 [弹弹play](http://www.dandanplay.com/) 资源搜索节点的 API 实现，基于 Cloudflare Workers 。
 

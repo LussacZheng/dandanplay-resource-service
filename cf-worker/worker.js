@@ -1,12 +1,13 @@
 // https://github.com/LussacZheng/dandanplay-resource-service
-// version: 0.0.2
+// version: 0.0.3
+// build: 2021-02-12 20:22 GMT+8
 
 !(function(e) {
   var t = {}
   function n(r) {
     if (t[r]) return t[r].exports
-    var a = (t[r] = { i: r, l: !1, exports: {} })
-    return e[r].call(a.exports, a, a.exports, n), (a.l = !0), a.exports
+    var o = (t[r] = { i: r, l: !1, exports: {} })
+    return e[r].call(o.exports, o, o.exports, n), (o.l = !0), o.exports
   }
   ;(n.m = e),
     (n.c = t),
@@ -28,13 +29,13 @@
         Object.defineProperty(r, 'default', { enumerable: !0, value: e }),
         2 & t && 'string' != typeof e)
       )
-        for (var a in e)
+        for (var o in e)
           n.d(
             r,
-            a,
+            o,
             function(t) {
               return e[t]
-            }.bind(null, a),
+            }.bind(null, o),
           )
       return r
     }),
@@ -56,11 +57,14 @@
     n((n.s = 1))
 })([
   function(e) {
-    e.exports = { b: '0.0.2', a: 'https://github.com/LussacZheng/dandanplay-resource-service' }
+    e.exports = { b: '0.0.3', a: 'https://github.com/LussacZheng/dandanplay-resource-service' }
   },
   function(e, t, n) {
     'use strict'
-    function r(e) {
+    function r(e, t) {
+      return e.replace(/\$\{(\w+)\}/gi, (e, n) => t[n])
+    }
+    function o(e) {
       const t = new Date(e).toLocaleString('default', {
         formatMatcher: 'best fit',
         year: 'numeric',
@@ -88,7 +92,7 @@
       )
     }
     n.r(t)
-    var o = function(e, t, n, r = 'first') {
+    var s = function(e, t, n, r = 'first') {
       switch (r) {
         case 'all':
           return (function(e, t, n) {
@@ -109,16 +113,16 @@
           })(e, t, n)
       }
     }
-    const s = { headers: { 'content-type': 'application/json;charset=utf-8' } },
-      i = { headers: { 'content-type': 'text/html;charset=utf-8' } },
-      u = {
+    const i = { headers: { 'content-type': 'application/json;charset=utf-8' } },
+      u = { headers: { 'content-type': 'text/html;charset=utf-8' } },
+      c = {
         headers: {
           accept: 'text/html;charset=utf-8',
           'user-agent':
             'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0',
         },
       }
-    async function c(e, t = u) {
+    async function l(e, t = c) {
       const n = await fetch(decodeURI(e), t)
       return await (async function(e) {
         const { headers: t } = e,
@@ -128,25 +132,25 @@
           : (n.includes('application/text') || n.includes('text/html'), await e.text())
       })(n)
     }
-    const l = 'https://share.dmhy.org',
-      d = {
-        type_and_subgroup_url: l + '/topics/advanced-search?team_id=0&sort_id=0&orderby=',
+    const d = 'https://share.dmhy.org',
+      h = {
+        type_and_subgroup_url: d + '/topics/advanced-search?team_id=0&sort_id=0&orderby=',
         list_url:
-          l +
+          d +
           '/topics/list/page/1?keyword=${keyword}&sort_id=${type}&team_id=${subgroup}&order=date-desc',
       },
-      h = '未能成功解析标题',
-      p = -2,
-      g = '未能成功解析类别',
-      f = -1,
-      y = '未知字幕组',
-      m = 'magnet_not_found_未能成功解析磁力链接或磁力链接不存在',
-      b = '未能成功解析资源发布页面',
-      w = '未能成功解析资源大小',
-      _ = '1970-01-01 08:00:00',
-      v = /<option value="(\d+)">(.+?)<\/option>/gim,
-      I = /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
-      S = {
+      p = '未能成功解析标题',
+      g = -2,
+      f = '未能成功解析类别',
+      y = -1,
+      m = '未知字幕组',
+      b = 'magnet_not_found_未能成功解析磁力链接或磁力链接不存在',
+      w = '未能成功解析资源发布页面',
+      _ = '未能成功解析资源大小',
+      v = '1970-01-01 08:00:00',
+      I = /<option value="(\d+)">(.+?)<\/option>/gim,
+      S = /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
+      T = {
         HasMore: /下一頁/g,
         Resources: /<tr class="">(.*?)<\/tr>/gis,
         TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
@@ -160,167 +164,169 @@
         Title: /target="_blank" ?>(.+?)<\/a>/gis,
         TitleReplacer: /<span class="keyword">(.*?)<\/span>/gi,
       }
-    async function T(e) {
+    async function x(e) {
       const t = new URL(encodeURI(e.url)).searchParams,
         n = t.get('type') || 0,
         a = t.get('subgroup') || 0,
-        s = encodeURI(
-          ((i = d.list_url),
-          (u = { keyword: t.get('keyword'), type: n < 0 ? 0 : n, subgroup: a < 0 ? 0 : a }),
-          i.replace(/\$\{(\w+)\}/gi, (e, t) => u[t])),
+        i = encodeURI(
+          r(h.list_url, {
+            keyword: t.get('keyword'),
+            type: n < 0 ? 0 : n,
+            subgroup: a < 0 ? 0 : a,
+          }),
         )
-      var i, u
-      let v
+      let u
       try {
-        v = await c(s)
+        u = await l(i)
       } catch (e) {
         console.error(e)
       }
       return (function(e) {
-        let t = { HasMore: null !== o(e, S.HasMore, []), Resources: [] }
-        const n = o(e, S.Resources, [], 'all')
+        let t = { HasMore: null !== s(e, T.HasMore, []), Resources: [] }
+        const n = s(e, T.Resources, [], 'all')
         if (null === n) return t
         return (
           n.forEach(e => {
             t.Resources.push(
               (function(e) {
-                const t = o(e, S.Title, []),
-                  n = o(e, S.TypeId, []),
-                  a = o(e, S.TypeName, []),
-                  s = o(e, S.SubgroupId, []),
-                  i = o(e, S.SubgroupName, []),
-                  u = o(e, S.Magnet, []),
-                  c = o(e, S.PageUrl, []),
-                  d = o(e, S.FileSize, []),
-                  v = o(e, S.PublishDate, [])
+                const t = s(e, T.Title, []),
+                  n = s(e, T.TypeId, []),
+                  r = s(e, T.TypeName, []),
+                  a = s(e, T.SubgroupId, []),
+                  i = s(e, T.SubgroupName, []),
+                  u = s(e, T.Magnet, []),
+                  c = s(e, T.PageUrl, []),
+                  l = s(e, T.FileSize, []),
+                  h = s(e, T.PublishDate, [])
                 return {
-                  Title: null === t ? h : t.trim().replace(S.TitleReplacer, '$1'),
-                  TypeId: parseInt(n) || p,
-                  TypeName: a || g,
-                  SubgroupId: parseInt(s) || f,
-                  SubgroupName: i || y,
-                  Magnet: u || m,
-                  PageUrl: null === c ? b : l + c,
-                  FileSize: d || w,
-                  PublishDate: null === v ? _ : r(v),
+                  Title: null === t ? p : t.trim().replace(T.TitleReplacer, '$1'),
+                  TypeId: parseInt(n) || g,
+                  TypeName: r || f,
+                  SubgroupId: parseInt(a) || y,
+                  SubgroupName: i || m,
+                  Magnet: u || b,
+                  PageUrl: null === c ? w : d + c,
+                  FileSize: l || _,
+                  PublishDate: null === h ? v : o(h),
                 }
               })(e),
             )
           }),
           t
         )
-      })(v)
-    }
-    function x(e) {
-      const t = e.replace(/&amp;/gi, '&')
-      let n = o(t, v, ['Id', 'Name'], 'all')
-      return null === n ? [] : (n.forEach(e => (e.Id = parseInt(e.Id))), n.shift(), n)
+      })(u)
     }
     function R(e) {
-      let t = o(e, I, ['Id', 'Name'], 'all')
+      const t = e.replace(/&amp;/gi, '&')
+      let n = s(t, I, ['Id', 'Name'], 'all')
+      return null === n ? [] : (n.forEach(e => (e.Id = parseInt(e.Id))), n.shift(), n)
+    }
+    function N(e) {
+      let t = s(e, S, ['Id', 'Name'], 'all')
       return null === t
         ? []
         : (t.forEach(e => (e.Id = parseInt(e.Id))), t.unshift({ Id: 0, Name: '全部' }), t)
     }
-    const N = e => t => t.method.toLowerCase() === e.toLowerCase(),
-      P = N('connect'),
-      M = N('delete'),
-      O = N('get'),
-      j = N('head'),
-      U = N('options'),
-      L = N('patch'),
-      k = N('post'),
-      $ = N('put'),
-      A = N('trace'),
-      C = e => t => {
+    var P = n(0)
+    const O = `\n<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width,initial-scale=1" />\n  <title>弹弹play资源搜索节点API - v${P.b}</title>\n</head>\n<body>\n  <h1>使用说明</h1>\n  <h2>GitHub - <a href="${P.a}">LussacZheng/dandanplay-resource-service</a></h2>\n</body>\n</html>\n`
+    const M = e => t => t.method.toLowerCase() === e.toLowerCase(),
+      j = M('connect'),
+      U = M('delete'),
+      L = M('get'),
+      k = M('head'),
+      E = M('options'),
+      $ = M('patch'),
+      A = M('post'),
+      C = M('put'),
+      D = M('trace'),
+      z = e => t => {
         const n = new URL(encodeURI(t.url)).pathname
         return (n.match(e) || [])[0] === n
       }
-    var D = class {
-        constructor() {
-          this.routes = []
-        }
-        handle(e, t) {
-          return this.routes.push({ conditions: e, handler: t }), this
-        }
-        connect(e, t) {
-          return this.handle([P, C(e)], t)
-        }
-        delete(e, t) {
-          return this.handle([M, C(e)], t)
-        }
-        get(e, t) {
-          return this.handle([O, C(e)], t)
-        }
-        head(e, t) {
-          return this.handle([j, C(e)], t)
-        }
-        options(e, t) {
-          return this.handle([U, C(e)], t)
-        }
-        patch(e, t) {
-          return this.handle([L, C(e)], t)
-        }
-        post(e, t) {
-          return this.handle([k, C(e)], t)
-        }
-        put(e, t) {
-          return this.handle([$, C(e)], t)
-        }
-        trace(e, t) {
-          return this.handle([A, C(e)], t)
-        }
-        all(e) {
-          return this.handle([], e)
-        }
-        route(e) {
-          const t = this.resolve(e)
-          return t
-            ? t.handler(e)
-            : new Response('resource not found', {
-                status: 404,
-                statusText: 'not found',
-                headers: { 'content-type': 'text/plain' },
-              })
-        }
-        resolve(e) {
-          return this.routes.find(
-            t =>
-              !(t.conditions && (!Array.isArray(t) || t.conditions.length)) ||
-              ('function' == typeof t.conditions ? t.conditions(e) : t.conditions.every(t => t(e))),
-          )
-        }
-      },
-      E = n(0)
-    async function z(e) {
-      const t = new D()
+    var F = class {
+      constructor() {
+        this.routes = []
+      }
+      handle(e, t) {
+        return this.routes.push({ conditions: e, handler: t }), this
+      }
+      connect(e, t) {
+        return this.handle([j, z(e)], t)
+      }
+      delete(e, t) {
+        return this.handle([U, z(e)], t)
+      }
+      get(e, t) {
+        return this.handle([L, z(e)], t)
+      }
+      head(e, t) {
+        return this.handle([k, z(e)], t)
+      }
+      options(e, t) {
+        return this.handle([E, z(e)], t)
+      }
+      patch(e, t) {
+        return this.handle([$, z(e)], t)
+      }
+      post(e, t) {
+        return this.handle([A, z(e)], t)
+      }
+      put(e, t) {
+        return this.handle([C, z(e)], t)
+      }
+      trace(e, t) {
+        return this.handle([D, z(e)], t)
+      }
+      all(e) {
+        return this.handle([], e)
+      }
+      route(e) {
+        const t = this.resolve(e)
+        return t
+          ? t.handler(e)
+          : new Response('resource not found', {
+              status: 404,
+              statusText: 'not found',
+              headers: { 'content-type': 'text/plain' },
+            })
+      }
+      resolve(e) {
+        return this.routes.find(
+          t =>
+            !(t.conditions && (!Array.isArray(t) || t.conditions.length)) ||
+            ('function' == typeof t.conditions ? t.conditions(e) : t.conditions.every(t => t(e))),
+        )
+      }
+    }
+    async function H(e) {
+      const t = new F()
       t.get('/subgroup', async () => {
         const e = await (async function() {
           let e
           try {
-            e = await c(d.type_and_subgroup_url)
+            e = await l(h.type_and_subgroup_url)
           } catch (e) {
             console.error(e)
           }
-          return { Subgroups: x(e) }
+          return { Subgroups: R(e) }
         })()
-        return new Response(JSON.stringify(e), s)
+        return new Response(JSON.stringify(e), i)
       }),
         t.get('/type', async () => {
           const e = await (async function() {
             let e
             try {
-              e = await c(d.type_and_subgroup_url)
+              e = await l(h.type_and_subgroup_url)
             } catch (e) {
               console.error(e)
             }
-            return { Types: R(e) }
+            return { Types: N(e) }
           })()
-          return new Response(JSON.stringify(e), s)
+          return new Response(JSON.stringify(e), i)
         }),
         t.get('/list', async e => {
-          const t = await T(e)
-          return new Response(JSON.stringify(t), s)
+          const t = await x(e)
+          return new Response(JSON.stringify(t), i)
         }),
         t.get(
           '/',
@@ -329,20 +335,20 @@
               await (async function() {
                 let e
                 try {
-                  e = await c(
+                  ;(e = await l(
                     'https://cdn.jsdelivr.net/gh/LussacZheng/dandanplay-resource-service@dist/web/index.html',
-                  )
+                  )),
+                    (e = r(e, { VERSION: P.b }))
                 } catch (t) {
-                  console.error(t),
-                    (e = `\n<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width,initial-scale=1" />\n  <title>弹弹play资源搜索节点API - v${E.b}</title>\n</head>\n<body>\n  <h1>使用说明</h1>\n  <h2>GitHub - <a href="${E.a}">LussacZheng/dandanplay-resource-service</a></h2>\n</body>\n</html>\n`)
+                  console.error(t), (e = O)
                 }
                 return e
               })(),
-              i,
+              u,
             ),
         )
       return await t.route(e)
     }
-    addEventListener('fetch', e => e.respondWith(z(e.request)))
+    addEventListener('fetch', e => e.respondWith(H(e.request)))
   },
 ])
