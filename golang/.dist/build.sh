@@ -11,7 +11,7 @@ root=$(
     pwd
 )
 
-pushd $root/.. >/dev/null 2>&1
+pushd "$root"/.. >/dev/null 2>&1
 
 echo "* go building..."
 
@@ -31,6 +31,6 @@ if [ x$1 == x-upx ]; then
     echo "* Upx compressing completed."
 fi
 
-sha256sum $name.* > sha256sum.txt
+sha256sum $name.* >sha256sum.txt
 
 popd >/dev/null 2>&1
