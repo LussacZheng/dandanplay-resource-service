@@ -45,7 +45,10 @@ API implementations for "dandanplay" resource search service.
 
 ### 部署
 
-从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件，运行即可。
+从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件到 本地 或 服务器 ，运行即可。
+
+或直接部署到 Heroku :  
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/LussacZheng/dandanplay-resource-service)
 
 ### 运行
 
