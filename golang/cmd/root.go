@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"dandanplay-resource-service/config"
-	"dandanplay-resource-service/routers"
+	"dandanplay-resource-service/router"
 	"dandanplay-resource-service/utils"
 	"dandanplay-resource-service/utils/logger"
 )
@@ -63,7 +63,7 @@ func rootHandler(cmd *cobra.Command, args []string) {
 
 	gin.SetMode(gin.ReleaseMode)
 
-	r := routers.InitRouter()
+	r := router.InitRouter()
 
 	// https://pkg.go.dev/net#Dial , https://pkg.go.dev/net#Listen
 	if config.Port != "" {
