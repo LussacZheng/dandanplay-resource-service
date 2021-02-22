@@ -1,23 +1,14 @@
-package dmhy
+package api
 
-import (
-	"net/http"
-	"net/url"
-
-	"github.com/gin-gonic/gin"
-
-	"dandanplay-resource-service/utils/logger"
-)
-
-type sort struct {
+type Sort struct {
 	Id   int
 	Name string
 }
-type team struct {
+type Team struct {
 	Id   int
 	Name string
 }
-type resource struct {
+type Resource struct {
 	Title        string
 	TypeId       int
 	TypeName     string
@@ -30,17 +21,17 @@ type resource struct {
 }
 
 type Types struct {
-	Types []sort
+	Types []Sort
 }
 type Subgroups struct {
-	Subgroups []team
+	Subgroups []Team
 }
 type List struct {
 	HasMore   bool
-	Resources []resource
+	Resources []Resource
 }
 
-type listQuery struct {
+type ListQuery struct {
 	Keyword string `form:"keyword"`
 	Team    int    `form:"subgroup"`
 	Sort    int    `form:"type"`
@@ -72,8 +63,8 @@ var unknown = map[string]interface{}{
 	//"PublishDate": "1970-01-01 08:00:00",
 }
 
-// fill fills in the empty fields with the above predefined values
-func (r *resource) fill() {
+// Fill fills in the empty fields with the above predefined values
+func (r *Resource) Fill() {
 	if r.SubgroupId == 0 {
 		r.SubgroupId = unknown["SubgroupId"].(int)
 	}
@@ -83,42 +74,4 @@ func (r *resource) fill() {
 	if r.Magnet == "" {
 		r.Magnet = unknown["Magnet"].(string)
 	}
-}
-
-func getStatus(err error) int {
-	status := http.StatusOK
-	if err != nil {
-		status = http.StatusInternalServerError
-		logger.Errorf("{{Failed when parsing the webpage.}} %v\n", err)
-	}
-	return status
-}
-
-func GenerateType(c *gin.Context) {
-	types, err := getTypes()
-	c.JSON(getStatus(err), types)
-}
-
-func GenerateSubgroup(c *gin.Context) {
-	subgroups, err := getSubgroups()
-	c.JSON(getStatus(err), subgroups)
-}
-
-func GenerateList(c *gin.Context) {
-	var query listQuery
-	err := c.ShouldBindQuery(&query)
-	if err != nil {
-		logger.Errorf("{{Failed when binding query string.}} %v\n", err)
-	}
-
-	query.Keyword = url.QueryEscape(query.Keyword)
-	if query.Team < 0 {
-		query.Team = 0
-	}
-	if query.Sort < 0 {
-		query.Sort = 0
-	}
-
-	list, err := getList(&query)
-	c.JSON(getStatus(err), list)
 }

@@ -6,10 +6,22 @@ import (
 
 	"github.com/gocolly/colly/v2"
 
-	"dandanplay-resource-service/config"
+	"dandanplay-resource-service/api"
+	"dandanplay-resource-service/service"
 	"dandanplay-resource-service/utils"
 	"dandanplay-resource-service/utils/logger"
 )
+
+var Provider *api.Provider
+
+func init() {
+	Provider = &api.Provider{
+		Name:      "動漫花園",
+		IsEnabled: true,
+		Route:     "/",
+		Scraper:   &dmhy{},
+	}
+}
 
 const (
 	base               = "https://share.dmhy.org"
@@ -17,92 +29,46 @@ const (
 	listUrl            = base + "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
 )
 
-func newCollector() *colly.Collector {
-	c := colly.NewCollector(
-		colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
-	)
+type dmhy struct{}
 
-	if config.Proxy != "" {
-		if !strings.Contains(config.Proxy, "/") {
-			config.Proxy = "//" + config.Proxy
-		}
-		err := c.SetProxy(config.Proxy)
-		if err != nil {
-			logger.Errorf("{{Failed when setting proxy.}} %v\n", err)
-		}
-	}
-
-	return c
-}
-
-func visit(c *colly.Collector, url string) error {
-	// Before making a request
-	c.OnRequest(func(r *colly.Request) {
-		logger.Infof("{{Visiting}} %s\n", r.URL.String())
+func (d *dmhy) NewCollector() *colly.Collector {
+	return service.NewCollector(service.CollectorOption{
+		AllowProxy: true,
 	})
-
-	err := c.Visit(url)
-	//c.Wait()
-	return err
 }
 
-func getTypes() (Types, error) {
-	var types Types
-
-	c := newCollector()
+func (d *dmhy) Type(types *api.Types) error {
+	c := d.NewCollector()
 
 	// CSS Selector
 	// https://www.w3school.com.cn/cssref/css_selectors.asp
 	c.OnHTML("select#AdvSearchSort option[value]", func(e *colly.HTMLElement) {
 		id := utils.ParseInt(e.Attr("value"))
-		types.Types = append(types.Types, sort{
+		types.Types = append(types.Types, api.Sort{
 			Id:   id,
 			Name: e.Text,
 		})
 	})
 
-	err := visit(c, typeAndSubgroupUrl)
-
-	// If there are no search results, return an empty slice (empty array in JSON)
-	if types.Types == nil {
-		types.Types = []sort{}
-	}
-
-	return types, err
+	return service.Visit(c, typeAndSubgroupUrl)
 }
 
-func getSubgroups() (Subgroups, error) {
-	var subgroups Subgroups
-
-	c := newCollector()
+func (d *dmhy) Subgroup(subgroups *api.Subgroups) error {
+	c := d.NewCollector()
 
 	c.OnHTML("select#AdvSearchTeam option[value]", func(e *colly.HTMLElement) {
 		id := utils.ParseInt(e.Attr("value"))
-		subgroups.Subgroups = append(subgroups.Subgroups, team{
+		subgroups.Subgroups = append(subgroups.Subgroups, api.Team{
 			Id:   id,
 			Name: e.Text,
 		})
 	})
 
-	err := visit(c, typeAndSubgroupUrl)
-
-	// If there are no search results, return an empty slice (empty array in JSON)
-	if subgroups.Subgroups == nil {
-		subgroups.Subgroups = []team{}
-	}
-
-	return subgroups, err
+	return service.Visit(c, typeAndSubgroupUrl)
 }
 
-func getList(query *listQuery) (List, error) {
-	var list List
-
-	url, err := utils.Template(listUrl, query)
-	if err != nil {
-		logger.Errorf("{{Failed when parsing query string.}} %v\n", err)
-	}
-
-	c := newCollector()
+func (d *dmhy) List(list *api.List, requestURL string) error {
+	c := d.NewCollector()
 
 	c.OnHTML("div.nav_title>div.fl", func(e *colly.HTMLElement) {
 		list.HasMore = e.ChildText("a") == "下一頁"
@@ -150,7 +116,7 @@ func getList(query *listQuery) (List, error) {
 			logger.Errorf("{{Failed when formatting time string.}} %v\n", err)
 		}
 
-		res := resource{
+		res := api.Resource{
 			Title:        strings.TrimSpace(Title),
 			TypeId:       TypeId,
 			TypeName:     TypeName,
@@ -161,16 +127,18 @@ func getList(query *listQuery) (List, error) {
 			FileSize:     FileSize,
 			PublishDate:  PublishDate.Format("2006-01-02 15:04:05"),
 		}
-		res.fill()
+		res.Fill()
 		list.Resources = append(list.Resources, res)
 	})
 
-	err = visit(c, url)
+	return service.Visit(c, requestURL)
+}
 
-	// If there are no search results, return an empty slice (empty array in JSON)
-	if list.Resources == nil {
-		list.Resources = []resource{}
+func (d *dmhy) ListQueryFormatter(query *api.ListQuery) string {
+	result, err := utils.Template(listUrl, query)
+	if err != nil {
+		logger.Errorf("{{Failed when parsing query string.}} %v\n", err)
+		return base + "/topics/list/page/1?keyword=" + query.Keyword
 	}
-
-	return list, err
+	return result
 }
