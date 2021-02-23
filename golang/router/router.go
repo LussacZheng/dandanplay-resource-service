@@ -7,6 +7,7 @@ import (
 
 	"dandanplay-resource-service/api"
 	"dandanplay-resource-service/api/dmhy"
+	"dandanplay-resource-service/api/kisssub"
 	"dandanplay-resource-service/config"
 )
 
@@ -22,6 +23,8 @@ func InitRouter() *gin.Engine {
 	})
 
 	register(dmhy.Provider)
+	register(kisssub.Provider)
+	// register more Providers here...
 
 	return r
 }
