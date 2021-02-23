@@ -11,8 +11,8 @@ import (
 
 // CollectorOption is used for configuration while creating a colly.Collector instance
 type CollectorOption struct {
-	UserAgent  string
-	AllowProxy bool // TODO: Used for configuration in the future. Temporarily invalid.
+	UserAgent  string // TODO: Add random user-agents.
+	AllowProxy bool   // TODO: Used for configuration in the future. Temporarily invalid.
 }
 
 // NewCollector creates a new colly.Collector instance

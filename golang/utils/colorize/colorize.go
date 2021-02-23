@@ -6,7 +6,7 @@ type Style color.Style
 
 var (
 	Info  = Style(color.New(color.FgGreen))
-	Warn  = Style(color.New(color.FgRed, color.OpBold))
+	Warn  = Style(color.New(color.FgYellow, color.OpBold))
 	Error = Style(color.New(color.FgRed))
 
 	Name    = Style(color.New(color.FgCyan, color.OpBold))
