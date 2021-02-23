@@ -47,8 +47,8 @@ var (
 	teamMap      sync.Map
 	isTeamLoaded bool
 
-	regexTypeId = regexp.MustCompile("sort-(\\d)-.*")
-	regexMagnet = regexp.MustCompile("show-([0-9a-fA-F]{40})\\..*")
+	regexTypeId = regexp.MustCompile("sort-(\\d+)-")
+	regexMagnet = regexp.MustCompile("show-([0-9a-fA-F]{40})")
 )
 
 type kisssub struct{}
@@ -127,9 +127,7 @@ func (k *kisssub) List(list *api.List, requestURL string) error {
 			utils.MatchString(regexMagnet, PageUrl),
 		)
 
-		TypeId := utils.MatchInt(regexTypeId,
-			e.ChildAttr("td:nth-child(2) a[href]", "href"),
-		)
+		TypeId := utils.MatchInt(regexTypeId, e.ChildAttr("td:nth-child(2) a[href]", "href"))
 		TypeName := e.ChildText("td:nth-child(2) a[href]")
 
 		// TODO: SubgroupName might be "[email protected]" if the uploader use his/her email as username.

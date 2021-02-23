@@ -1,6 +1,7 @@
 package dmhy
 
 import (
+	"regexp"
 	"strings"
 	"time"
 
@@ -27,6 +28,11 @@ const (
 	base               = "https://share.dmhy.org"
 	typeAndSubgroupUrl = base + "/topics/advanced-search?team_id=0&sort_id=0&orderby="
 	listUrl            = base + "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
+)
+
+var (
+	regexTypeId     = regexp.MustCompile("sort-(\\d+)")
+	regexSubgroupId = regexp.MustCompile("team_id/(\\d+)")
 )
 
 type dmhy struct{}
@@ -87,12 +93,7 @@ func (d *dmhy) List(list *api.List, requestURL string) error {
 		if titleAndSubgroup := e.ChildTexts("td:nth-child(3) a"); len(titleAndSubgroup) > 1 {
 			SubgroupName = titleAndSubgroup[0]
 			Title = titleAndSubgroup[1]
-			SubgroupId = utils.ParseInt(
-				strings.TrimPrefix(
-					e.ChildAttr("td:nth-child(3) a[href]", "href"),
-					"/topics/list/team_id/",
-				),
-			)
+			SubgroupId = utils.MatchInt(regexSubgroupId, e.ChildAttr("td:nth-child(3) a[href]", "href"))
 			PageUrl = e.ChildAttr("td:nth-child(3) a:nth-child(2)[href]", "href")
 		} else {
 			//SubgroupId = unknown["SubgroupId"].(int)
@@ -101,12 +102,7 @@ func (d *dmhy) List(list *api.List, requestURL string) error {
 			PageUrl = e.ChildAttr("td:nth-child(3) a", "href")
 		}
 
-		TypeId := utils.ParseInt(
-			strings.TrimPrefix(
-				e.ChildAttr("td:nth-child(2) a[href]", "class"),
-				"sort-",
-			),
-		)
+		TypeId := utils.MatchInt(regexTypeId, e.ChildAttr("td:nth-child(2) a[href]", "class"))
 		TypeName := e.ChildText("td:nth-child(2) a[href]")
 		Magnet := e.ChildAttr("td:nth-child(4) a[href]", "href")
 		FileSize := e.ChildText("td:nth-child(5)")
