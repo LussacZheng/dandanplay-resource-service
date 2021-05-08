@@ -6,7 +6,7 @@
 API implementations for "dandanplay" resource search service.  
 [弹弹play](http://www.dandanplay.com/) 资源搜索节点的 API 实现。
 
-提供基于 **Cloudflare Workers** 和 **Golang** 的两种实现。
+提供分别基于 [**Cloudflare Workers**](#cloudflare-workers) 和 [**Golang**](#golang) 的两种实现。
 
 ## Cloudflare Workers
 
@@ -45,9 +45,9 @@ API implementations for "dandanplay" resource search service.
 
 ### 部署
 
-从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件到 本地 或 服务器 ，运行即可。
+从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件到 本地 或 服务器 ，(重命名后)运行即可。
 
-或直接部署到 Heroku :  
+若不想部署到本地或服务器，可直接部署到 Heroku :  
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/LussacZheng/dandanplay-resource-service)
 
 ### 运行
@@ -142,6 +142,13 @@ $ poetry run poe build
 3. [资源搜索相关问题的解答](https://mp.weixin.qq.com/s/OSsk6tuj4lXMcKq2S4s1Kg)
 
 ---
+
+## TODO
+
+- [ ] 添加 Dockerfile
+- [ ] 引入缓存机制
+- [ ] _[go-impl]_ 完善 KissSub 相关网页的 [解析](https://github.com/LussacZheng/dandanplay-resource-service/tree/main/golang/api/kisssub#known-issues)
+- [ ] _[go-impl]_ 添加更多的信息源/发布站
 
 ## Contributing
 
