@@ -2,6 +2,7 @@
 
 ![cfw impl version](https://img.shields.io/badge/cfw--impl-v0.0.3-f1e05a?logo=cloudflare)
 ![go impl version](https://img.shields.io/badge/go--impl-v0.0.3-00add8?logo=go)
+[![jsDelivr hits](https://img.shields.io/jsdelivr/gh/hm/LussacZheng/dandanplay-resource-service?color=red)](https://data.jsdelivr.com/v1/package/gh/LussacZheng/dandanplay-resource-service@dist/stats/file)
 
 [弹弹play](http://www.dandanplay.com/) 资源搜索节点的 API 实现，基于 Cloudflare Workers 。
 
