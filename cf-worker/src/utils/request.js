@@ -7,7 +7,12 @@ import { ReqInitHtml } from '../config/config'
  * @param {RequestInit} init
  */
 export async function get(url, init = ReqInitHtml) {
-  const res = await fetch(decodeURI(url), init)
+  let res
+  try {
+    res = await fetch(decodeURI(url), init)
+  } catch (e) {
+    console.error(e)
+  }
   return await gatherResponse(res)
 }
 

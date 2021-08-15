@@ -1,5 +1,6 @@
 'use strict'
 
+import SearchOptions from './searchOption'
 import { template, formatLocaleString } from '../utils/helper'
 import htmlparser from '../utils/htmlparser'
 import { get } from '../utils/request'
@@ -8,7 +9,9 @@ const BASE = 'https://share.dmhy.org'
 const DMHY = {
   type_and_subgroup_url: `${BASE}/topics/advanced-search?team_id=0&sort_id=0&orderby=`,
   list_url: `${BASE}/topics/list/page/1?keyword=\${keyword}&sort_id=\${type}&team_id=\${subgroup}&order=date-desc`,
+  index_url: `${BASE}/topics/list/page/\${realtime}`,
 }
+
 /**
  * Return a predefined special value if certain fields failed to parse.
  *
@@ -78,12 +81,7 @@ const REGEX = {
  * @async
  */
 async function generateSubgroup() {
-  let html
-  try {
-    html = await get(DMHY.type_and_subgroup_url)
-  } catch (e) {
-    console.error(e)
-  }
+  const html = await get(DMHY.type_and_subgroup_url)
   return { Subgroups: extractSubgroups(html) }
 }
 
@@ -91,12 +89,7 @@ async function generateSubgroup() {
  * @async
  */
 async function generateType() {
-  let html
-  try {
-    html = await get(DMHY.type_and_subgroup_url)
-  } catch (e) {
-    console.error(e)
-  }
+  const html = await get(DMHY.type_and_subgroup_url)
   return { Types: extractTypes(html) }
 }
 
@@ -108,22 +101,28 @@ async function generateList(request) {
   const params = new URL(encodeURI(request.url)).searchParams
   const type = params.get('type') || 0
   const subgroup = params.get('subgroup') || 0
+
+  const { keyword, realtime } = new SearchOptions(decodeURIComponent(params.get('keyword')))
+
   const fetchURL = encodeURI(
     template(DMHY.list_url, {
-      keyword: params.get('keyword'),
+      keyword,
       type: type < 0 ? 0 : type,
       subgroup: subgroup < 0 ? 0 : subgroup,
     }),
   )
+  let html = await get(fetchURL)
+  let result = extractList(html)
 
-  let html
-  try {
-    html = await get(fetchURL)
-  } catch (e) {
-    console.error(e)
+  if (realtime) {
+    const fetchURL_realtime = encodeURI(template(DMHY.index_url, { realtime }))
+    html = await get(fetchURL_realtime)
+
+    const extraResources = extraResourcesForOptionRealtime(html, keyword, result.Resources)
+    result.Resources = extraResources.concat(result.Resources)
   }
 
-  return extractList(html)
+  return result
 }
 
 /**
@@ -136,9 +135,7 @@ function extractSubgroups(html) {
   let subgroups = htmlparser(decodedHtml, REGEX.Subgroups, ['Id', 'Name'], 'all')
 
   // If parsing fails, return an empty array
-  if (subgroups === null) {
-    return []
-  }
+  if (subgroups === null) return []
 
   subgroups.forEach(item => (item['Id'] = parseInt(item['Id'])))
 
@@ -160,9 +157,7 @@ function extractTypes(html) {
   let types = htmlparser(html, REGEX.Types, ['Id', 'Name'], 'all')
 
   // If parsing fails, return an empty array
-  if (types === null) {
-    return []
-  }
+  if (types === null) return []
 
   types.forEach(item => (item['Id'] = parseInt(item['Id'])))
 
@@ -186,19 +181,44 @@ function extractList(html) {
     Resources: [],
   }
 
-  // Get all research results in `table#topic_list tbody tr`
+  // Get all search results in `table#topic_list tbody tr`
   const elements = htmlparser(html, REGEX.List.Resources, [], 'all')
 
   // If there are no search results, return an empty array
-  if (elements === null) {
-    return result
-  }
+  if (elements === null) return result
 
   elements.forEach(e => {
     result.Resources.push(extractListFromElement(e))
   })
 
   return result
+}
+
+/**
+ * Extract extra Resources info from HTML text, with SearchOption: $realtime
+ * @param {String} html HTML text string
+ * @param {String} keyword only Resource that contains the keyword will be extracted
+ * @param {Array} originalRes Resource that already exists will be ignored
+ * @returns {Array<Object<string, number | string>>}
+ */
+function extraResourcesForOptionRealtime(html, keyword, originalRes) {
+  let resources = []
+
+  const elements = htmlparser(html, REGEX.List.Resources, [], 'all')
+
+  if (elements === null) return result
+
+  elements.forEach(e => {
+    let res = extractListFromElement(e)
+    // Unable to recognize the same simplified and traditional Chinese characters
+    const isMatched = keyword.split(' ').every(word => res.Title.includes(word))
+    const isDuplicated = originalRes.some(item => res.PageUrl === item.PageUrl)
+    if (isMatched && !isDuplicated) {
+      resources.push(res)
+    }
+  })
+
+  return resources
 }
 
 /**
