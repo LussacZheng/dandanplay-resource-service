@@ -52,8 +52,8 @@ export function formatLocaleString(time) {
 
   // Since ISO string is alway formatted, like: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
   // To get ISO string, we assume the locale time is just the UTC time.
-  let str = new Date(localeStr + ' UTC').toISOString().substr(0, 19)
-  // now str == '2020-03-24T04:15:53'
+  let str = new Date(localeStr + ' UTC').toISOString()
+  // now str == '2020-03-24T04:15:53.000Z'
 
-  return str.replace('T', ' ')
+  return str.substring(0, 19).replace('T', ' ')
 }

@@ -1,6 +1,6 @@
 'use strict'
 
-import SearchOptions from './searchOption'
+import SearchOptions from './search-option'
 import { template, formatLocaleString } from '../utils/helper'
 import htmlparser from '../utils/htmlparser'
 import { get } from '../utils/request'
