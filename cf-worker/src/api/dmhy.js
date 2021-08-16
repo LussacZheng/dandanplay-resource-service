@@ -211,7 +211,11 @@ function extraResourcesForOptionRealtime(html, keyword, originalRes) {
   elements.forEach(e => {
     let res = extractListFromElement(e)
     // Unable to recognize the same simplified and traditional Chinese characters
-    const isMatched = keyword.split(' ').every(word => res.Title.includes(word))
+    const isMatched = keyword.split(' ').every(word => {
+      // NOTE: anyString.includes('') === true
+      // so keyword with multi-whitespace is allowed
+      return res.Title.toLowerCase().includes(word.toLowerCase())
+    })
     const isDuplicated = originalRes.some(item => res.PageUrl === item.PageUrl)
     if (isMatched && !isDuplicated) {
       resources.push(res)
