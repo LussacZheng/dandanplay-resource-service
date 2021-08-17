@@ -102,7 +102,7 @@ async function generateList(request) {
   const type = params.get('type') || 0
   const subgroup = params.get('subgroup') || 0
 
-  const { keyword, realtime } = new SearchOptions(decodeURIComponent(params.get('keyword')))
+  const { keyword, options } = new SearchOptions(decodeURIComponent(params.get('keyword')))
 
   const fetchURL = encodeURI(
     template(DMHY.list_url, {
@@ -114,8 +114,8 @@ async function generateList(request) {
   let html = await get(fetchURL)
   let result = extractList(html)
 
-  if (realtime) {
-    const fetchURL_realtime = encodeURI(template(DMHY.index_url, { realtime }))
+  if (options.realtime) {
+    const fetchURL_realtime = encodeURI(template(DMHY.index_url, { realtime: options.realtime }))
     html = await get(fetchURL_realtime)
 
     const extraResources = extraResourcesForOptionRealtime(html, keyword, result.Resources)
