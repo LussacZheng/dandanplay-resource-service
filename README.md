@@ -9,6 +9,13 @@ API implementations for "dandanplay" resource search service.
 
 提供分别基于 [**Cloudflare Workers**](#cloudflare-workers) 和 [**Golang**](#golang) 的两种实现。
 
+## 特性
+
+- Serverless 优先
+- 支持 [搜索指令](docs) : `$realtime` , `$page` , `$limit`
+
+---
+
 ## Cloudflare Workers
 
 注册一个 Cloudflare 免费账户即可部署，**无需 远程服务器 或 常驻任何本地程序** 。
@@ -22,7 +29,7 @@ API implementations for "dandanplay" resource search service.
 
 ### 开发
 
-若需修改源码，可以依照以下步骤自行生成 `worker.js` :
+若需修改源码，则需要 [Node.js](https://nodejs.org/) 开发环境。可以依照以下步骤自行生成 `worker.js` :
 
 1. 安装 [wrangler](https://github.com/cloudflare/wrangler) 。
    > 若为 Windows 系统，建议选择 [二进制文件安装](https://developers.cloudflare.com/workers/cli-wrangler/install-update#manual-install) 。
@@ -32,6 +39,7 @@ API implementations for "dandanplay" resource search service.
    ```shell
    $ git clone https://github.com/LussacZheng/dandanplay-resource-service.git
    $ cd dandanplay-resource-service/cf-worker
+   $ npm install
 
    # 按需修改源码
 
@@ -41,6 +49,8 @@ API implementations for "dandanplay" resource search service.
    ```
 
 3. 输出文件位于 `cf-worker/dist/worker.js` 。
+
+---
 
 ## Golang
 
