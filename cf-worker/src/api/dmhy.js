@@ -123,6 +123,10 @@ async function generateList(request) {
     result.Resources = extraResources.concat(result.Resources)
   }
 
+  if (result.Resources.length > options.limit) {
+    result.Resources = result.Resources.slice(0, options.limit)
+  }
+
   return result
 }
 
@@ -207,7 +211,7 @@ function extraResourcesForOptionRealtime(html, keyword, originalRes) {
 
   const elements = htmlparser(html, REGEX.List.Resources, [], 'all')
 
-  if (elements === null) return result
+  if (elements === null) return []
 
   elements.forEach(e => {
     let res = extractListFromElement(e)

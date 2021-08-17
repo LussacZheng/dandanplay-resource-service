@@ -21,8 +21,8 @@ export default class SearchOptions {
     this.options = {
       realtime: options.realtime || _DEFAULT.UNUSED.$realtime,
       page: options.page || _DEFAULT.UNUSED.$page,
+      limit: options.limit || _DEFAULT.UNUSED.$limit,
     }
-    // this.options.limit = options.limit || _DEFAULT.UNUSED.$limit
     // this.options.sort = options.sort || _DEFAULT.UNUSED.$sort
   }
 }
@@ -34,13 +34,13 @@ const _DEFAULT = {
   UNUSED: {
     $realtime: 0,
     $page: 1,
-    // $limit: 80,
+    $limit: 200,
     // $sort: 0,
   },
   UNASSIGNED: {
     $realtime: 1,
     $page: 1,
-    // $limit: 80,
+    $limit: 80,
     // $sort: 1,
   },
   UNDEFINED: 1,
@@ -61,10 +61,10 @@ export function parseSearchOperator(searchStr) {
   const keyword = searchStr.replace(
     / ?(?<!\$|\w)\$(\w+)(?::(\d+))?(?=\s|$)/gi,
     (match, optionName, optionValue) => {
+      const value = parseInt(optionValue)
       // $realtime => value will be `NaN`, so assign it with `UNASSIGNED[$realtime]` => 1
       // $reverse => value will be `NaN`, so assign it with `UNASSIGNED[$reverse]`
       // but `UNASSIGNED[$reverse]` is `undefined`, so assign it with the DefaultValue of Undefined
-      const value = parseInt(optionValue)
       options[optionName] = isNaN(value)
         ? _DEFAULT.UNASSIGNED[match.trim()] || _DEFAULT.UNDEFINED
         : value
