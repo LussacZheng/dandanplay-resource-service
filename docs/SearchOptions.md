@@ -113,9 +113,9 @@
 以较为复杂的为例，当在 弹弹play客户端 的搜索框中输入以下内容时，解析结果如下：
 
 - 实际输入:  
-  "<code>$page:3 &nbsp;fate stay $realtime $reverse&nbsp; $limit:50 $n$ig$$ht$ $$abc $中文指令 $sorted $limit $page:5</code>"
+  "<code>$page:3 &nbsp;fate stay $realtime $realtime:-1 $realtime:1.5 $reverse&nbsp; $limit:50 $n$ig$$ht$ $$abc $$efg:2 $中文指令 $sorted $limit $page:5</code>"
 - 搜索词:  
-  "<code>&nbsp; fate stay&nbsp; $n$ig$ht$ $abc $中文指令</code>"
+  "<code>&nbsp; fate stay $realtime:-1 $realtime:1.5&nbsp; $n$ig$ht$ $abc $efg:2 $中文指令</code>"
 - 指令及其值:
   - page: 5
   - realtime: 1
@@ -134,7 +134,7 @@
 >
 > 以资源搜索节点 `https://aaa.bbb.workers.dev` 为例，访问 `https://aaa.bbb.workers.dev/self` 即可。
 
-```json
+```jsonc
 {
   "name": "dandanplay-resource-service",
   "version": "0.0.4-beta",
