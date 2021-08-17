@@ -8,7 +8,7 @@ import { get } from '../utils/request'
 const BASE = 'https://share.dmhy.org'
 const DMHY = {
   type_and_subgroup_url: `${BASE}/topics/advanced-search?team_id=0&sort_id=0&orderby=`,
-  list_url: `${BASE}/topics/list/page/1?keyword=\${keyword}&sort_id=\${type}&team_id=\${subgroup}&order=date-desc`,
+  list_url: `${BASE}/topics/list/page/\${page}?keyword=\${keyword}&sort_id=\${type}&team_id=\${subgroup}&order=date-desc`,
   index_url: `${BASE}/topics/list/page/\${realtime}`,
 }
 
@@ -106,6 +106,7 @@ async function generateList(request) {
 
   const fetchURL = encodeURI(
     template(DMHY.list_url, {
+      page: options.page,
       keyword,
       type: type < 0 ? 0 : type,
       subgroup: subgroup < 0 ? 0 : subgroup,

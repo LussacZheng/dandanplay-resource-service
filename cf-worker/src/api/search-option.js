@@ -6,7 +6,9 @@
  * str3 = 'fate stay night $realtime:3'
  * let objX = new SearchOptions(strX)
  * objX.keyword === 'fate stay night'
- * obj1.realtime === 0; obj2.realtime === 1; obj3.realtime === 3
+ * obj1.options.realtime === 0
+ * obj2.options.realtime === 1
+ * obj3.options.realtime === 3
  */
 export default class SearchOptions {
   /**
@@ -16,9 +18,10 @@ export default class SearchOptions {
     // It is a filter or formatter for `parseSearchOperator()`
     const { keyword, options } = parseSearchOperator(searchStr)
     this.keyword = keyword
-    this.options = {}
-    this.options.realtime = options.realtime || _DEFAULT.UNUSED.$realtime
-    // this.options.page = options.page || _DEFAULT.UNUSED.$page
+    this.options = {
+      realtime: options.realtime || _DEFAULT.UNUSED.$realtime,
+      page: options.page || _DEFAULT.UNUSED.$page,
+    }
     // this.options.limit = options.limit || _DEFAULT.UNUSED.$limit
     // this.options.sort = options.sort || _DEFAULT.UNUSED.$sort
   }
@@ -30,13 +33,13 @@ export default class SearchOptions {
 const _DEFAULT = {
   UNUSED: {
     $realtime: 0,
-    // $page: 1,
+    $page: 1,
     // $limit: 80,
     // $sort: 0,
   },
   UNASSIGNED: {
     $realtime: 1,
-    // $page: 1,
+    $page: 1,
     // $limit: 80,
     // $sort: 1,
   },
