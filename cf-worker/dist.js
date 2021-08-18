@@ -1,6 +1,6 @@
 /**
  * Please do NOT execute this script directly.
- * Please run wrangler first,
+ * Please run `wrangler build` first,
  * or make sure that `dist/worker.js` exists first.
  */
 
@@ -27,7 +27,7 @@ try {
 // Generate the final comments
 const comments = `// ${homepage}
 // version: ${version}
-// build: ${formatLocaleString(Date.now())}
+// build: ${formatLocaleString(Date.now())} GMT${getTimezoneOffset()}
 // wrangler: ${wranglerVersion}
 `
 
@@ -52,4 +52,13 @@ function formatLocaleString(time) {
   })
   let str = new Date(localeStr + ' UTC').toISOString()
   return str.substring(0, 19).replace('T', ' ')
+}
+
+// https://stackoverflow.com/questions/24500375/#24500441
+function getTimezoneOffset() {
+  const z = n => (n < 10 ? '0' : '') + n
+  let offset = new Date().getTimezoneOffset()
+  const sign = offset < 0 ? '+' : '-'
+  offset = Math.abs(offset)
+  return sign + z((offset / 60) | 0) + z(offset % 60)
 }

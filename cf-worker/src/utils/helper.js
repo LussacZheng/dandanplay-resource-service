@@ -21,13 +21,18 @@ export function template(templateStr, payload) {
 
 /**
  * @param {Number | String} time a TimeStamp or regular TimeString
+ * @param {String} timeZone specify a time-zone instead of using the local time-zone
  * @example
  * formatLocaleString(1584994553000) === '2020-03-24 04:15:53'
  * formatLocaleString('04:15 3/24/2020') === '2020-03-24 04:15:00'
+ * formatLocaleString(1584994553000, 'America/Los_Angeles') === '2020-03-23 13:15:53'
  * // or
  * console.log(formatLocaleString(Date.now()))
+ * @see
+ * MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+ * IANA time zone database: https://www.iana.org/time-zones
  */
-export function formatLocaleString(time) {
+export function formatLocaleString(time, timeZone = undefined) {
   // If I am at the timezone of 'Asia/Shanghai',
   // let the locale time is '2020/03/24 04:15:53'.
   // and the `timeStamp` is '1584994553000'
@@ -45,6 +50,7 @@ export function formatLocaleString(time) {
     // hour12: false,
     // https://github.com/moment/luxon/issues/675
     hourCycle: 'h23',
+    timeZone: timeZone,
   })
   // now localeStr == '2020/03/24 04:15:53'
   //   If there is no params for `toLocaleString()`,
