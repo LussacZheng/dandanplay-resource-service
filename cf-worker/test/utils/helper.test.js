@@ -1,8 +1,8 @@
 import { template, formatLocaleString as fmt } from '@/utils/helper.js'
 
 test('template()', () => {
-  const templateStr = 'python.org/${str1}/${str2}/python-${str2}.exe, ${str3}'
-  const payload = { str1: 'ftp/python', str2: '3.8.2', str4: 'abc' }
+  const templateStr = 'python.org/${str1}/${str2}${num}/python-${str2}${num}.exe, ${str3}'
+  const payload = { str1: 'ftp/python', str2: '3.8.', num: 2, str4: 'abc' }
   expect(template(templateStr, payload)).toBe(
     'python.org/ftp/python/3.8.2/python-3.8.2.exe, undefined',
   )

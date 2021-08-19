@@ -99,8 +99,10 @@ async function generateType() {
  */
 async function generateList(request) {
   const params = new URL(encodeURI(request.url)).searchParams
-  const type = params.get('type') || 0
-  const subgroup = params.get('subgroup') || 0
+  let type = parseInt(params.get('type')) || 0
+  let subgroup = parseInt(params.get('subgroup')) || 0
+  type = type < 0 ? 0 : type
+  subgroup = subgroup < 0 ? 0 : subgroup
 
   const { keyword, options } = new SearchOptions(decodeURIComponent(params.get('keyword')))
 
@@ -108,8 +110,8 @@ async function generateList(request) {
     template(DMHY.list_url, {
       page: options.page,
       keyword,
-      type: type < 0 ? 0 : type,
-      subgroup: subgroup < 0 ? 0 : subgroup,
+      type,
+      subgroup,
     }),
   )
   let html = await get(fetchURL)
@@ -119,7 +121,13 @@ async function generateList(request) {
     const fetchURL_realtime = encodeURI(template(DMHY.index_url, { realtime: options.realtime }))
     html = await get(fetchURL_realtime)
 
-    const extraResources = extraResourcesForOptionRealtime(html, keyword, result.Resources)
+    const extraResources = extraResourcesForOptionRealtime(
+      html,
+      keyword,
+      subgroup,
+      type,
+      result.Resources,
+    )
     result.Resources = extraResources.concat(result.Resources)
   }
 
@@ -203,10 +211,12 @@ function extractList(html) {
  * Extract extra Resources info from HTML text, with SearchOption: $realtime
  * @param {String} html HTML text string
  * @param {String} keyword only Resource that contains the keyword will be extracted
+ * @param {Number} subgroup only Resource that matches the subgroup will be extracted
+ * @param {Number} type only Resource that matches the type will be extracted
  * @param {Array} originalRes Resource that already exists will be ignored
  * @returns {Array<Object<string, number | string>>}
  */
-function extraResourcesForOptionRealtime(html, keyword, originalRes) {
+function extraResourcesForOptionRealtime(html, keyword, subgroup, type, originalRes) {
   let resources = []
 
   const elements = htmlparser(html, REGEX.List.Resources, [], 'all')
@@ -216,13 +226,15 @@ function extraResourcesForOptionRealtime(html, keyword, originalRes) {
   elements.forEach(e => {
     let res = extractListFromElement(e)
     // Unable to recognize the same simplified and traditional Chinese characters
-    const isMatched = keyword.split(' ').every(word => {
+    const isKeywordMatched = keyword.split(' ').every(word => {
       // NOTE: anyString.includes('') === true
       // so keyword with multi-whitespace is allowed
       return res.Title.toLowerCase().includes(word.toLowerCase())
     })
+    const isSubgroupMatched = subgroup === 0 ? true : res.SubgroupId === subgroup
+    const isTypeMatched = type === 0 ? true : res.TypeId === type
     const isDuplicated = originalRes.some(item => res.PageUrl === item.PageUrl)
-    if (isMatched && !isDuplicated) {
+    if (isKeywordMatched && isSubgroupMatched && isTypeMatched && !isDuplicated) {
       resources.push(res)
     }
   })
