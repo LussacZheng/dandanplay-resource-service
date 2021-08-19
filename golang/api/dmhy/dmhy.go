@@ -75,10 +75,11 @@ func (d *dmhy) Subgroup(subgroups *api.Subgroups) error {
 	return service.Visit(c, typeAndSubgroupUrl)
 }
 
-func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) error {
+func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions, query *api.ListQuery) error {
 	c := d.NewCollector()
 
 	var uniqueMap sync.Map
+	once := false
 
 	logger.Debugf("{{Parsed keyword}}  : '%s'", so.Keyword)
 	logger.Debugf("{{Option $realtime}}: %d", so.Options.Realtime)
@@ -115,10 +116,23 @@ func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) er
 			PageUrl = e.ChildAttr("td:nth-child(3) a", "href")
 		}
 
+		TypeId := utils.MatchInt(regexTypeId, e.ChildAttr("td:nth-child(2) a[href]", "class"))
+
 		if so.Options.Realtime > 0 {
+			// isDuplicated
 			if _, exist := uniqueMap.Load(PageUrl); exist {
 				return
 			}
+			// isSubgroupNotMatched
+			// an unknown SubgroupId (=0) also means not-matched
+			if query.Team != 0 && SubgroupId != query.Team {
+				return
+			}
+			// isTypeNotMatched
+			if query.Sort != 0 && TypeId != query.Sort {
+				return
+			}
+			// isKeywordNotMatched
 			for _, word := range strings.Fields(so.Keyword) {
 				if !utils.StrContains(Title, word) {
 					return
@@ -127,7 +141,6 @@ func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) er
 		}
 		uniqueMap.Store(PageUrl, true)
 
-		TypeId := utils.MatchInt(regexTypeId, e.ChildAttr("td:nth-child(2) a[href]", "class"))
 		TypeName := e.ChildText("td:nth-child(2) a[href]")
 		Magnet := e.ChildAttr("td:nth-child(4) a[href]", "href")
 		FileSize := e.ChildText("td:nth-child(5)")
@@ -154,12 +167,20 @@ func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) er
 
 	if so.Options.Realtime > 0 {
 		c.OnRequest(func(r *colly.Request) {
+			if once {
+				// If no return, c.Visit() will raise the 'Request' event again,
+				// resulting in a circular call.
+				// Although colly will internally prevent the third call via
+				// c.HasVisited(), we should still avoid it.
+				return
+			}
 			requestURLForRealtime, err := utils.Template(indexUrl, struct {
 				Realtime int
 			}{Realtime: so.Options.Realtime})
 			if err != nil {
 				return
 			}
+			once = true
 			_ = c.Visit(requestURLForRealtime)
 		})
 	}

@@ -16,11 +16,11 @@ type ICollector interface {
 }
 
 // IScraper defines the functions what a Provider should implement,
-// and how to extract resource information.
+// and how to extract resource information. (or how to fill the incoming structs)
 type IScraper interface {
 	Type(types *Types) error
 	Subgroup(subgroups *Subgroups) error
-	List(list *List, requestURL string, so *SearchOptions) error
+	List(list *List, requestURL string, so *SearchOptions, query *ListQuery) error
 	ListQueryFormatter(query *ListQuery) string
 }
 
@@ -79,7 +79,7 @@ func (p *Provider) GenerateList(c *gin.Context) {
 		HasMore:   false,
 		Resources: []Resource{},
 	}
-	err = p.Scraper.List(&list, requestURL, so)
+	err = p.Scraper.List(&list, requestURL, so, &query)
 	c.JSON(getStatus(err), list)
 }
 

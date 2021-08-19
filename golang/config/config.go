@@ -5,7 +5,7 @@ const (
 	ShortDescription = `API implementations for "dandanplay" resource search service.`
 	LongDescription  = `API implementations for "dandanplay" resource search service, in Golang.`
 
-	Version = "0.0.4-alpha"
+	Version = "0.0.4-alpha.3"
 )
 
 var (
