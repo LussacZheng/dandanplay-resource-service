@@ -106,7 +106,7 @@ func (k *kisssub) Subgroup(subgroups *api.Subgroups) error {
 	return err
 }
 
-func (k *kisssub) List(list *api.List, requestURL string) error {
+func (k *kisssub) List(list *api.List, requestURL string, so *api.SearchOptions) error {
 	c := k.NewCollector()
 
 	c.OnHTML("a.nextprev", func(e *colly.HTMLElement) {

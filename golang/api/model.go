@@ -36,6 +36,7 @@ type ListQuery struct {
 	Team    int    `form:"subgroup"`
 	Sort    int    `form:"type"`
 	Random  string `form:"r"`
+	Page    int
 }
 
 /**

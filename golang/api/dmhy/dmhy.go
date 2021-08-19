@@ -3,6 +3,7 @@ package dmhy
 import (
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -27,7 +28,8 @@ func init() {
 const (
 	base               = "https://share.dmhy.org"
 	typeAndSubgroupUrl = base + "/topics/advanced-search?team_id=0&sort_id=0&orderby="
-	listUrl            = base + "/topics/list/page/1?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
+	listUrl            = base + "/topics/list/page/{{.Page}}?keyword={{.Keyword}}&sort_id={{.Sort}}&team_id={{.Team}}&order=date-desc"
+	indexUrl           = base + "/topics/list/page/{{.Realtime}}"
 )
 
 var (
@@ -73,14 +75,25 @@ func (d *dmhy) Subgroup(subgroups *api.Subgroups) error {
 	return service.Visit(c, typeAndSubgroupUrl)
 }
 
-func (d *dmhy) List(list *api.List, requestURL string) error {
+func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) error {
 	c := d.NewCollector()
+
+	var uniqueMap sync.Map
+
+	logger.Debugf("{{Parsed keyword}}  : '%s'", so.Keyword)
+	logger.Debugf("{{Option $realtime}}: %d", so.Options.Realtime)
+	logger.Debugf("{{Option $page}}    : %d", so.Options.Page)
+	logger.Debugf("{{Option $limit}}   : %d", so.Options.Limit)
 
 	c.OnHTML("div.nav_title>div.fl", func(e *colly.HTMLElement) {
 		list.HasMore = e.ChildText("a") == "下一頁"
 	})
 
 	c.OnHTML("table#topic_list tbody tr", func(e *colly.HTMLElement) {
+		if len(list.Resources) >= so.Options.Limit {
+			return
+		}
+
 		var (
 			Title        string
 			SubgroupId   int
@@ -101,6 +114,18 @@ func (d *dmhy) List(list *api.List, requestURL string) error {
 			Title = titleAndSubgroup[0]
 			PageUrl = e.ChildAttr("td:nth-child(3) a", "href")
 		}
+
+		if so.Options.Realtime > 0 {
+			if _, exist := uniqueMap.Load(PageUrl); exist {
+				return
+			}
+			for _, word := range strings.Fields(so.Keyword) {
+				if !utils.StrContains(Title, word) {
+					return
+				}
+			}
+		}
+		uniqueMap.Store(PageUrl, true)
 
 		TypeId := utils.MatchInt(regexTypeId, e.ChildAttr("td:nth-child(2) a[href]", "class"))
 		TypeName := e.ChildText("td:nth-child(2) a[href]")
@@ -127,7 +152,29 @@ func (d *dmhy) List(list *api.List, requestURL string) error {
 		list.Resources = append(list.Resources, res)
 	})
 
+	if so.Options.Realtime > 0 {
+		c.OnRequest(func(r *colly.Request) {
+			requestURLForRealtime, err := utils.Template(indexUrl, struct {
+				Realtime int
+			}{Realtime: so.Options.Realtime})
+			if err != nil {
+				return
+			}
+			c.Visit(requestURLForRealtime)
+		})
+	}
+
 	return service.Visit(c, requestURL)
+	// return service.VisitAndRun(c, requestURL, func(a ...interface{}) {
+	// 	count := 0
+	// 	regex := regexp.MustCompile(`view/(\d+)_`)
+	// 	uniqueMap.Range(func(k, v interface{}) bool {
+	// 		fmt.Printf("%s: %v\n", regex.FindStringSubmatch(k.(string))[1], v)
+	// 		count++
+	// 		return true
+	// 	})
+	// 	fmt.Printf("length: %d\n", count)
+	// })
 }
 
 func (d *dmhy) ListQueryFormatter(query *api.ListQuery) string {

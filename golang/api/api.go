@@ -20,7 +20,7 @@ type ICollector interface {
 type IScraper interface {
 	Type(types *Types) error
 	Subgroup(subgroups *Subgroups) error
-	List(list *List, requestURL string) error
+	List(list *List, requestURL string, so *SearchOptions) error
 	ListQueryFormatter(query *ListQuery) string
 }
 
@@ -58,8 +58,15 @@ func (p *Provider) GenerateList(c *gin.Context) {
 	if err != nil {
 		logger.Errorf("{{Failed when binding query string.}} %v\n", err)
 	}
+	logger.Debugf("{{Received keyword}}: '%s'", query.Keyword)
 
-	query.Keyword = url.QueryEscape(query.Keyword)
+	so := newSearchOptions(query.Keyword)
+	// url.QueryEscape() will replace whitespace ' ' with '+' instead of '%20'
+	query.Keyword = url.QueryEscape(so.Keyword)
+	logger.Debugf("{{Final (parsed&escaped) keyword}}: '%s'", query.Keyword)
+
+	query.Page = so.Options.Page
+
 	if query.Team < 0 {
 		query.Team = 0
 	}
@@ -72,7 +79,7 @@ func (p *Provider) GenerateList(c *gin.Context) {
 		HasMore:   false,
 		Resources: []Resource{},
 	}
-	err = p.Scraper.List(&list, requestURL)
+	err = p.Scraper.List(&list, requestURL, so)
 	c.JSON(getStatus(err), list)
 }
 
