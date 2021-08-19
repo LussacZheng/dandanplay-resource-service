@@ -53,6 +53,11 @@ func init() {
 		"Listen port of the API")
 	rootCmd.Flags().StringVarP(&config.Proxy, "proxy", "x", "",
 		`Proxy address for web scraper, "http" and "socks5" are supported`)
+	rootCmd.Flags().BoolVar(&config.IsDebug, "debug", false,
+		"Debug mode with more logs.")
+	rootCmd.Flags().BoolVar(&config.IsDryRun, "dry-run", false,
+		"Block access to the website and return empty data. For dev debugging.")
+
 }
 
 func rootHandler(cmd *cobra.Command, args []string) {
@@ -61,7 +66,9 @@ func rootHandler(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	gin.SetMode(gin.ReleaseMode)
+	if !config.IsDebug && !config.IsDryRun {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	r := router.InitRouter()
 
@@ -75,7 +82,7 @@ func rootHandler(cmd *cobra.Command, args []string) {
 		displayedHost = "0.0.0.0"
 	}
 
-	logger.Infof("{{Listening and serving HTTP on http://%s%s}}", displayedHost, config.Port)
+	logger.Infof("Listening and serving HTTP on {{http://%s%s}}", displayedHost, config.Port)
 
 	if err := r.Run(config.Host + config.Port); err != nil {
 		logger.Errorf("{{Server start failed.}} %v\n", err)

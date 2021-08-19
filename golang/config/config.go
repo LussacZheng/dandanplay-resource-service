@@ -9,6 +9,7 @@ const (
 )
 
 var Host, Port, Proxy string
+var IsDryRun, IsDebug bool
 
 const HtmlStringIndex = `
 <!DOCTYPE html>

@@ -45,8 +45,16 @@ func Visit(c *colly.Collector, url string) error {
 		logger.Infof("{{Visiting}} %s\n", r.URL.String())
 	})
 
-	err := c.Visit(url)
-	c.Wait()
+	var err error
+
+	if config.IsDryRun {
+		logger.AsDebugf("{{Ready but not actually visiting}}:\n")
+		logger.AsDebugf("{{%s}}\n", url)
+	} else {
+		err = c.Visit(url)
+		c.Wait()
+	}
+
 	return err
 }
 

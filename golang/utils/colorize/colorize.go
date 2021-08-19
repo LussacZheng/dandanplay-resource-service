@@ -8,6 +8,7 @@ var (
 	Info  = Style(color.New(color.FgGreen))
 	Warn  = Style(color.New(color.FgYellow, color.OpBold))
 	Error = Style(color.New(color.FgRed))
+	Debug = Style(color.New(color.FgCyan))
 
 	Name    = Style(color.New(color.FgCyan, color.OpBold))
 	Version = Style(color.New(color.FgYellow))
