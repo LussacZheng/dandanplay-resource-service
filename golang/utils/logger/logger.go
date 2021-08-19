@@ -30,19 +30,19 @@ func replace(format string, style *colorize.Style) (colorized string) {
 	return
 }
 
-// Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
+// Infof : Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
 func Infof(format string, v ...interface{}) {
 	format = replace(format, &colorize.Info)
 	infoLogger.Printf(format, v...)
 }
 
-// Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
+// Warnf : Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
 func Warnf(format string, v ...interface{}) {
 	format = replace(format, &colorize.Warn)
 	warnLogger.Printf(format, v...)
 }
 
-// Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
+// Errorf : Use it as log.Printf, and wrap the string to be colorized with "{{" and "}}"
 func Errorf(format string, v ...interface{}) {
 	format = replace(format, &colorize.Error)
 	errorLogger.Printf(format, v...)

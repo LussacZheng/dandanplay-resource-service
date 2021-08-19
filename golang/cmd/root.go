@@ -40,7 +40,7 @@ func init() {
 	cobra.MousetrapHelpText = ""
 
 	// Define global flags
-	//rootCmd.PersistentFlags().BoolVarP()
+	// rootCmd.PersistentFlags().BoolVarP()
 
 	// Define local flags
 	rootCmd.Flags().BoolVarP(

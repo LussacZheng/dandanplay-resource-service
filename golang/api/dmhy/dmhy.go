@@ -109,8 +109,8 @@ func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) er
 			SubgroupId = utils.MatchInt(regexSubgroupId, e.ChildAttr("td:nth-child(3) a[href]", "href"))
 			PageUrl = e.ChildAttr("td:nth-child(3) a:nth-child(2)[href]", "href")
 		} else {
-			//SubgroupId = unknown["SubgroupId"].(int)
-			//SubgroupName = unknown["SubgroupName"].(string)
+			// SubgroupId = unknown["SubgroupId"].(int)
+			// SubgroupName = unknown["SubgroupName"].(string)
 			Title = titleAndSubgroup[0]
 			PageUrl = e.ChildAttr("td:nth-child(3) a", "href")
 		}
@@ -160,7 +160,7 @@ func (d *dmhy) List(list *api.List, requestURL string, so *api.SearchOptions) er
 			if err != nil {
 				return
 			}
-			c.Visit(requestURLForRealtime)
+			_ = c.Visit(requestURLForRealtime)
 		})
 	}
 

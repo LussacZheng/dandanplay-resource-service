@@ -9,7 +9,7 @@ import (
 	"dandanplay-resource-service/utils/logger"
 )
 
-// CollectorOption is used for configuration while creating a colly.Collector instance
+// CollectorOption is used for configuration while creating a `colly.Collector` instance
 type CollectorOption struct {
 	UserAgent  string // TODO: Add random user-agents.
 	AllowProxy bool   // TODO: Used for configuration in the future. Temporarily invalid.

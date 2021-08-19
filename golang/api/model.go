@@ -46,9 +46,9 @@ type ListQuery struct {
  *       Just some temporary placeholders.
  */
 var unknown = map[string]interface{}{
-	//"Title":        "未能成功解析标题",
-	//"TypeId ":      -2,
-	//"TypeName":     "未能成功解析类别",
+	// "Title":        "未能成功解析标题",
+	// "TypeId ":      -2,
+	// "TypeName":     "未能成功解析类别",
 	"SubgroupId":   -1,
 	"SubgroupName": "未知字幕组",
 	/**
@@ -59,9 +59,9 @@ var unknown = map[string]interface{}{
 	 * For example, try to search "你好安妮"
 	 */
 	"Magnet": "magnet_not_found_未能成功解析磁力链接或磁力链接不存在",
-	//"PageUrl":     "未能成功解析资源发布页面",
-	//"FileSize":    "未能成功解析资源大小",
-	//"PublishDate": "1970-01-01 08:00:00",
+	// "PageUrl":     "未能成功解析资源发布页面",
+	// "FileSize":    "未能成功解析资源大小",
+	// "PublishDate": "1970-01-01 08:00:00",
 }
 
 // Fill fills in the empty fields with the above predefined values

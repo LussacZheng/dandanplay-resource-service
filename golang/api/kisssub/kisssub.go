@@ -39,8 +39,8 @@ const (
 	typeAndSubgroupUrl = base + "/addon.php?r=sublist/group"
 	userAgent          = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36 Kisssub/12"
 
-	//listUrl   = base + "/search.php?keyword={{.Keyword}}+{{.Team}}+sort_id:{{.Sort}}&page=1"
-	//listUrl2  = base + "/search.php?bound=content&keyword={{.Keyword}}&sort_id={{.Sort}}&local=1&field=title&node_id=0&external=google"
+	// listUrl   = base + "/search.php?keyword={{.Keyword}}+{{.Team}}+sort_id:{{.Sort}}&page=1"
+	// listUrl2  = base + "/search.php?bound=content&keyword={{.Keyword}}&sort_id={{.Sort}}&local=1&field=title&node_id=0&external=google"
 )
 
 var (
@@ -77,7 +77,7 @@ func (k *kisssub) Type(types *api.Types) error {
 func (k *kisssub) Subgroup(subgroups *api.Subgroups) error {
 	c := k.NewCollector()
 
-	// The search function of Kisssub does not require an Team.Id
+	// The search function of Kisssub does not require a Team.Id
 	// It appends the Team.Name to the keyword
 	count := 1
 
@@ -106,7 +106,7 @@ func (k *kisssub) Subgroup(subgroups *api.Subgroups) error {
 	return err
 }
 
-func (k *kisssub) List(list *api.List, requestURL string, so *api.SearchOptions) error {
+func (k *kisssub) List(list *api.List, requestURL string, _ *api.SearchOptions) error {
 	c := k.NewCollector()
 
 	c.OnHTML("a.nextprev", func(e *colly.HTMLElement) {
@@ -190,7 +190,7 @@ func (k *kisssub) ListQueryFormatter(query *api.ListQuery) string {
 	if query.Sort != 0 {
 		query.Keyword += "+sort_id" + url.QueryEscape(":") + strconv.Itoa(query.Sort)
 	}
-	//fmt.Println("query.Keyword:", query.Keyword)
+	// fmt.Println("query.Keyword:", query.Keyword)
 
 	result := base + "/search.php?keyword=" + query.Keyword
 	return result

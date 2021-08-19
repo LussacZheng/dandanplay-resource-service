@@ -8,8 +8,17 @@ const (
 	Version = "0.0.4-alpha"
 )
 
-var Host, Port, Proxy string
-var IsDryRun, IsDebug bool
+var (
+	// Host is the IP address that the API listens on
+	Host string
+	// Port is the listen port of the API
+	Port string
+	// Proxy is the proxy address for web scraper
+	Proxy string
+
+	IsDryRun bool
+	IsDebug  bool
+)
 
 const HtmlStringIndex = `
 <!DOCTYPE html>

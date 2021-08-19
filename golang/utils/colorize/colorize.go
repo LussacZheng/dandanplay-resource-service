@@ -12,7 +12,7 @@ var (
 
 	Name    = Style(color.New(color.FgCyan, color.OpBold))
 	Version = Style(color.New(color.FgYellow))
-	//Emphasis = Style(color.New(color.FgGreen, color.OpUnderscore))
+	// Emphasis = Style(color.New(color.FgGreen, color.OpUnderscore))
 )
 
 func (c Style) Sprint(a ...interface{}) string {
