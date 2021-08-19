@@ -19,11 +19,11 @@ export default class SearchOptions {
     const { keyword, options } = parseSearchOperator(searchStr)
     this.keyword = keyword
     this.options = {
-      realtime: options.realtime || _DEFAULT.UNUSED.$realtime,
-      page: options.page || _DEFAULT.UNUSED.$page,
-      limit: options.limit || _DEFAULT.UNUSED.$limit,
+      realtime: options.realtime || _DEFAULT.UNUSED.realtime,
+      page: options.page || _DEFAULT.UNUSED.page,
+      limit: options.limit || _DEFAULT.UNUSED.limit,
     }
-    // this.options.sort = options.sort || _DEFAULT.UNUSED.$sort
+    // this.options.sort = options.sort || _DEFAULT.UNUSED.sort
   }
 }
 
@@ -32,16 +32,16 @@ export default class SearchOptions {
  */
 const _DEFAULT = {
   UNUSED: {
-    $realtime: 0,
-    $page: 1,
-    $limit: 200,
-    // $sort: 0,
+    realtime: 0,
+    page: 1,
+    limit: 200,
+    // sort: 0,
   },
   UNASSIGNED: {
-    $realtime: 1,
-    $page: 1,
-    $limit: 80,
-    // $sort: 1,
+    realtime: 1,
+    page: 1,
+    limit: 80,
+    // sort: 1,
   },
   UNDEFINED: 1,
 }
@@ -59,14 +59,14 @@ const _DEFAULT = {
 export function parseSearchOperator(searchStr) {
   let options = {}
   const keyword = searchStr.replace(
-    / ?(?<!\$|\w)\$(\w+)(?::(\d+))?(?=\s|$)/gi,
+    / ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/gi,
     (match, optionName, optionValue) => {
       const value = parseInt(optionValue)
-      // $realtime => value will be `NaN`, so assign it with `UNASSIGNED[$realtime]` => 1
-      // $reverse => value will be `NaN`, so assign it with `UNASSIGNED[$reverse]`
-      // but `UNASSIGNED[$reverse]` is `undefined`, so assign it with the DefaultValue of Undefined
+      // $realtime => value will be `NaN`, so assign it with `UNASSIGNED[realtime]` => 1
+      // $reverse => value will be `NaN`, so assign it with `UNASSIGNED[reverse]`
+      // but `UNASSIGNED[reverse]` is `undefined`, so assign it with the DefaultValue of Undefined
       options[optionName] = isNaN(value)
-        ? _DEFAULT.UNASSIGNED[match.trim()] || _DEFAULT.UNDEFINED
+        ? _DEFAULT.UNASSIGNED[optionName] || _DEFAULT.UNDEFINED
         : value
       return ''
     },
