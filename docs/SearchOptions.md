@@ -12,8 +12,10 @@
 
 ### 使用方法
 
-在原搜索关键词后添加形如 `$option` 或 `$option:X` 的指令即可。  
-其中 `option` 为指令名， `X` 为该指令对应的参数值，且 `X` 应为自然数。
+在原搜索关键词后添加形如 `$option` 或 `$option:X` 的指令即可。
+
+- 其中 `option` 为指令名，应为全小写的英文单词；
+- `X` 为该指令对应的参数值，应为自然数。
 
 所有支持的指令及其用途详见 [下文](#指令) 。
 
@@ -63,9 +65,10 @@
 
 1. 为什么不默认进行实时搜索？  
    因为这会导致服务器对 dmhy 的请求次数直接翻倍。
-2. `$realtime` 的  cf-worker 实现暂不支持“延迟”资源的简繁体转换。  
-   即关键词为简中时，同名的繁中“延迟”资源不会出现在搜索结果中，反之亦然。
-3. `$realtime` 会从 dmhy 首页寻找“延迟”资源，`$realtime:X` 则将从 dmhy 主页的第 X 页寻找“延迟”资源。
+2. `$realtime` 会从 dmhy 首页寻找“延迟”资源，`$realtime:X` 则将从 dmhy 主页的第 X 页寻找“延迟”资源。
+3. `$realtime` 的  cf-worker 实现暂不支持“延迟”资源的简繁体转换。  
+   即关键词为简中时，同名的繁中“延迟”资源不会出现在搜索结果中，反之亦然。  
+   理由是暂时未能实现一个轻量且全面的 JavaScript 简繁转换函数。而 go 实现没有此问题。
 
 ### $page
 
@@ -105,11 +108,11 @@
 
 指定返回的搜索结果是否按文件大小排序。
 `X` 只允许有三种取值： `0` 表示否，即保持默认的按发布时间降序；`1` 表示是，且按文件大小升序；`2` 表示是，且按文件大小降序。
-大于 3 的值将被视为 3 。
+大于 3 的值将被视为 `3` 。
 
 ## 注意事项 / 边界情况
 
-> 用于识别指令的正则表达式为:  `/ ?(?<!\$|\w)\$(\w+)(?::(\d+))?(?=\s|$)/gi`
+> 用于识别指令的正则表达式为:  `/ ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/gi`
 > <sup>[\[1\]](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)</sup>
 
 1. 使用指令时，搜索输入框内只允许 空格 这一种符号，即不能与带 <kbd>&</kbd> <kbd>|</kbd> <kbd>!</kbd> <kbd>(</kbd> <kbd>)</kbd> 的高级搜索同时使用。
@@ -154,17 +157,19 @@
   "dev": true, // 开发版本 or 正式发行版
   "info": {
     "homepage": "https://github.com/LussacZheng/dandanplay-resource-service",
-    "description": "API implementation for 'dandanplay' resource search service."
+    "description": "API for 'dandanplay' resource search service, based on Cloudflare Workers."
   },
   "meta": {
     "implementation": "cf-worker",
-    "wrangler_version": "1.19.0",
-    "golang_version": "none",
-    "git_commit": "c88e59f"
+    "git_commit_hash": "be1e6bd87aacdfb2696db1c3636c3b690315c874", // `git rev-parse HEAD`
+    "build_at": "2021-08-20T06:22:27Z", // UTC time
+    "wrangler_version": "1.19.0", // `wrangler --version`
+    "golang_version": "none" // `go version`
   },
   "options": {
-    "supported": ["$realtime", "$page", "$limit"],
-    "instruction": "https://github.com/LussacZheng/dandanplay-resource-service/blob/main/docs/SearchOptions.md"
+    "instruction": "https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs",
+    "supported": ["$realtime", "$page", "$limit"]
   }
 }
+
 ```
