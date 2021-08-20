@@ -22,6 +22,10 @@ func InitRouter() *gin.Engine {
 		c.String(http.StatusOK, config.HtmlStringIndex)
 	})
 
+	r.GET("/self", func(c *gin.Context) {
+		c.JSON(http.StatusOK, config.MetaInfo)
+	})
+
 	register(dmhy.Provider)
 	register(kisssub.Provider)
 	// register more Providers here...
