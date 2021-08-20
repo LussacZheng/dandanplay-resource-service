@@ -10,22 +10,34 @@ set "name=dandanplay-resource-service"
 
 pushd "%~dp0.."
 
+for /f %%i in ('go list -m') do ( set "module=%%i" )
+for /f "usebackq" %%i in (`powershell -command "Get-Date -Date (Get-Date).ToUniversalTime() -Format 'yyyy-MM-ddTHH:mm:ssZ'"`) do ( set "time=%%i" )
+for /f %%i in ('git rev-parse HEAD') do ( set "hash=%%i" )
+for /f "tokens=5 delims=o " %%i in ('go version') do ( set "goVer=%%i" )
+
+set "flag1=-X '%module%/config.buildDate=%time%'"
+set "flag2=-X '%module%/config.gitCommitHash=%hash%'"
+set "flag3=-X '%module%/config.goVersion=%goVer%'"
+set "flags=-s -w %flag1% %flag2% %flag3%"
+
 echo  * go building...
 
+set CGO_ENABLED=0
+
 set "GOOS=windows" & set "GOARCH=amd64"
-go build -ldflags="-s -w" -o .dist/%name%.win64.exe
+go build -ldflags="%flags%" -o .dist/%name%.win64.exe
 
 set "GOOS=windows" & set "GOARCH=386"
-go build -ldflags="-s -w" -o .dist/%name%.win32.exe
+go build -ldflags="%flags%" -o .dist/%name%.win32.exe
 
 set "GOOS=linux" & set "GOARCH=amd64"
-go build -ldflags="-s -w" -o .dist/%name%.linux
+go build -ldflags="%flags%" -o .dist/%name%.linux
 
 set "GOOS=darwin" & set "GOARCH=amd64"
-go build -ldflags="-s -w" -o .dist/%name%.macos
+go build -ldflags="%flags%" -o .dist/%name%.macos
 
 set "GOOS=android" & set "GOARCH=arm64"
-go build -ldflags="-s -w" -o .dist/%name%.android
+go build -ldflags="%flags%" -o .dist/%name%.android
 
 echo  * Built completed.
 
