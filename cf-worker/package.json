@@ -7,9 +7,11 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "format": "prettier --write \"**/*.{js,css,json,md}\"",
+    "format:dist": "prettier --write \"dist/worker_*.js\"",
     "build": "wrangler build",
-    "dist": "npm run build && node ./dist.js && prettier --write \"dist/worker_*.js\"",
-    "dist:min": "npm run build && node ./dist.js"
+    "dist": "npm run dist:min && npm run format:dist",
+    "dist:min": "node ./scripts/dist.js",
+    "predist:min": "wrangler --version && git rev-parse HEAD"
   },
   "keywords": [
     "dandanplay",

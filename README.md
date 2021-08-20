@@ -45,7 +45,7 @@ API implementations for "dandanplay" resource search service.
 
    $ wrangler build
    # or
-   $ npm run build
+   $ npm run dist
    ```
 
 3. 输出文件位于 `cf-worker/dist/worker.js` 。
