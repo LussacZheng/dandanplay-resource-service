@@ -104,7 +104,7 @@ func defaultVal(s situation, key ...string) int {
 
 // loader will take the values from `optMap` based on the fieldNames,
 // and fill them into the struct `opt`.
-// NOTE: fieldNames should all be capitalized.
+// NOTE: fieldNames should all be lowercase.
 func loader(opt *option, optMap optionMap, fieldNames ...string) {
 	for _, fieldName := range fieldNames {
 		s := reflect.ValueOf(opt).Elem().FieldByName(strings.Title(fieldName))
