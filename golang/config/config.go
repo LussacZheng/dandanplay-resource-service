@@ -5,7 +5,7 @@ const (
 	ShortDescription = `API implementations for "dandanplay" resource search service.`
 	LongDescription  = `API implementations for "dandanplay" resource search service, in Golang.`
 
-	Version = "0.0.4-alpha.4"
+	Version = "0.0.4-beta"
 
 	Homepage = "https://github.com/LussacZheng/dandanplay-resource-service"
 )
@@ -119,7 +119,7 @@ const HtmlStringIndex = `
       <span>
         <i
           ><a href="https://github.com/LussacZheng/dandanplay-resource-service/releases"
-            >v0.0.4-alpha.4</a
+            >v0.0.4-beta</a
           >
           (go-impl)</i
         ></span
