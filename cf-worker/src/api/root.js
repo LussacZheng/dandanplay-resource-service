@@ -31,7 +31,6 @@ export async function fetchIndex() {
     html = await get(ASSET)
     html = template(html, { VERSION: version })
   } catch (e) {
-    console.error(e)
     html = DEFAULT
   }
   return html

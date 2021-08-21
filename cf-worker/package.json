@@ -1,12 +1,17 @@
 {
   "name": "dandanplay-resource-service",
-  "version": "0.0.3",
+  "version": "0.0.4-alpha.4",
   "description": "API for 'dandanplay' resource search service, based on Cloudflare Workers.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write '**/*.{js,css,json,md}'",
-    "build": "wrangler build"
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "format": "prettier --write \"**/*.{js,css,json,md}\"",
+    "format:dist": "prettier --write \"dist/worker_*.js\"",
+    "build": "wrangler build",
+    "dist": "npm run dist:min && npm run format:dist",
+    "dist:min": "node ./scripts/dist.js",
+    "predist:min": "wrangler --version && git rev-parse HEAD"
   },
   "keywords": [
     "dandanplay",
@@ -27,6 +32,10 @@
   "homepage": "https://github.com/LussacZheng/dandanplay-resource-service",
   "dependencies": {},
   "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "babel-jest": "^27.0.6",
+    "jest": "^27.0.6",
     "prettier": "^1.18.2"
   }
 }

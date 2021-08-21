@@ -5,10 +5,22 @@ const (
 	ShortDescription = `API implementations for "dandanplay" resource search service.`
 	LongDescription  = `API implementations for "dandanplay" resource search service, in Golang.`
 
-	Version = "0.0.4-alpha"
+	Version = "0.0.4-alpha.4"
+
+	Homepage = "https://github.com/LussacZheng/dandanplay-resource-service"
 )
 
-var Host, Port, Proxy string
+var (
+	// Host is the IP address that the API listens on
+	Host string
+	// Port is the listen port of the API
+	Port string
+	// Proxy is the proxy address for web scraper
+	Proxy string
+
+	IsDryRun bool
+	IsDebug  bool
+)
 
 const HtmlStringIndex = `
 <!DOCTYPE html>
@@ -107,7 +119,7 @@ const HtmlStringIndex = `
       <span>
         <i
           ><a href="https://github.com/LussacZheng/dandanplay-resource-service/releases"
-            >v0.0.4-alpha</a
+            >v0.0.4-alpha.4</a
           >
           (go-impl)</i
         ></span
@@ -128,6 +140,7 @@ const HtmlStringIndex = `
         <li>GET <a href="/type" target="_blank">/type</a></li>
         <li>GET <a href="/subgroup" target="_blank">/subgroup</a></li>
         <li>GET <a href="/list" target="_blank">/list</a></li>
+        <li>GET <a href="/self" target="_blank">/self</a></li>
       </ul>
     </div>
     <div>

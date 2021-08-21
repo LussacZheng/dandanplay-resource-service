@@ -13,6 +13,7 @@ import (
 	"dandanplay-resource-service/config"
 	"dandanplay-resource-service/utils/colorize"
 	"dandanplay-resource-service/utils/logger"
+	"dandanplay-resource-service/utils/opencc"
 )
 
 // PrintVersionInfo prints the version number
@@ -82,6 +83,15 @@ func TemporalDateToTimeString(s string) string {
 		date.AddDate(0, 0, -2).Format("2006/01/02"),
 	)
 
-	//return "0001/01/01"
+	// return "0001/01/01"
 	return s
+}
+
+// StrContains reports whether substr is within s,
+// ignoring case, simplified or traditional Chinese characters.
+func StrContains(s string, substr string) bool {
+	return strings.Contains(
+		opencc.T2S(strings.ToLower(s)),
+		opencc.T2S(strings.ToLower(substr)),
+	)
 }

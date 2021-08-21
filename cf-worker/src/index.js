@@ -2,6 +2,7 @@
 
 import { generateSubgroup, generateType, generateList } from './api/dmhy'
 import { fetchIndex } from './api/root'
+import { generateMetaInfo } from './api/self'
 import { ResInitHtml, ResInitJson } from './config/config'
 import Router from './router'
 
@@ -28,6 +29,11 @@ async function handleRequest(request) {
   // return an index page for the root route
   r.get('/', async () => {
     return new Response(await fetchIndex(), ResInitHtml)
+  })
+
+  // return meta info about this API self
+  r.get('/self', () => {
+    return new Response(JSON.stringify(generateMetaInfo()), ResInitJson)
   })
 
   const resp = await r.route(request)

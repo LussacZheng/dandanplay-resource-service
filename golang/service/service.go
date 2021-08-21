@@ -9,7 +9,7 @@ import (
 	"dandanplay-resource-service/utils/logger"
 )
 
-// CollectorOption is used for configuration while creating a colly.Collector instance
+// CollectorOption is used for configuration while creating a `colly.Collector` instance
 type CollectorOption struct {
 	UserAgent  string // TODO: Add random user-agents.
 	AllowProxy bool   // TODO: Used for configuration in the future. Temporarily invalid.
@@ -45,8 +45,16 @@ func Visit(c *colly.Collector, url string) error {
 		logger.Infof("{{Visiting}} %s\n", r.URL.String())
 	})
 
-	err := c.Visit(url)
-	c.Wait()
+	var err error
+
+	if config.IsDryRun {
+		logger.AsDebugf("{{Ready but not actually visiting}}:\n")
+		logger.AsDebugf("{{%s}}\n", url)
+	} else {
+		err = c.Visit(url)
+		c.Wait()
+	}
+
 	return err
 }
 

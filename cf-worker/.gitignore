@@ -3,3 +3,6 @@ dist/
 # https://github.com/cloudflare/wrangler/issues/1046
 worker/
 
+# Jest coverage files
+test/_coverage
+
