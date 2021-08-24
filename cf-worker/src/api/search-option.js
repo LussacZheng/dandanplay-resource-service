@@ -59,7 +59,7 @@ const _DEFAULT = {
 export function parseSearchOperator(searchStr) {
   let options = {}
   const keyword = searchStr.replace(
-    / ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/gi,
+    / ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/g,
     (match, optionName, optionValue) => {
       const value = parseInt(optionValue)
       // $realtime => value will be `NaN`, so assign it with `UNASSIGNED[realtime]` => 1

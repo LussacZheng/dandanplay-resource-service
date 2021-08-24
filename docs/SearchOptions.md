@@ -112,7 +112,7 @@
 
 ## 注意事项 / 边界情况
 
-> 用于识别指令的正则表达式为:  `/ ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/gi`
+> 用于识别指令的正则表达式为:  `/ ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/g`
 > <sup>[\[1\]](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)</sup>
 
 1. 使用指令时，搜索输入框内只允许 空格 这一种符号，即不能与带 <kbd>&</kbd> <kbd>|</kbd> <kbd>!</kbd> <kbd>(</kbd> <kbd>)</kbd> 的高级搜索同时使用。
@@ -129,9 +129,9 @@
 以较为复杂的为例，当在 弹弹play客户端 的搜索框中输入以下内容时，解析结果如下：
 
 - 实际输入:  
-  "<code>$page:3 &nbsp;fate stay $realtime $realtime:-1 $realtime:1.5 $reverse&nbsp; $limit:50 $n$ig$$ht$ $$abc $$efg:2 $中文指令 $sorted $limit $page:5</code>"
+  "<code>$page:3 &nbsp;fate stay $realtime $realtime:-1 $realtime:1.5 $reverse&nbsp; $limit:500 $limIt:20 $n$ig$$ht$ $$abc $$efg:2 $中文指令 $sorted $limit $page:5</code>"
 - 搜索词:  
-  "<code>&nbsp; fate stay $realtime:-1 $realtime:1.5&nbsp; $n$ig$ht$ $abc $efg:2 $中文指令</code>"
+  "<code>&nbsp; fate stay $realtime:-1 $realtime:1.5&nbsp; $limIt:20 $n$ig$ht$ $abc $efg:2 $中文指令</code>"
 - 指令及其值:
   - page: 5
   - realtime: 1

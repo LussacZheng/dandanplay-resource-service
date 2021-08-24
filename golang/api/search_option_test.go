@@ -8,8 +8,8 @@ import (
 
 const (
 	plainStr         = " fate stay night "
-	complexStr       = "$page:3  fate stay $realtime $realtime:-1 $realtime:1.5 $reverse  $limit:50 $n$ig$$ht$ $$abc $$efg:2 $ $中文指令 $sorted $limit $page:005"
-	wantedComplexStr = "  fate stay $realtime:-1 $realtime:1.5  $n$ig$ht$ $abc $efg:2 $ $中文指令"
+	complexStr       = "$page:3  fate stay $realtime $realtime:-1 $realtime:1.5 $reverse  $limit:500 $limIt:20 $n$ig$$ht$ $$abc $$efg:2 $ $中文指令 $sorted $limit $page:005"
+	wantedComplexStr = "  fate stay $realtime:-1 $realtime:1.5  $limIt:20 $n$ig$ht$ $abc $efg:2 $ $中文指令"
 )
 
 func TestParseSearchOperator(t *testing.T) {

@@ -135,10 +135,10 @@ test('Item-by-item: $limit', () => {
  * Parse complex string
  */
 const complexStr =
-  '$page:3  fate stay $realtime $realtime:-1 $realtime:1.5 $reverse  $limit:50 $n$ig$$ht$ $$abc $$efg:2 $ $中文指令 $sorted $limit $page:005'
+  '$page:3  fate stay $realtime $realtime:-1 $realtime:1.5 $reverse  $limit:500 $limIt:20 $n$ig$$ht$ $$abc $$efg:2 $ $中文指令 $sorted $limit $page:005'
 
 const WANTED = {
-  keyword: '  fate stay $realtime:-1 $realtime:1.5  $n$ig$ht$ $abc $efg:2 $ $中文指令',
+  keyword: '  fate stay $realtime:-1 $realtime:1.5  $limIt:20 $n$ig$ht$ $abc $efg:2 $ $中文指令',
   options: {
     page: 5,
     realtime: 1,
