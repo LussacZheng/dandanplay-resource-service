@@ -1,6 +1,6 @@
 {
   "name": "dandanplay-resource-service",
-  "version": "0.0.4-beta",
+  "version": "0.0.4-beta+feat.t2s",
   "description": "API for 'dandanplay' resource search service, based on Cloudflare Workers.",
   "main": "src/index.js",
   "scripts": {
@@ -30,7 +30,9 @@
     "url": "https://github.com/LussacZheng/dandanplay-resource-service/issues"
   },
   "homepage": "https://github.com/LussacZheng/dandanplay-resource-service",
-  "dependencies": {},
+  "dependencies": {
+    "chinese-conv": "^1.0.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",

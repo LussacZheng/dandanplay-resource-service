@@ -1,5 +1,7 @@
 'use strict'
 
+import { sify } from 'chinese-conv'
+
 import SearchOptions from './search-option'
 import { template, formatLocaleString } from '../utils/helper'
 import htmlparser from '../utils/htmlparser'
@@ -229,7 +231,7 @@ function extraResourcesForOptionRealtime(html, keyword, subgroup, type, original
     const isKeywordMatched = keyword.split(' ').every(word => {
       // NOTE: anyString.includes('') === true
       // so keyword with multi-whitespace is allowed
-      return res.Title.toLowerCase().includes(word.toLowerCase())
+      return sify(res.Title.toLowerCase()).includes(sify(word.toLowerCase()))
     })
     const isSubgroupMatched = subgroup === 0 ? true : res.SubgroupId === subgroup
     const isTypeMatched = type === 0 ? true : res.TypeId === type
