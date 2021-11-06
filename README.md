@@ -71,11 +71,13 @@ Usage:
   dandanplay-resource-service [flags]
 
 Flags:
-  -h, --help           help for dandanplay-resource-service
-  -H, --host string    IP address the API listens on, such as "0.0.0.0", "127.0.0.1", or "192.168.0.100" (default "localhost")
-  -P, --port string    Listen port of the API (default "8080")
-  -x, --proxy string   Proxy address for web scraper, "http" and "socks5" are supported
-  -V, --version        Print the version number of dandanplay-resource-service
+      --debug          以调试模式运行，运行时输出更多信息
+      --dry-run        阻止网络访问并返回空数据，用于开发调试
+  -h, --help           输出帮助信息
+  -H, --host string    API 监听的 IP 地址，例如 "0.0.0.0", "127.0.0.1", "192.168.0.100" (默认为 "localhost")
+  -P, --port string    API 监听的端口 (默认为 "8080")
+  -x, --proxy string   网页解析器所使用的代理地址，支持 "http" 和 "socks5" 协议
+  -V, --version        输出版本信息
 ```
 
 例如：
