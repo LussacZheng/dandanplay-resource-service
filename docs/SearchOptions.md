@@ -15,7 +15,7 @@
 在原搜索关键词后添加形如 `$option` 或 `$option:X` 的指令即可。
 
 - 其中 `option` 为指令名，应为全小写的英文单词；
-- `X` 为该指令对应的参数值，应为自然数。
+- `X` 为该指令对应的参数值，应为自然数 (即 0 或正整数)。
 
 所有支持的指令及其用途详见 [下文](#指令) 。
 
@@ -112,7 +112,7 @@
 
 ## 注意事项 / 边界情况
 
-> 用于识别指令的正则表达式为:  `/ ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/g`
+> 用于识别指令的正则表达式为:  `/(?: |^)\$([a-z]+)(?::(\d+))?(?=\s|$)/g`
 > <sup>[\[1\]](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)</sup>
 
 1. 使用指令时，搜索输入框内只允许 空格 这一种符号，即不能与带 <kbd>&</kbd> <kbd>|</kbd> <kbd>!</kbd> <kbd>(</kbd> <kbd>)</kbd> 的高级搜索同时使用。
@@ -139,6 +139,36 @@
   - limit: 80
   - ~~sorted: 1~~ (拼写错误，无效)
   - sort: 0 (未提及，故引用其默认值 `M` )
+
+> 你可以在浏览器的控制台中运行如下代码，
+>
+> ```js
+> String.prototype.toKeyword = function () {
+>   return this.replace(/(?: |^)\$([a-z]+)(?::(\d+))?(?=\s|$)/g, '')
+>     .replace(/\$\$/g, '$')
+> }
+> ```
+>
+> 再验证程序能否从实际输入中正确地提取出你预想的搜索词：
+>
+> ```js
+> `把这段文字替换成你的实际输入并运行`.toKeyword()
+> ```
+>
+> 例如:
+>
+> ```js
+> `fate $page:3 stay $limit:50 night $realtime:-1 $limit $page:5`.toKeyword()
+> // 输出: "fate stay night $realtime:-1"
+>
+> // Oops，我应该把 '$realtime' 的值设定为自然数
+> `fate $page:3 stay $limit:50 night $realtime:1 $limit $page:5`.toKeyword()
+> // 输出: "fate stay night"
+>
+> // 或许我还应该调整一下顺序，再去除重复的指令
+> `fate stay night $realtime:1 $limit $page:5`.toKeyword()
+> // 输出: "fate stay night"
+> ```
 
 ## 支持情况
 

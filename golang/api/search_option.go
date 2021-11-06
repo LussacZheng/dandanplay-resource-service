@@ -62,7 +62,7 @@ func newSearchOptions(searchStr string) *SearchOptions {
 	return result
 }
 
-var regexOption = regexp2.MustCompile(` ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)`, 0)
+var regexOption = regexp2.MustCompile(`(?: |^)\$([a-z]+)(?::(\d+))?(?=\s|$)`, 0)
 
 // parseSearchOperator parses the Keyword and Options from the searchStr
 func parseSearchOperator(searchStr string) (string, optionMap) {
