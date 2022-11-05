@@ -1,0 +1,29 @@
+{
+  "name": "dandanplay-resource-service_cfw-impl",
+  "version": "0.0.0",
+  "description": "API for 'dandanplay' resource search service, based on TypeScript and Cloudflare Workers.",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --workspace-root run sync-deps && wrangler dev --local",
+    "build": "pnpm --workspace-root run sync-deps && wrangler publish --dry-run --outdir=dist",
+    "build:min": "pnpm --workspace-root run sync-deps && wrangler publish --dry-run --outdir=dist --minify",
+    "dist": "tsx dist.ts",
+    "predist": "wrangler --version && git rev-parse HEAD",
+    "postdist": "prettier --write \"dist/worker_*.js\"",
+    "list": "echo pnpm run dev, build, dist"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.18.0",
+    "@types/node": "^18.11.9",
+    "tsx": "*",
+    "typescript": "*",
+    "utils": "workspace:*",
+    "wrangler": "2.1.15"
+  },
+  "dependencies": {
+    "dandanplay-resource-api": "workspace:*",
+    "itty-router": "^2.6.6",
+    "prettier": "*"
+  }
+}

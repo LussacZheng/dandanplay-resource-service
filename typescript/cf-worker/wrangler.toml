@@ -1,0 +1,3 @@
+name = "dandanplay-resource-service_cfw-impl"
+main = "main.ts"
+compatibility_date = "2022-11-02"

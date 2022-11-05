@@ -1,0 +1,9 @@
+# https://prettier.io/docs/en/ignore.html
+
+# Ignore artifacts:
+dist
+.coverage
+
+# deno related code
+# https://github.com/denoland/deno/issues/13616
+deno*/**/*.[jt]s

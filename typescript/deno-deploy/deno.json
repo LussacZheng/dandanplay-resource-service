@@ -1,0 +1,23 @@
+{
+  "importMap": "import_map.json",
+  "tasks": {
+    "start": "pnpm --workspace-root run sync-deps && deno run --allow-net main.ts",
+    "build": "pnpm --workspace-root run sync-deps && mkdir -p ./dist && deno bundle main.ts ./dist/main.js",
+    "dist": "pnpm --workspace-root run sync-deps && deno run --allow-run --allow-read --allow-write ./dist.ts",
+    "dist:pre": "git rev-parse HEAD && deno bundle routes.ts ./dist/routes.js"
+  },
+  "fmt": {
+    "options": {
+      "indentWidth": 2,
+      "lineWidth": 100,
+      "proseWrap": "always",
+      "singleQuote": true,
+      "useTabs": false
+    }
+  },
+  "lint": {
+    "files": {
+      "exclude": ["dist/"]
+    }
+  }
+}

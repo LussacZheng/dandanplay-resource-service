@@ -1,0 +1,8 @@
+# ignore these folders under any directories
+node_modules
+dist
+.dist
+.coverage
+
+# keep `deno-deploy/.vscode/`
+!deno-deploy/.vscode

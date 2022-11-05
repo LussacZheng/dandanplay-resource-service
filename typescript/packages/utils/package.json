@@ -1,0 +1,38 @@
+{
+  "name": "utils",
+  "version": "0.1.0",
+  "description": "Utils for 'dandanplay-resource-service' workspace",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./request": "./dist/request.js",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "request": [
+        "./dist/request.d.ts"
+      ]
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "timezone-mock": "^1.3.4",
+    "typescript": "*",
+    "vitest": "*"
+  }
+}

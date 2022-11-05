@@ -1,0 +1,60 @@
+{
+  "name": "dandanplay-resource-service",
+  "version": "0.0.5",
+  "description": "API for 'dandanplay' resource search service, based on TypeScript. Supports Cloudflare Workers and Deno Deploy.",
+  "private": true,
+  "scripts": {
+    "test": "vitest run --dir packages",
+    "coverage": "vitest run --dir packages --coverage",
+    "build": "pnpm -r --filter \"./packages/*\" run build",
+    "sync-deps": "pnpm --workspace-root run build",
+    "dist:all": "pnpm run dist:deno && pnpm run dist:cfw && pnpm run format:dist",
+    "dist:cfw": "pnpm --dir cf-worker run dist",
+    "dist:deno": "cd deno-deploy && deno task dist",
+    "predist:deno": "deno --version",
+    "postdist:all": "echo All done.",
+    "format": "prettier --write \"**/*.{js,ts,css,json,md}\"",
+    "format:debug": "prettier --find-config-path package.json",
+    "format:dist": "prettier --write --ignore-path false \"./.dist/*.js\"",
+    "list": "echo pnpm run test, coverage, format, dist:all",
+    "notice": "echo Avoid escaping quotes in this file. && echo See 'https://github.com/denoland/deno/issues/14012'"
+  },
+  "author": "Lussac Zheng",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LussacZheng/dandanplay-resource-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LussacZheng/dandanplay-resource-service/issues"
+  },
+  "homepage": "https://github.com/LussacZheng/dandanplay-resource-service",
+  "keywords": [
+    "dandanplay",
+    "cloudflare-workers",
+    "deno-deploy",
+    "api-service",
+    "web-scraper",
+    "resource-search"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@vitest/coverage-c8": "*",
+    "prettier": "*",
+    "vitest": "*"
+  },
+  "engines": {
+    "node": ">=16.13",
+    "pnpm": ">=7"
+  },
+  "packageManager": "pnpm@7.14.2",
+  "pnpm": {
+    "overrides": {
+      "@vitest/coverage-c8": "^0.24.5",
+      "prettier": "^2.7.1",
+      "tsx": "^3.11.0",
+      "typescript": "^4.8.4",
+      "vitest": "^0.24.5"
+    }
+  }
+}
