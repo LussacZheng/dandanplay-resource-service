@@ -16,6 +16,21 @@ describe('template()', () => {
     expect(template(str, payload)).toBe('python.org/ftp/python/3.8.2/python-3.8.2.exe')
   })
 
+  test('possible keys', () => {
+    // - `KEY` should match the regular expression `[\w-]+`, or `[A-Za-z0-9_-]+`
+    // - `KEY` is case-sensitive, `KEY` != `key`
+    const str = 'python.${0}/${sTr}/${StR}${_}${-}/python-${StR}${_}${-}.${1_sTr4ngE_keY-_-Here-}'
+    const payload = {
+      0: 'org',
+      sTr: 'ftp/python',
+      StR: '3',
+      _: '.8.',
+      '-': 2,
+      '1_sTr4ngE_keY-_-Here-': 'exe',
+    }
+    expect(template(str, payload)).toBe('python.org/ftp/python/3.8.2/python-3.8.2.exe')
+  })
+
   test('mismatched keys', () => {
     let str = '',
       payload = {}
