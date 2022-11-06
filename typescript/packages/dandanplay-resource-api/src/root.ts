@@ -15,6 +15,7 @@ const DEFAULT = `
 <body>
   <h1>使用说明</h1>
   <h2>GitHub - <a href="\${HOMEPAGE}">LussacZheng/dandanplay-resource-service</a></h2>
+  <p>（主页加载失败，此页面为默认页面）</p>
 </body>
 </html>
 `

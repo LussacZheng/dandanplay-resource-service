@@ -37,12 +37,9 @@ export default async function get(
   url: string,
   init: RequestInit = ReqInitHtml,
 ): Promise<string | any> {
-  let res: Response
-  try {
-    res = await fetch(decodeURI(url), init)
-  } catch (e) {
-    console.error(e)
-    res = new Response(`ERROR: ${e}`)
+  const res = await fetch(decodeURI(url), init)
+  if (!res.ok) {
+    throw new Error(`Bad response from server: ${res.status}`)
   }
   return await gatherResponse(res)
 }
