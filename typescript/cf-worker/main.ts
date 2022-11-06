@@ -38,7 +38,9 @@ router.get('/list', async req => {
 })
 
 // return an index page for the root route
-router.get('/', async () => new Response(await fetchIndex(version, homepage), ResInitHtml))
+router.get('/', async () => {
+  return new Response(await fetchIndex(version, homepage, 'cfw-impl'), ResInitHtml)
+})
 
 // return meta info about this API self
 router.get('/self', () => {

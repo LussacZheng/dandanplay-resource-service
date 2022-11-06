@@ -19,14 +19,16 @@ const DEFAULT = `
 </html>
 `
 
-export async function fetchIndex(version: string, homepage: string): Promise<string> {
-  let html
+export async function fetchIndex(
+  version: string,
+  homepage: string,
+  impl: string = 'ts-impl',
+): Promise<string> {
   try {
-    html = await request(ASSET)
-    html = template(html, { VERSION: version })
-  } catch (e) {
-    console.error(e)
-    html = template(DEFAULT, { VERSION: version, HOMEPAGE: homepage })
+    const html = await request(ASSET)
+    return template(html, { VERSION: version, IMPL: impl })
+  } catch (err) {
+    console.error(err)
+    return template(DEFAULT, { VERSION: version, HOMEPAGE: homepage })
   }
-  return html
 }

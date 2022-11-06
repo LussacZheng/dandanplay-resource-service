@@ -37,7 +37,7 @@ export const routes: Routes = {
   },
 
   // return an index page for the root route
-  '/': async () => new Response(await fetchIndex(version, homepage), ResInitHtml),
+  '/': async () => new Response(await fetchIndex(version, homepage, 'deno-impl'), ResInitHtml),
 
   // return meta info about this API self
   'GET@/self': () => {
