@@ -95,8 +95,7 @@
         <i
           ><a href="https://github.com/LussacZheng/dandanplay-resource-service/releases"
             >v${VERSION}</a
-          >
-          (cfw-impl)</i
+          ><span id="impl">(${IMPL})</span></i
         ></span
       >
     </h1>
@@ -166,6 +165,11 @@
     <script defer>
       var e = document.getElementById('uri')
       e.innerHTML = e.href.slice(0, -1)
+      var impl = document.getElementById('impl')
+      // compatibility for version 0.0.3 ~ 0.0.4-beta
+      if (impl.innerText == '(undefined)') {
+        impl.innerHTML = '(cfw-impl)'
+      }
       function copy() {
         var input = document.createElement('input')
         input.setAttribute('readonly', 'readonly')
