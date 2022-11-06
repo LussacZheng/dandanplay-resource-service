@@ -2,9 +2,11 @@
   "importMap": "import_map.json",
   "tasks": {
     "start": "pnpm --workspace-root run sync-deps && deno run --allow-net main.ts",
+    "dev": "pnpm --workspace-root run sync-deps && deno run --watch --allow-net main.ts",
     "build": "pnpm --workspace-root run sync-deps && mkdir -p ./dist && deno bundle main.ts ./dist/main.js",
     "dist": "pnpm --workspace-root run sync-deps && deno run --allow-run --allow-read --allow-write ./dist.ts",
-    "dist:pre": "git rev-parse HEAD && deno bundle routes.ts ./dist/routes.js"
+    "dist:pre": "git rev-parse HEAD && deno bundle routes.ts ./dist/routes.js",
+    "compile": "deno compile --allow-net --import-map import_map.json -o ./dist/dandanplay-resource-service main.ts"
   },
   "fmt": {
     "options": {

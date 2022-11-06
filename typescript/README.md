@@ -81,7 +81,7 @@ pnpm i
 1. 启动开发服务器
 
    ```shell
-   deno task start
+   deno task dev
    ```
 
 2. 修改该文件夹内代码，浏览器访问 [localhost:8000](http://localhost:8000) 以观察效果。
@@ -119,6 +119,16 @@ pnpm i
 
   ```shell
   deno run --allow-net /path/to/playground.js
+  ```
+
+- 或打包为 独立可执行文件 再运行
+
+  > 注意，如果需要独立可执行文件 (standalone executable)，更建议使用 [Go 实现](../golang/README.md)，此处只是提供一种可行性。
+  >
+  > 此外，打包时的 Warning [可忽略](https://github.com/denoland/deno/issues/14246)。
+
+  ```shell
+  deno task compile
   ```
 
 ---
