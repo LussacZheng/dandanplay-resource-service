@@ -2,8 +2,8 @@ package config
 
 const (
 	Name             = "dandanplay-resource-service"
-	ShortDescription = `API implementations for "dandanplay" resource search service.`
-	LongDescription  = `API implementations for "dandanplay" resource search service, in Golang.`
+	ShortDescription = "API implementation for 'dandanplay' resource search service."
+	LongDescription  = "API implementation for 'dandanplay' resource search service, in Golang."
 
 	Version = "0.0.4-beta"
 

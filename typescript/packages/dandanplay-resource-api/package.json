@@ -1,7 +1,7 @@
 {
   "name": "dandanplay-resource-api",
   "version": "0.0.5",
-  "description": "Main implementation code for 'dandanplay-resource-service'. Serves as lib for Node.js, Cloudflare Workers, or Deno.",
+  "description": "Core implementation codes for 'dandanplay-resource-service'. Serves as lib for Node.js, Cloudflare Workers, or Deno.",
   "scripts": {
     "build": "tsc",
     "test": "vitest run",

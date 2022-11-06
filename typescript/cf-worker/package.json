@@ -1,7 +1,7 @@
 {
   "name": "dandanplay-resource-service_cfw-impl",
   "version": "0.0.0",
-  "description": "API for 'dandanplay' resource search service, based on TypeScript and Cloudflare Workers.",
+  "description": "API implementation for 'dandanplay' resource search service, based on TypeScript and Cloudflare Workers.",
   "private": true,
   "scripts": {
     "dev": "pnpm --workspace-root run sync-deps && wrangler dev --local",

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "dandanplay-resource-service"
 version = "0.0.1"
-description = "API implementations for 'dandanplay' resource search service, in Python."
+description = "API implementation for 'dandanplay' resource search service, in Python."
 authors = ["伊诺"]
 
 [tool.poetry.urls]

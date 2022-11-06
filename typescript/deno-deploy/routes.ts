@@ -20,7 +20,7 @@ import {
 } from '../packages/dandanplay-resource-api/dist/index.js';
 
 const description =
-  'API for \'dandanplay\' resource search service, based on TypeScript and Deno Deploy.';
+  'API implementation for \'dandanplay\' resource search service, based on TypeScript and Deno Deploy.';
 
 export const routes: Routes = {
   'GET@/subgroup': async () => {

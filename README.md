@@ -44,7 +44,7 @@ API implementations for "dandanplay" resource search service.
 
 ```shell
 $ dandanplay-resource-service -h
-API implementations for "dandanplay" resource search service, in Golang.
+API implementation for 'dandanplay' resource search service, in Golang.
 
 Usage:
   dandanplay-resource-service [flags]

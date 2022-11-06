@@ -183,23 +183,24 @@
 ```jsonc
 {
   "name": "dandanplay-resource-service",
-  "version": "0.0.4-beta",
+  "version": "0.0.5-alpha",
   "dev": true, // 开发版本 or 正式发行版
   "info": {
     "homepage": "https://github.com/LussacZheng/dandanplay-resource-service",
-    "description": "API for 'dandanplay' resource search service, based on Cloudflare Workers."
+    "description": "API implementation for 'dandanplay' resource search service, based on TypeScript and Cloudflare Workers."
   },
   "meta": {
-    "implementation": "cf-worker",
-    "git_commit_hash": "be1e6bd87aacdfb2696db1c3636c3b690315c874", // `git rev-parse HEAD`
-    "build_at": "2021-08-20T06:22:27Z", // UTC time
-    "wrangler_version": "1.19.0", // `wrangler --version`
-    "golang_version": "none" // `go version`
+    "implementation": {
+      "platform": "cf-worker",
+      "tool": "wrangler",
+      "version": "2.1.15"
+    },
+    "git_commit_hash": "0d08de15aa5a84b7d5ba799dbad78148ae28dd1e", // `git rev-parse HEAD`
+    "build_at": "2022-11-06T15:08:59Z" // UTC time
   },
   "options": {
     "instruction": "https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs",
     "supported": ["$realtime", "$page", "$limit"]
   }
 }
-
 ```

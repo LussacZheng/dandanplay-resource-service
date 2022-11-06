@@ -3,7 +3,7 @@
   "__version": "0.0.4-beta",
 
   "name": "dandanplay-resource-service",
-  "description": "API implementations for \"dandanplay\" resource search service, in Golang",
+  "description": "API implementation for 'dandanplay' resource search service, in Golang.",
   "logo": "https://golang.google.cn/lib/godoc/images/go-logo-blue.svg",
   "keywords": [
     "dandanplay",

@@ -1,7 +1,7 @@
 {
   "name": "dandanplay-resource-service",
   "version": "0.0.5",
-  "description": "API for 'dandanplay' resource search service, based on TypeScript. Supports Cloudflare Workers and Deno Deploy.",
+  "description": "API implementations for 'dandanplay' resource search service, in TypeScript. Supports Cloudflare Workers and Deno Deploy.",
   "private": true,
   "scripts": {
     "test": "vitest run --dir packages",
