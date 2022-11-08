@@ -214,7 +214,7 @@ pnpm -w run format
 ### Notes on NPM scripts
 
 - For all the commands mentioned above related to `pnpm run`, you can omit the `run`.
-  For example, `pnpm -w run test` is [equivalent](https://pnpm.io/pnpm-cli#commands) to `pnpm -w test`.
+  For example, `pnpm -w test` is [equivalent](https://pnpm.io/pnpm-cli#commands) to `pnpm -w run test`.
 
 - Highlight/list the important or frequently used [npm scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts) defined in the `package.json` of this project/sub-package:
 
