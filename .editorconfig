@@ -11,5 +11,5 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{js,json,mjs,jsx,ts,tsx}]
+[*.{js,ts,json,cjs,mjs,jsx,tsx}]
 max_line_length = 100

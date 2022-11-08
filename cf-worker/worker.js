@@ -1,414 +1,351 @@
 // https://github.com/LussacZheng/dandanplay-resource-service
-// version: 0.0.4-beta
-// build: 2021-08-21 14:36:52 GMT+0800
-// wrangler: 1.19.0
+// version: 0.0.5-alpha
+// build: 2022-11-08 21:19:17 GMT+0800
+// wrangler: 2.1.15
 
-!(function (e) {
-  var t = {}
-  function n(r) {
-    if (t[r]) return t[r].exports
-    var o = (t[r] = { i: r, l: !1, exports: {} })
-    return e[r].call(o.exports, o, o.exports, n), (o.l = !0), o.exports
+var h = { headers: { 'content-type': 'application/json;charset=utf-8' } },
+  R = { headers: { 'content-type': 'text/html;charset=utf-8' } }
+var j = {
+  headers: {
+    accept: 'text/html;charset=utf-8',
+    'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0',
+  },
+}
+async function m(e, r = j) {
+  let t = await fetch(decodeURI(e), r)
+  if (!t.ok) throw new Error(`Bad response from server: ${t.status}`)
+  return await C(t)
+}
+async function C(e) {
+  let { headers: r } = e,
+    t = r.get('content-type')
+  return t?.includes('application/json')
+    ? await e.json()
+    : t?.includes('application/text')
+    ? await e.text()
+    : t?.includes('text/html')
+    ? await e.text()
+    : await e.text()
+}
+var b = class {
+    constructor(r) {
+      let { keyword: t, options: s } = G(r)
+      ;(this.keyword = t),
+        (this.options = {
+          realtime: s.realtime || w.UNUSED.realtime,
+          page: s.page || w.UNUSED.page,
+          limit: s.limit || w.UNUSED.limit,
+        })
+    }
+  },
+  w = {
+    UNUSED: { realtime: 0, page: 1, limit: 200 },
+    UNASSIGNED: { realtime: 1, page: 1, limit: 80 },
+    UNDEFINED: 1,
   }
-  ;(n.m = e),
-    (n.c = t),
-    (n.d = function (e, t, r) {
-      n.o(e, t) || Object.defineProperty(e, t, { enumerable: !0, get: r })
-    }),
-    (n.r = function (e) {
-      'undefined' != typeof Symbol &&
-        Symbol.toStringTag &&
-        Object.defineProperty(e, Symbol.toStringTag, { value: 'Module' }),
-        Object.defineProperty(e, '__esModule', { value: !0 })
-    }),
-    (n.t = function (e, t) {
-      if ((1 & t && (e = n(e)), 8 & t)) return e
-      if (4 & t && 'object' == typeof e && e && e.__esModule) return e
-      var r = Object.create(null)
-      if (
-        (n.r(r),
-        Object.defineProperty(r, 'default', { enumerable: !0, value: e }),
-        2 & t && 'string' != typeof e)
-      )
-        for (var o in e)
-          n.d(
-            r,
-            o,
-            function (t) {
-              return e[t]
-            }.bind(null, o),
-          )
-      return r
-    }),
-    (n.n = function (e) {
-      var t =
-        e && e.__esModule
-          ? function () {
-              return e.default
-            }
-          : function () {
-              return e
-            }
-      return n.d(t, 'a', t), t
-    }),
-    (n.o = function (e, t) {
-      return Object.prototype.hasOwnProperty.call(e, t)
-    }),
-    (n.p = ''),
-    n((n.s = 1))
-})([
-  function (e) {
-    e.exports = JSON.parse(
-      '{"c":"dandanplay-resource-service","d":"0.0.4-beta","a":"API for \'dandanplay\' resource search service, based on Cloudflare Workers.","b":"https://github.com/LussacZheng/dandanplay-resource-service"}',
-    )
-  },
-  function (e, t, n) {
-    'use strict'
-    n.r(t)
-    class r {
-      constructor(e) {
-        const { keyword: t, options: n } = (function (e) {
-          let t = {}
-          return {
-            keyword: e
-              .replace(/ ?(?<!\$|\w)\$([a-z]+)(?::(\d+))?(?=\s|$)/gi, (e, n, r) => {
-                const a = parseInt(r)
-                return (t[n] = isNaN(a) ? o.UNASSIGNED[n] || o.UNDEFINED : a), ''
-              })
-              .replace(/\$\$/g, '$'),
-            options: t,
-          }
-        })(e)
-        ;(this.keyword = t),
-          (this.options = {
-            realtime: n.realtime || o.UNUSED.realtime,
-            page: n.page || o.UNUSED.page,
-            limit: n.limit || o.UNUSED.limit,
-          })
-      }
-    }
-    const o = {
-      UNUSED: { realtime: 0, page: 1, limit: 200 },
-      UNASSIGNED: { realtime: 1, page: 1, limit: 80 },
-      UNDEFINED: 1,
-    }
-    function a(e, t) {
-      return e.replace(/\$\{(\w+)\}/gi, (e, n) => t[n])
-    }
-    function s(e, t) {
-      const n = new Date(e).toLocaleString('default', {
-        formatMatcher: 'best fit',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hourCycle: 'h23',
-        timeZone: t,
+function G(e) {
+  let r = {}
+  return {
+    keyword: e
+      .replace(/(?: |^)\$([a-z]+)(?::(\d+))?(?=\s|$)/g, (s, n, o) => {
+        let p = parseInt(o)
+        return (r[n] = isNaN(p) ? w.UNASSIGNED[n] || w.UNDEFINED : p), ''
       })
-      return new Date(n + ' UTC').toISOString().substring(0, 19).replace('T', ' ')
-    }
-    function i(e, t) {
-      if (0 === t.length) return e[1]
-      let n = {}
-      return (
-        t.length > e.length - 1 && t.splice(e.length - 1),
-        t.forEach((t, r) => {
-          n[t] = e[r + 1]
-        }),
-        n
-      )
-    }
-    var l = function (e, t, n, r = 'first') {
-      switch (r) {
-        case 'all':
-          return (function (e, t, n) {
-            const r = e.matchAll(t),
-              o = Array.from(r, (e) => i(e, n))
-            return 0 === o.length ? null : o
-          })(e, t, n)
-        case 'last':
-          return (function (e, t, n) {
-            const r = [...e.matchAll(t)],
-              o = r[r.length - 1]
-            return 0 === r.length ? null : i(o, n)
-          })(e, t, n)
-        default:
-          return (function (e, t, n) {
-            let r = t.exec(e)
-            return (t.lastIndex = 0), null === r ? null : i(r, n)
-          })(e, t, n)
-      }
-    }
-    const c = { headers: { 'content-type': 'application/json;charset=utf-8' } },
-      u = { headers: { 'content-type': 'text/html;charset=utf-8' } },
-      d = {
-        headers: {
-          accept: 'text/html;charset=utf-8',
-          'user-agent':
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0',
-        },
-      }
-    async function p(e, t = d) {
-      let n
-      try {
-        n = await fetch(decodeURI(e), t)
-      } catch (e) {
-        console.error(e)
-      }
-      return await (async function (e) {
-        const { headers: t } = e,
-          n = t.get('content-type')
-        return n.includes('application/json')
-          ? await e.json()
-          : (n.includes('application/text') || n.includes('text/html'), await e.text())
-      })(n)
-    }
-    const h = 'https://share.dmhy.org',
-      g = {
-        type_and_subgroup_url: h + '/topics/advanced-search?team_id=0&sort_id=0&orderby=',
-        list_url:
-          h +
-          '/topics/list/page/${page}?keyword=${keyword}&sort_id=${type}&team_id=${subgroup}&order=date-desc',
-        index_url: h + '/topics/list/page/${realtime}',
-      },
-      f = '未能成功解析标题',
-      m = -2,
-      y = '未能成功解析类别',
-      w = -1,
-      b = '未知字幕组',
-      I = 'magnet_not_found_未能成功解析磁力链接或磁力链接不存在',
-      _ = '未能成功解析资源发布页面',
-      v = '未能成功解析资源大小',
-      S = '1970-01-01 08:00:00',
-      N = /<option value="(\d+)">(.+?)<\/option>/gim,
-      R = /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
-      U = {
-        HasMore: /下一頁/g,
-        Resources: /<tr class="">(.*?)<\/tr>/gis,
-        TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
-        TypeName: /<font color=[\w#]+>(.+)<\/font>/gim,
-        SubgroupId: /href="\/topics\/list\/team_id\/(\d+)"/gim,
-        SubgroupName: /\s+(.*)<\/a><\/span>/gim,
-        Magnet: /href="(magnet:\?xt=urn:btih:.+?)"/gim,
-        PageUrl: /href="(.+?)"\s*target="_blank"/gim,
-        FileSize: /<td.*>([\w\.]+B)<\/td>/gim,
-        PublishDate: /<span style="display: none;">([\d\/ :]+)<\/span>/gim,
-        Title: /target="_blank" ?>(.+?)<\/a>/gis,
-        TitleReplacer: /<span class="keyword">(.*?)<\/span>/gi,
-      }
-    async function T(e) {
-      const t = new URL(encodeURI(e.url)).searchParams
-      let n = parseInt(t.get('type')) || 0,
-        o = parseInt(t.get('subgroup')) || 0
-      ;(n = n < 0 ? 0 : n), (o = o < 0 ? 0 : o)
-      const { keyword: s, options: i } = new r(decodeURIComponent(t.get('keyword'))),
-        c = encodeURI(a(g.list_url, { page: i.page, keyword: s, type: n, subgroup: o }))
-      let u = await p(c),
-        d = (function (e) {
-          let t = { HasMore: null !== l(e, U.HasMore, []), Resources: [] }
-          const n = l(e, U.Resources, [], 'all')
-          return (
-            null === n ||
-              n.forEach((e) => {
-                t.Resources.push(E(e))
-              }),
-            t
-          )
-        })(u)
-      if (i.realtime) {
-        const e = encodeURI(a(g.index_url, { realtime: i.realtime }))
-        u = await p(e)
-        const t = (function (e, t, n, r, o) {
-          let a = []
-          const s = l(e, U.Resources, [], 'all')
-          return null === s
-            ? []
-            : (s.forEach((e) => {
-                let s = E(e)
-                const i = t
-                    .split(' ')
-                    .every((e) => s.Title.toLowerCase().includes(e.toLowerCase())),
-                  l = 0 === n || s.SubgroupId === n,
-                  c = 0 === r || s.TypeId === r,
-                  u = o.some((e) => s.PageUrl === e.PageUrl)
-                i && l && c && !u && a.push(s)
-              }),
-              a)
-        })(u, s, o, n, d.Resources)
-        d.Resources = t.concat(d.Resources)
-      }
-      return d.Resources.length > i.limit && (d.Resources = d.Resources.slice(0, i.limit)), d
-    }
-    function x(e) {
-      const t = e.replace(/&amp;/gi, '&')
-      let n = l(t, N, ['Id', 'Name'], 'all')
-      return null === n ? [] : (n.forEach((e) => (e.Id = parseInt(e.Id))), n.shift(), n)
-    }
-    function $(e) {
-      let t = l(e, R, ['Id', 'Name'], 'all')
-      return null === t
-        ? []
-        : (t.forEach((e) => (e.Id = parseInt(e.Id))), t.unshift({ Id: 0, Name: '全部' }), t)
-    }
-    function E(e) {
-      const t = l(e, U.Title, []),
-        n = l(e, U.TypeId, []),
-        r = l(e, U.TypeName, []),
-        o = l(e, U.SubgroupId, []),
-        a = l(e, U.SubgroupName, []),
-        i = l(e, U.Magnet, []),
-        c = l(e, U.PageUrl, []),
-        u = l(e, U.FileSize, []),
-        d = l(e, U.PublishDate, [])
-      return {
-        Title: null === t ? f : t.trim().replace(U.TitleReplacer, '$1'),
-        TypeId: parseInt(n) || m,
-        TypeName: r || y,
-        SubgroupId: parseInt(o) || w,
-        SubgroupName: a || b,
-        Magnet: i || I,
-        PageUrl: null === c ? _ : h + c,
-        FileSize: u || v,
-        PublishDate: null === d ? S : s(d),
-      }
-    }
-    var P = n(0)
-    const D = `\n<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width,initial-scale=1" />\n  <title>弹弹play资源搜索节点API - v${P.d}</title>\n</head>\n<body>\n  <h1>使用说明</h1>\n  <h2>GitHub - <a href="${P.b}">LussacZheng/dandanplay-resource-service</a></h2>\n</body>\n</html>\n`
-    const O = (e) => (t) => t.method.toLowerCase() === e.toLowerCase(),
-      k = O('connect'),
-      L = O('delete'),
-      M = O('get'),
-      j = O('head'),
-      C = O('options'),
-      A = O('patch'),
-      F = O('post'),
-      z = O('put'),
-      Z = O('trace'),
-      J = (e) => (t) => {
-        const n = new URL(encodeURI(t.url)).pathname
-        return (n.match(e) || [])[0] === n
-      }
-    var G = class {
-      constructor() {
-        this.routes = []
-      }
-      handle(e, t) {
-        return this.routes.push({ conditions: e, handler: t }), this
-      }
-      connect(e, t) {
-        return this.handle([k, J(e)], t)
-      }
-      delete(e, t) {
-        return this.handle([L, J(e)], t)
-      }
-      get(e, t) {
-        return this.handle([M, J(e)], t)
-      }
-      head(e, t) {
-        return this.handle([j, J(e)], t)
-      }
-      options(e, t) {
-        return this.handle([C, J(e)], t)
-      }
-      patch(e, t) {
-        return this.handle([A, J(e)], t)
-      }
-      post(e, t) {
-        return this.handle([F, J(e)], t)
-      }
-      put(e, t) {
-        return this.handle([z, J(e)], t)
-      }
-      trace(e, t) {
-        return this.handle([Z, J(e)], t)
-      }
-      all(e) {
-        return this.handle([], e)
-      }
-      route(e) {
-        const t = this.resolve(e)
-        return t
-          ? t.handler(e)
-          : new Response('resource not found', {
-              status: 404,
-              statusText: 'not found',
-              headers: { 'content-type': 'text/plain' },
-            })
-      }
-      resolve(e) {
-        return this.routes.find(
-          (t) =>
-            !(t.conditions && (!Array.isArray(t) || t.conditions.length)) ||
-            ('function' == typeof t.conditions ? t.conditions(e) : t.conditions.every((t) => t(e))),
-        )
-      }
-    }
-    async function H(e) {
-      const t = new G()
-      t.get('/subgroup', async () => {
-        const e = await (async function () {
-          return { Subgroups: x(await p(g.type_and_subgroup_url)) }
-        })()
-        return new Response(JSON.stringify(e), c)
-      }),
-        t.get('/type', async () => {
-          const e = await (async function () {
-            return { Types: $(await p(g.type_and_subgroup_url)) }
-          })()
-          return new Response(JSON.stringify(e), c)
-        }),
-        t.get('/list', async (e) => {
-          const t = await T(e)
-          return new Response(JSON.stringify(t), c)
-        }),
-        t.get(
-          '/',
-          async () =>
-            new Response(
-              await (async function () {
-                let e
-                try {
-                  ;(e = await p(
-                    'https://cdn.jsdelivr.net/gh/LussacZheng/dandanplay-resource-service@dist/web/index.html',
-                  )),
-                    (e = a(e, { VERSION: P.d }))
-                } catch (t) {
-                  e = D
-                }
-                return e
-              })(),
-              u,
-            ),
-        ),
-        t.get(
-          '/self',
-          () =>
-            new Response(
-              JSON.stringify({
-                name: P.c,
-                version: P.d,
-                dev: !/^[\d\.]+$/.test(P.d),
-                info: { homepage: P.b, description: P.a },
-                meta: {
-                  implementation: 'cf-worker',
-                  git_commit_hash: 'c8f931e2d18074120cefb4635b2f219bd2397860',
-                  build_at: '2021-08-21T06:36:52Z',
-                  wrangler_version: '1.19.0',
-                  golang_version: 'none',
-                },
-                options: {
-                  instruction:
-                    'https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs',
-                  supported: ['$realtime', '$page', '$limit'],
-                },
-              }),
-              c,
-            ),
-        )
-      return await t.route(e)
-    }
-    addEventListener('fetch', (e) => e.respondWith(H(e.request)))
+      .replace(/\$\$/g, '$'),
+    options: r,
+  }
+}
+function J(e, r, t, s = 'first') {
+  switch (s) {
+    case 'all':
+      return q(e, r, t)
+    case 'last':
+      return W(e, r, t)
+    default:
+      return Z(e, r, t)
+  }
+}
+function Z(e, r, t) {
+  let s = r.exec(e)
+  return (r.lastIndex = 0), s === null ? null : I(s, t)
+}
+function W(e, r, t) {
+  let s = [...e.matchAll(r)],
+    n = s[s.length - 1]
+  return s.length === 0 ? null : I(n, t)
+}
+function q(e, r, t) {
+  let s = e.matchAll(r),
+    n = Array.from(s, (o) => I(o, t))
+  return n.length === 0 ? null : n
+}
+function I(e, r) {
+  if (!r || !r.length) return e[1]
+  let t = {}
+  return (
+    r.length > e.length - 1 && r.splice(e.length - 1),
+    r.forEach((s, n) => {
+      t[s] = e[n + 1]
+    }),
+    t
+  )
+}
+var i = J
+function D(e, r) {
+  let t = new Date(e).toLocaleString('default', {
+    formatMatcher: 'best fit',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+    timeZone: r,
+  })
+  return new Date(t + ' GMT').toISOString().substring(0, 19).replace('T', ' ')
+}
+function f(e, r) {
+  return e.replace(/\$\{([\w-]+)\}/g, (t, s) => `${r[s] ?? t}`)
+}
+var x = 'https://share.dmhy.org',
+  S = {
+    type_and_subgroup_url: `${x}/topics/advanced-search?team_id=0&sort_id=0&orderby=`,
+    list_url: `${x}/topics/list/page/\${page}?keyword=\${keyword}&sort_id=\${type}&team_id=\${subgroup}&order=date-desc`,
+    index_url: `${x}/topics/list/page/\${realtime}`,
   },
-])
+  l = {
+    Title: '\u672A\u80FD\u6210\u529F\u89E3\u6790\u6807\u9898',
+    TypeId: -2,
+    TypeName: '\u672A\u80FD\u6210\u529F\u89E3\u6790\u7C7B\u522B',
+    SubgroupId: -1,
+    SubgroupName: '\u672A\u77E5\u5B57\u5E55\u7EC4',
+    Magnet:
+      'magnet_not_found_\u672A\u80FD\u6210\u529F\u89E3\u6790\u78C1\u529B\u94FE\u63A5\u6216\u78C1\u529B\u94FE\u63A5\u4E0D\u5B58\u5728',
+    PageUrl: '\u672A\u80FD\u6210\u529F\u89E3\u6790\u8D44\u6E90\u53D1\u5E03\u9875\u9762',
+    FileSize: '\u672A\u80FD\u6210\u529F\u89E3\u6790\u8D44\u6E90\u5927\u5C0F',
+    PublishDate: '1970-01-01 08:00:00',
+  },
+  c = {
+    Subgroups: /<option value="(\d+)">(.+?)<\/option>/gim,
+    Types: /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
+    List: {
+      HasMore: /下一頁/g,
+      Resources: /<tr class="">(.*?)<\/tr>/gis,
+      TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
+      TypeName: /<font color=[\w#]+>(.+)<\/font>/gim,
+      SubgroupId: /href="\/topics\/list\/team_id\/(\d+)"/gim,
+      SubgroupName: /\s+(.*)<\/a><\/span>/gim,
+      Magnet: /href="(magnet:\?xt=urn:btih:.+?)"/gim,
+      PageUrl: /href="(.+?)"\s*target="_blank"/gim,
+      FileSize: /<td.*>([\w\.]+B)<\/td>/gim,
+      PublishDate: /<span style="display: none;">([\d\/ :]+)<\/span>/gim,
+      Title: /target="_blank" ?>(.+?)<\/a>/gis,
+      TitleReplacer: /<span class="keyword">(.*?)<\/span>/gi,
+    },
+  }
+async function N() {
+  let e = await m(S.type_and_subgroup_url)
+  return { Subgroups: V(e) }
+}
+async function T() {
+  let e = await m(S.type_and_subgroup_url)
+  return { Types: B(e) }
+}
+async function L(e) {
+  let r = new URL(encodeURI(e)).searchParams,
+    t = Number(r.get('type')) || 0,
+    s = Number(r.get('subgroup')) || 0
+  ;(t = t < 0 ? 0 : t), (s = s < 0 ? 0 : s)
+  let { keyword: n, options: o } = new b(decodeURIComponent(r.get('keyword') || '')),
+    p = encodeURI(f(S.list_url, { page: o.page, keyword: n, type: t, subgroup: s })),
+    u = await m(p),
+    a = K(u)
+  if (o.realtime) {
+    let d = encodeURI(f(S.index_url, { realtime: o.realtime }))
+    u = await m(d)
+    let y = Y(u, n, s, t, a.Resources)
+    a.Resources = y.concat(a.Resources)
+  }
+  return a.Resources.length > o.limit && (a.Resources = a.Resources.slice(0, o.limit)), a
+}
+function V(e) {
+  let r = e.replace(/&amp;/gi, '&'),
+    t = i(r, c.Subgroups, ['Id', 'Name'], 'all')
+  if (t === null) return []
+  let s = t.map((n) => M(n))
+  return s.shift(), s
+}
+function B(e) {
+  let r = i(e, c.Types, ['Id', 'Name'], 'all')
+  if (r === null) return []
+  let t = r.map((s) => M(s))
+  return t.unshift({ Id: 0, Name: '\u5168\u90E8' }), t
+}
+function K(e) {
+  let r = { HasMore: i(e, c.List.HasMore, []) !== null, Resources: [] },
+    t = i(e, c.List.Resources, [], 'all')
+  return (
+    t === null ||
+      t.forEach((s) => {
+        r.Resources.push(P(s))
+      }),
+    r
+  )
+}
+function M(e) {
+  return { Id: parseInt(e.Id), Name: e.Name }
+}
+function Y(e, r, t, s, n) {
+  let o = [],
+    p = i(e, c.List.Resources, [], 'all')
+  return p === null
+    ? []
+    : (p.forEach((u) => {
+        let a = P(u),
+          d = r.split(' ').every((v) => a.Title.toLowerCase().includes(v.toLowerCase())),
+          y = t === 0 ? !0 : a.SubgroupId === t,
+          H = s === 0 ? !0 : a.TypeId === s,
+          z = n.some((v) => a.PageUrl === v.PageUrl)
+        d && y && H && !z && o.push(a)
+      }),
+      o)
+}
+function P(e) {
+  let r = i(e, c.List.Title, []),
+    t = i(e, c.List.TypeId, []),
+    s = i(e, c.List.TypeName, []),
+    n = i(e, c.List.SubgroupId, []),
+    o = i(e, c.List.SubgroupName, []),
+    p = i(e, c.List.Magnet, []),
+    u = i(e, c.List.PageUrl, []),
+    a = i(e, c.List.FileSize, []),
+    d = i(e, c.List.PublishDate, [])
+  return {
+    Title: r === null ? l.Title : r.trim().replace(c.List.TitleReplacer, '$1'),
+    TypeId: Number(t) || l.TypeId,
+    TypeName: s || l.TypeName,
+    SubgroupId: Number(n) || l.SubgroupId,
+    SubgroupName: o || l.SubgroupName,
+    Magnet: p || l.Magnet,
+    PageUrl: u === null ? l.PageUrl : x + u,
+    FileSize: a || l.FileSize,
+    PublishDate: d === null ? l.PublishDate : D(d),
+  }
+}
+var X = 'https://cdn.jsdelivr.net/gh/LussacZheng/dandanplay-resource-service@dist/web/index.html',
+  Q = `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>\u5F39\u5F39play\u8D44\u6E90\u641C\u7D22\u8282\u70B9API - v\${VERSION}</title>
+</head>
+<body>
+  <h1>\u4F7F\u7528\u8BF4\u660E</h1>
+  <h2>GitHub - <a href="\${HOMEPAGE}">LussacZheng/dandanplay-resource-service</a></h2>
+  <p>\uFF08\u4E3B\u9875\u52A0\u8F7D\u5931\u8D25\uFF0C\u6B64\u9875\u9762\u4E3A\u9ED8\u8BA4\u9875\u9762\uFF09</p>
+</body>
+</html>
+`
+async function _(e, r, t = 'ts-impl') {
+  try {
+    let s = await m(X)
+    return f(s, { VERSION: e, IMPL: t })
+  } catch (s) {
+    return console.error(s), f(Q, { VERSION: e, HOMEPAGE: r })
+  }
+}
+function k(e) {
+  return {
+    name: e.name,
+    version: e.version,
+    dev: !/^[\d\.]+$/.test(e.version),
+    info: { homepage: e.homepage, description: e.description },
+    meta: {
+      implementation: { platform: e.platform, tool: e.tool, version: '2.1.15' },
+      git_commit_hash: '56bbda98151d35da4aaead93f1ecd301b18ad36d',
+      build_at: '2022-11-08T13:19:17Z',
+    },
+    options: {
+      instruction: 'https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs',
+      supported: ['$realtime', '$page', '$limit'],
+    },
+  }
+}
+function A({ base: e = '', routes: r = [] } = {}) {
+  return {
+    __proto__: new Proxy(
+      {},
+      {
+        get:
+          (t, s, n) =>
+          (o, ...p) =>
+            r.push([
+              s.toUpperCase(),
+              RegExp(
+                `^${(e + o)
+                  .replace(/(\/?)\*/g, '($1.*)?')
+                  .replace(/(\/$)|((?<=\/)\/)/, '')
+                  .replace(/:(\w+)(\?)?(\.)?/g, '$2(?<$1>[^/]+)$2$3')
+                  .replace(/\.(?=[\w(])/, '\\.')
+                  .replace(/\)\.\?\(([^\[]+)\[\^/g, '?)\\.?($1(?<=\\.)[^\\.')}/*$`,
+              ),
+              p,
+            ]) && n,
+      },
+    ),
+    routes: r,
+    async handle(t, ...s) {
+      let n,
+        o,
+        p = new URL(t.url)
+      t.query = Object.fromEntries(p.searchParams)
+      for (var [u, a, d] of r)
+        if ((u === t.method || u === 'ALL') && (o = p.pathname.match(a))) {
+          t.params = o.groups
+          for (var y of d) if ((n = await y(t.proxy || t, ...s)) !== void 0) return n
+        }
+    },
+  }
+}
+var F = 'dandanplay-resource-service',
+  U = '0.0.5-alpha'
+var E = 'https://github.com/LussacZheng/dandanplay-resource-service'
+var O =
+  "API implementation for 'dandanplay' resource search service, based on TypeScript and Cloudflare Workers."
+var g = A()
+g.get('/subgroup', async () => {
+  let e = await N()
+  return new Response(JSON.stringify(e), h)
+})
+g.get('/type', async () => {
+  let e = await T()
+  return new Response(JSON.stringify(e), h)
+})
+g.get('/list', async (e) => {
+  let r = await L(e.url)
+  return new Response(JSON.stringify(r), h)
+})
+g.get('/', async () => new Response(await _(U, E, 'cfw-impl'), R))
+g.get(
+  '/self',
+  () =>
+    new Response(
+      JSON.stringify(
+        k({
+          name: F,
+          version: U,
+          homepage: E,
+          description: O,
+          platform: 'cf-worker',
+          tool: 'wrangler',
+        }),
+      ),
+      h,
+    ),
+)
+g.all('*', () => new Response('Not Found.', { status: 404 }))
+var _e = { fetch: g.handle }
+export { _e as default }
