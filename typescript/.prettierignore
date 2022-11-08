@@ -2,6 +2,7 @@
 
 # Ignore artifacts:
 dist
+.dist
 .coverage
 
 # deno related code
