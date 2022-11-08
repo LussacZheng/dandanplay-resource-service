@@ -13,12 +13,10 @@ pushd "%~dp0.."
 for /f %%i in ('go list -m') do ( set "module=%%i" )
 for /f "usebackq" %%i in (`powershell -command "Get-Date -Date (Get-Date).ToUniversalTime() -Format 'yyyy-MM-ddTHH:mm:ssZ'"`) do ( set "time=%%i" )
 for /f %%i in ('git rev-parse HEAD') do ( set "hash=%%i" )
-for /f "tokens=5 delims=o " %%i in ('go version') do ( set "goVer=%%i" )
 
 set "flag1=-X '%module%/config.buildDate=%time%'"
 set "flag2=-X '%module%/config.gitCommitHash=%hash%'"
-set "flag3=-X '%module%/config.goVersion=%goVer%'"
-set "flags=-s -w %flag1% %flag2% %flag3%"
+set "flags=-s -w %flag1% %flag2%"
 
 echo  * go building...
 

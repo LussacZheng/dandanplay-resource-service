@@ -1,9 +1,12 @@
 package config
 
-import "regexp"
+import (
+	"regexp"
+	"runtime"
+	"strings"
+)
 
 var (
-	goVersion     = "unknown version"
 	gitCommitHash = "unknown commit"
 	buildDate     = "unknown time" // UTC time "yyyy-MM-ddTHH:mm:ssZ"
 
@@ -21,11 +24,13 @@ var MetaInfo = h{
 		"description": LongDescription,
 	},
 	"meta": h{
-		"implementation":   "golang",
-		"git_commit_hash":  gitCommitHash,
-		"build_at":         buildDate,
-		"golang_version":   goVersion,
-		"wrangler_version": "none",
+		"implementation": h{
+			"platform": runtime.GOOS + "/" + runtime.GOARCH,
+			"tool":     "golang",
+			"version":  strings.TrimPrefix(runtime.Version(), "go"),
+		},
+		"git_commit_hash": gitCommitHash,
+		"build_at":        buildDate,
 	},
 	"options": h{
 		"instruction": "https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs",

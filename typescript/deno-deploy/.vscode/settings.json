@@ -2,6 +2,14 @@
   "deno.enable": true,
   "deno.lint": true,
   "deno.importMap": "./import_map.json",
+
+  "json.schemas": [
+    {
+      "fileMatch": ["deno.json"],
+      "url": "https://deno.land/x/deno/cli/schemas/config-file.v1.json"
+    }
+  ],
+
   "editor.formatOnSave": true,
   "[typescript]": { "editor.defaultFormatter": "denoland.vscode-deno" },
   "[javascript]": { "editor.defaultFormatter": "denoland.vscode-deno" },

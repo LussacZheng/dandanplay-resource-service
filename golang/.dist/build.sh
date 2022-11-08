@@ -16,12 +16,10 @@ pushd "$root"/.. >/dev/null 2>&1
 module=$(go list -m)
 time=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
 hash=$(git rev-parse HEAD)
-goVer=$(go version | sed -r 's/.*go([0-9.]+).*/\1/g')
 
 flag1="-X '$module/config.buildDate=$time'"
 flag2="-X '$module/config.gitCommitHash=$hash'"
-flag3="-X '$module/config.goVersion=$goVer'"
-flags="-s -w $flag1 $flag2 $flag3"
+flags="-s -w $flag1 $flag2"
 
 echo "* go building..."
 

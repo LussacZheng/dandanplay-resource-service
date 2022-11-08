@@ -1,6 +1,6 @@
 {
   "__usage": "This file is used for the 'Deploy to Heroku' Button. See https://devcenter.heroku.com/articles/heroku-button for details.",
-  "__version": "0.0.4-beta",
+  "__version": "0.0.5-alpha",
 
   "name": "dandanplay-resource-service",
   "description": "API implementation for 'dandanplay' resource search service, in Golang.",
