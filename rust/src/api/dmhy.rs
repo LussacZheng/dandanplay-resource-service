@@ -1,5 +1,6 @@
 use chrono::{TimeZone, Utc};
 use html_scraper::{Html, Selector};
+use log::trace;
 
 use super::Scraper;
 use crate::model::{Item, List, ListQuery, Resource, UNKNOWN_SUBGROUP_ID, UNKNOWN_TYPE_ID};
@@ -28,20 +29,21 @@ struct Selectors {
 
 impl Dmhy {
     /// Returns an instance of [`Dmhy`] Scraper for constructing a `Provider`.
-    pub(crate) fn new() -> Self {
-        Self {
+    pub(crate) fn new() -> Option<Self> {
+        trace!("create Scraper 'dmhy' with CSS selectors");
+        Some(Self {
             selectors: Selectors {
-                sort: Selector::parse("select#AdvSearchSort option[value]").unwrap(),
-                team: Selector::parse("select#AdvSearchTeam option[value]").unwrap(),
-                has_more: Selector::parse("div.nav_title>div.fl a").unwrap(),
-                resource: Selector::parse("table#topic_list tbody tr").unwrap(),
-                title_and_subgroup: Selector::parse("td:nth-child(3) a").unwrap(),
-                type_id_and_name: Selector::parse("td:nth-child(2) a[href][class]").unwrap(),
-                magnet: Selector::parse("td:nth-child(4) a[href]").unwrap(),
-                file_size: Selector::parse("td:nth-child(5)").unwrap(),
-                publish_date: Selector::parse("td:nth-child(1) span").unwrap(),
+                sort: Selector::parse("select#AdvSearchSort option[value]").ok()?,
+                team: Selector::parse("select#AdvSearchTeam option[value]").ok()?,
+                has_more: Selector::parse("div.nav_title>div.fl a").ok()?,
+                resource: Selector::parse("table#topic_list tbody tr").ok()?,
+                title_and_subgroup: Selector::parse("td:nth-child(3) a").ok()?,
+                type_id_and_name: Selector::parse("td:nth-child(2) a[href][class]").ok()?,
+                magnet: Selector::parse("td:nth-child(4) a[href]").ok()?,
+                file_size: Selector::parse("td:nth-child(5)").ok()?,
+                publish_date: Selector::parse("td:nth-child(1) span").ok()?,
             },
-        }
+        })
     }
 }
 

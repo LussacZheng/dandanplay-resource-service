@@ -1,7 +1,10 @@
-pub(crate) mod dmhy;
+mod dmhy;
+
+pub(crate) use self::dmhy::Dmhy;
 
 use actix_web::web::{Json, Query};
-use reqwest::Client;
+use log::trace;
+use reqwest::{Client, Proxy};
 
 use crate::model::{Item, List, ListQuery, Subgroups, Types};
 use crate::util::request::{request_html, USER_AGENT};
@@ -39,8 +42,7 @@ pub(crate) trait Scraper {
 ///
 /// - **To add a new [`Provider`], you just need to add a new type which implements [`Scraper`].**
 pub(crate) struct Provider<S: Scraper> {
-    /// TODO: Temporarily useless.
-    _name: &'static str,
+    pub(crate) name: &'static str,
 
     /// TODO: Used for configuration in the future. Temporarily invalid.
     _is_enabled: bool,
@@ -57,17 +59,24 @@ pub(crate) struct Provider<S: Scraper> {
 
 impl<S: Scraper> Provider<S> {
     /// Construct a new `Provider` from an instance of `Scraper`.
-    pub(crate) fn new(name: &'static str, route: &'static str, scraper: S) -> Self {
-        Self {
-            _name: name,
+    pub(crate) fn new(
+        name: &'static str,
+        route: &'static str,
+        scraper: S,
+        proxy: Option<String>,
+    ) -> Result<Self, reqwest::Error> {
+        let mut client_builder = Client::builder().user_agent(USER_AGENT);
+        if let Some(s) = proxy {
+            trace!("create Provider '{}' with proxy: {}", name, s);
+            client_builder = client_builder.proxy(Proxy::all(s)?);
+        }
+        Ok(Self {
+            name,
             _is_enabled: true,
             route,
-            request_client: Client::builder()
-                .user_agent(USER_AGENT)
-                .build()
-                .expect("Failed to build a Client for further request"),
+            request_client: client_builder.build()?,
             scraper,
-        }
+        })
     }
 
     /// Request handler for the route "`/type`".

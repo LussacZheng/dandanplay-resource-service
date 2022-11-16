@@ -1,4 +1,6 @@
-pub(crate) mod meta;
+mod meta;
+
+pub(crate) use self::meta::MetaInfo;
 
 use serde::{ser::SerializeStruct, Deserialize, Deserializer, Serialize, Serializer};
 
@@ -92,7 +94,7 @@ pub(crate) struct ListQuery {
     #[serde(rename = "r")]
     /// This field won't be using for a while, so we don't need to construct an empty `String`.
     /// Leave it as `None` if not in QueryString.
-    pub(crate) _random: Option<String>,
+    _random: Option<String>,
 
     #[serde(default)]
     #[serde(deserialize_with = "serde_helper::ok_or_default")]

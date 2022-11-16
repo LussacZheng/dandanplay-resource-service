@@ -3,22 +3,58 @@ mod model;
 mod router;
 mod util;
 
-use actix_web::{web, App, HttpResponse, HttpServer};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
+use clap::Parser;
+use env_logger::{Builder, Env};
+use log::{debug, info};
 
-use crate::api::dmhy::Dmhy;
-use crate::api::Provider;
+use crate::api::{Dmhy, Provider};
 use crate::router::{index, meta, register};
+
+#[derive(Debug, Parser)]
+#[command(about, long_about = None)]
+struct Cli {
+    /// IP address the API listens on,
+    /// such as "0.0.0.0", "127.0.0.1", or "192.168.0.100"
+    #[arg(short = 'H', long, default_value = "localhost")]
+    host: String,
+
+    /// Listen port of the API
+    #[arg(short = 'P', long, default_value_t = 8080)]
+    port: u16,
+
+    /// Proxy address for web scraper, "http" and "socks5" are supported
+    ///
+    /// Besides this option, all of the following settings are valid:
+    /// "System Proxies", `HTTP_PROXY`, or `HTTPS_PROXY`.
+    #[arg(short = 'x', long)]
+    proxy: Option<String>,
+
+    /// Use verbose output (`-vv` for very verbose output)
+    #[arg(short, long, action = clap::ArgAction::Count)]
+    verbose: u8,
+}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("Listen at: http://127.0.0.1:8080");
+    let cli: Cli = Cli::parse();
 
-    HttpServer::new(|| {
-        // we'd better not to use "/" here, otherwise the path will be "//foo" instead of "/foo"
-        let dmhy = Provider::new("dmhy", "", Dmhy::new());
+    init_logger(cli.verbose);
+    pre_log(&cli);
+
+    // start the HTTP server
+    HttpServer::new(move || {
+        let dmhy = Provider::new(
+            "dmhy",
+            "/",
+            Dmhy::new().expect("Failed to build a Scraper for further request"),
+            cli.proxy.clone(),
+        )
+        .expect("Failed to build a Provider for further request");
         let config = register(dmhy);
 
         App::new()
+            .wrap(Logger::default())
             .service(index)
             .service(meta)
             .default_service(web::to(|| async {
@@ -26,7 +62,62 @@ async fn main() -> std::io::Result<()> {
             }))
             .configure(config)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind((cli.host, cli.port))?
     .run()
     .await
+}
+
+/// Start the [`env_logger`].
+fn init_logger(verbose: u8) {
+    // To override this `filter`, set the environment variable `RUST_LOG`
+    // with your customize value.
+    let filter = logger_filter(verbose);
+    Builder::new()
+        .format_target(false)
+        // .format_timestamp(None)
+        .parse_env(Env::default().default_filter_or(filter))
+        .init();
+}
+
+/// Specify the default logger filter based on the value of `verbose`.
+fn logger_filter(verbose: u8) -> String {
+    // This is equivalent to `export RUST_LOG=info,dandanplay_resource_service`.
+    let mut logger_filter = format!("info,{}", env!("CARGO_PKG_NAME").replace('-', "_"));
+
+    // no `-v` -> `info,self=info`  (only INFO logs for all crate)
+    // `-v`    -> `info,self=debug` (enable DEBUG logs for this crate)
+    // `-vv`   -> `info,self=trace` (enable all logs for this crate self)
+    // `-vvv`  -> `info,self=trace,reqwest=debug,actix=debug`
+    //                              (additional logs from reqwest and actix)
+    // `-vvvv` -> `info,self=trace,all_others=debug`
+    //                              (except for some crates with huge DEBUG logs)
+    // `-v` * 4~9 is equivalent to `-vvvv`
+    // `-v` * 10+ will be ignored
+    match verbose {
+        1 => logger_filter += "=debug",
+        2 => {}
+        3 => logger_filter += ",reqwest=debug,actix=debug",
+        4..=9 => logger_filter += ",debug,html5ever=info,selectors=info,hyper=info",
+        _ => logger_filter += "=info",
+    }
+
+    logger_filter
+}
+
+/// Print some debug information before starting the HTTP server.
+fn pre_log(cli: &Cli) {
+    // print cli arguments
+    debug!("{:?}", cli);
+
+    // print listening address
+    info!(
+        "Listening and serving HTTP on http://{}:{}",
+        if cli.host.is_empty() {
+            // only when running: CLI -H '""'
+            "0.0.0.0"
+        } else {
+            &cli.host
+        },
+        cli.port
+    );
 }
