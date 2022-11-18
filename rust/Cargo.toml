@@ -22,7 +22,7 @@ publish = false
 
 [dependencies]
 log = "0.4"
-env_logger = "0.9"
+env_logger = { version = "0.9", optional = true }
 serde = { version = "1.0", features = ["derive"] }
 clap = { version = "4.0", features = ["derive"] }
 actix-web = "4"
@@ -34,6 +34,11 @@ chrono = { version = "0.4", default-features = false, features = ["std"] }
 regex = "1"
 rustc_version = "0.4.0"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[features]
+default = ["log"]
+# Enable logger for this program.
+log = ["dep:env_logger"]
 
 [profile.release]
 opt-level = "z"

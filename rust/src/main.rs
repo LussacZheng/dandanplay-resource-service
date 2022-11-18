@@ -5,8 +5,6 @@ mod util;
 
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
 use clap::Parser;
-use env_logger::{Builder, Env};
-use log::{debug, info};
 
 use crate::api::{Dmhy, Provider};
 use crate::router::{index, meta, register};
@@ -39,8 +37,8 @@ struct Cli {
 async fn main() -> std::io::Result<()> {
     let cli: Cli = Cli::parse();
 
-    init_logger(cli.verbose);
-    pre_log(&cli);
+    #[cfg(feature = "log")]
+    log::pre_log(&cli);
 
     // start the HTTP server
     HttpServer::new(move || {
@@ -67,57 +65,67 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
-/// Start the [`env_logger`].
-fn init_logger(verbose: u8) {
-    // To override this `filter`, set the environment variable `RUST_LOG`
-    // with your customize value.
-    let filter = logger_filter(verbose);
-    Builder::new()
-        .format_target(false)
-        // .format_timestamp(None)
-        .parse_env(Env::default().default_filter_or(filter))
-        .init();
-}
+#[cfg(feature = "log")]
+mod log {
+    use env_logger::{Builder, Env};
+    use log::{debug, info};
 
-/// Specify the default logger filter based on the value of `verbose`.
-fn logger_filter(verbose: u8) -> String {
-    // This is equivalent to `export RUST_LOG=info,dandanplay_resource_service`.
-    let mut logger_filter = format!("info,{}", env!("CARGO_PKG_NAME").replace('-', "_"));
+    use super::Cli;
 
-    // no `-v` -> `info,self=info`  (only INFO logs for all crate)
-    // `-v`    -> `info,self=debug` (enable DEBUG logs for this crate)
-    // `-vv`   -> `info,self=trace` (enable all logs for this crate self)
-    // `-vvv`  -> `info,self=trace,reqwest=debug,actix=debug`
-    //                              (additional logs from reqwest and actix)
-    // `-vvvv` -> `info,self=trace,all_others=debug`
-    //                              (except for some crates with huge DEBUG logs)
-    // `-v` * 4~9 is equivalent to `-vvvv`
-    // `-v` * 10+ will be ignored
-    match verbose {
-        1 => logger_filter += "=debug",
-        2 => {}
-        3 => logger_filter += ",reqwest=debug,actix=debug",
-        4..=9 => logger_filter += ",debug,html5ever=info,selectors=info,hyper=info",
-        _ => logger_filter += "=info",
+    /// Print some debug information before starting the HTTP server.
+    pub(super) fn pre_log(cli: &Cli) {
+        init_logger(cli.verbose);
+
+        // print cli arguments
+        debug!("{:?}", cli);
+
+        // print listening address
+        info!(
+            "Listening and serving HTTP on http://{}:{}",
+            if cli.host.is_empty() {
+                // only when running: CLI -H '""'
+                "0.0.0.0"
+            } else {
+                &cli.host
+            },
+            cli.port
+        );
     }
 
-    logger_filter
-}
+    /// Start the [`env_logger`].
+    fn init_logger(verbose: u8) {
+        // To override this `filter`, set the environment variable `RUST_LOG`
+        // with your customize value.
+        let filter = logger_filter(verbose);
+        Builder::new()
+            .format_target(false)
+            // .format_timestamp(None)
+            .parse_env(Env::default().default_filter_or(filter))
+            .init();
+    }
 
-/// Print some debug information before starting the HTTP server.
-fn pre_log(cli: &Cli) {
-    // print cli arguments
-    debug!("{:?}", cli);
+    /// Specify the default logger filter based on the value of `verbose`.
+    fn logger_filter(verbose: u8) -> String {
+        // This is equivalent to `export RUST_LOG=info,dandanplay_resource_service`.
+        let mut logger_filter = format!("info,{}", env!("CARGO_PKG_NAME").replace('-', "_"));
 
-    // print listening address
-    info!(
-        "Listening and serving HTTP on http://{}:{}",
-        if cli.host.is_empty() {
-            // only when running: CLI -H '""'
-            "0.0.0.0"
-        } else {
-            &cli.host
-        },
-        cli.port
-    );
+        // no `-v` -> `info,self=info`  (only INFO logs for all crate)
+        // `-v`    -> `info,self=debug` (enable DEBUG logs for this crate)
+        // `-vv`   -> `info,self=trace` (enable all logs for this crate self)
+        // `-vvv`  -> `info,self=trace,reqwest=debug,actix=debug`
+        //                              (additional logs from reqwest and actix)
+        // `-vvvv` -> `info,self=trace,all_others=debug`
+        //                              (except for some crates with huge DEBUG logs)
+        // `-v` * 4~9 is equivalent to `-vvvv`
+        // `-v` * 10+ will be ignored
+        match verbose {
+            1 => logger_filter += "=debug",
+            2 => {}
+            3 => logger_filter += ",reqwest=debug,actix=debug",
+            4..=9 => logger_filter += ",debug,html5ever=info,selectors=info,hyper=info",
+            _ => logger_filter += "=info",
+        }
+
+        logger_filter
+    }
 }
