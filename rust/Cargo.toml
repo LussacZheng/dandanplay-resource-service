@@ -38,8 +38,8 @@ rustc_version = "0.4.0"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 
 [features]
-default = ["all"]
-all = ["log", "search-option"]
+default = ["basic", "search-option"]
+basic = ["log"]
 # Enable logger for this program.
 log = ["dep:env_logger"]
 # Allow SearchOptions in the keyword of query string.

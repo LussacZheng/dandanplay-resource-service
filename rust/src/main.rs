@@ -29,6 +29,7 @@ struct Cli {
     proxy: Option<String>,
 
     /// Use verbose output (`-vv` for very verbose output)
+    #[cfg(feature = "log")]
     #[arg(short, long, action = clap::ArgAction::Count)]
     verbose: u8,
 }
