@@ -62,7 +62,7 @@ impl Default for MetaInfo {
             },
             options: Options {
                 instruction: concat!(env!("CARGO_PKG_REPOSITORY"), "/tree/main/docs"),
-                supported: vec!["TODO:$realtime", "TODO:$page", "TODO:$limit"],
+                supported: vec!["$realtime", "$page", "$limit"],
             },
         }
     }

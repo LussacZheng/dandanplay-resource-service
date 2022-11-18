@@ -1,4 +1,6 @@
 mod meta;
+#[cfg(feature = "search-option")]
+pub(crate) mod search_option;
 
 pub(crate) use self::meta::MetaInfo;
 
@@ -41,6 +43,8 @@ pub(crate) struct Resource {
     pub(crate) subgroup_id: Option<i16>,
     pub(crate) subgroup_name: Option<String>,
     pub(crate) magnet: Option<String>,
+    /// `page_url` is equivalent to the unique ID of a `Resource`,
+    /// which is more suitable as an identifier than `title`.
     pub(crate) page_url: Option<String>,
     pub(crate) file_size: Option<String>,
     pub(crate) publish_date: Option<String>,
@@ -76,7 +80,7 @@ pub(crate) struct List {
 /// `ListQuery` stores the received QueryString from route `/list`.
 ///
 /// `/list?keyword={str}&subgroup={uint}&type={uint}&r={str}&page={uint}`
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub(crate) struct ListQuery {
     #[serde(default)]
     pub(crate) keyword: String,
@@ -101,8 +105,8 @@ pub(crate) struct ListQuery {
     pub(crate) page: Page,
 }
 
-#[derive(Deserialize)]
-pub(crate) struct Page(usize);
+#[derive(Deserialize, Debug)]
+pub(crate) struct Page(pub(crate) usize);
 
 mod serde_helper {
     use super::*;
