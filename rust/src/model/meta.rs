@@ -1,9 +1,4 @@
-use once_cell::sync::Lazy;
-use regex::Regex;
 use serde::Serialize;
-
-/// A reusable regular expression for testing SEMVER.
-static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[\d.]+$").expect("failed to compile a regex"));
 
 /// Return struct of route "`/self`".
 #[derive(Serialize)]
@@ -49,7 +44,9 @@ impl Default for MetaInfo {
             // https://doc.rust-lang.org/cargo/reference/environment-variables.html
             name: env!("CARGO_PKG_NAME"),
             version: env!("CARGO_PKG_VERSION"),
-            dev: !RE.is_match(env!("CARGO_PKG_VERSION")),
+            // env values from `build.rs`:
+            // "DEV", "TARGET", "RUSTC_VERSION", "GIT_COMMIT_HASH", "BUILD_AT"
+            dev: env!("DEV") == "true",
             info: Info {
                 homepage: env!("CARGO_PKG_HOMEPAGE"),
                 description: env!("CARGO_PKG_DESCRIPTION"),
