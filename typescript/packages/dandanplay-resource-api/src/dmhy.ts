@@ -44,7 +44,7 @@ const REGEX = {
 
   List: {
     // <a href="/topics/list/page/2?keyword=xxx">下一頁</a>
-    HasMore: /下一頁/g,
+    HasMore: /href=.*下一頁<\/a>/gim,
 
     // $('table#topic_list tbody tr')
     Resources: /<tr class="">(.*?)<\/tr>/gis,
