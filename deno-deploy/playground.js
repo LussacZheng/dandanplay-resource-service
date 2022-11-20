@@ -1,10 +1,10 @@
 // https://github.com/LussacZheng/dandanplay-resource-service
 // version: 0.0.5-alpha
-// build: 2022-11-08 21:18:25 GMT+0800
-// deno: 1.27.1
+// build: 2022-11-20 18:13:19 GMT+0800
+// deno: 1.28.1
 
-import { serve } from 'https://deno.land/std@0.161.0/http/server.ts'
-import { router } from 'https://deno.land/x/rutt@0.0.13/mod.ts'
+import { serve } from 'https://deno.land/std@0.165.0/http/server.ts'
+import { router } from 'https://deno.land/x/rutt@0.0.14/mod.ts'
 
 const __default = {
   name: 'dandanplay-resource-service',
@@ -110,7 +110,7 @@ function getLastMatch(text, regex, receivers) {
 }
 function getAllMatch(text, regex, receivers) {
   const iterator = text.matchAll(regex)
-  const arr = Array.from(iterator, (i) => load(i, receivers))
+  const arr = Array.from(iterator, i => load(i, receivers))
   return arr.length === 0 ? null : arr
 }
 function load(result, receivers) {
@@ -167,7 +167,7 @@ const REGEX = {
   Subgroups: /<option value="(\d+)">(.+?)<\/option>/gim,
   Types: /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
   List: {
-    HasMore: /下一頁/g,
+    HasMore: /href=.*下一頁<\/a>/gim,
     Resources: /<tr class="">(.*?)<\/tr>/gis,
     TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
     TypeName: /<font color=[\w#]+>(.+)<\/font>/gim,
@@ -235,14 +235,14 @@ function extractSubgroups(html) {
   const decodedHtml = html.replace(/&amp;/gi, '&')
   const rawSubgroups = extract(decodedHtml, REGEX.Subgroups, ['Id', 'Name'], 'all')
   if (rawSubgroups === null) return []
-  const subgroups = rawSubgroups.map((item) => convertItem(item))
+  const subgroups = rawSubgroups.map(item => convertItem(item))
   subgroups.shift()
   return subgroups
 }
 function extractTypes(html) {
   const rawTypes = extract(html, REGEX.Types, ['Id', 'Name'], 'all')
   if (rawTypes === null) return []
-  const types = rawTypes.map((item) => convertItem(item))
+  const types = rawTypes.map(item => convertItem(item))
   types.unshift({
     Id: 0,
     Name: '全部',
@@ -256,7 +256,7 @@ function extractList(html) {
   }
   const elements = extract(html, REGEX.List.Resources, [], 'all')
   if (elements === null) return result
-  elements.forEach((e) => {
+  elements.forEach(e => {
     result.Resources.push(extractListFromElement(e))
   })
   return result
@@ -271,14 +271,14 @@ function extraResourcesForOptionRealtime(html, keyword, subgroup, type, original
   const resources = []
   const elements = extract(html, REGEX.List.Resources, [], 'all')
   if (elements === null) return []
-  elements.forEach((e) => {
+  elements.forEach(e => {
     const res = extractListFromElement(e)
-    const isKeywordMatched = keyword.split(' ').every((word) => {
+    const isKeywordMatched = keyword.split(' ').every(word => {
       return res.Title.toLowerCase().includes(word.toLowerCase())
     })
     const isSubgroupMatched = subgroup === 0 ? true : res.SubgroupId === subgroup
     const isTypeMatched = type === 0 ? true : res.TypeId === type
-    const isDuplicated = originalRes.some((item) => res.PageUrl === item.PageUrl)
+    const isDuplicated = originalRes.some(item => res.PageUrl === item.PageUrl)
     if (isKeywordMatched && isSubgroupMatched && isTypeMatched && !isDuplicated) {
       resources.push(res)
     }
@@ -352,10 +352,10 @@ function generateMetaInfo(coreInfo) {
       implementation: {
         platform: coreInfo.platform,
         tool: coreInfo.tool,
-        version: '1.27.1',
+        version: '1.28.1',
       },
-      git_commit_hash: '56bbda98151d35da4aaead93f1ecd301b18ad36d',
-      build_at: '2022-11-08T13:18:25Z',
+      git_commit_hash: 'f0bec12c4b12917fc955c53409dc194cbadac174',
+      build_at: '2022-11-20T10:13:19Z',
     },
     options: {
       instruction: 'https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs',
@@ -375,7 +375,7 @@ const routes = {
     const data = await generateType()
     return new Response(JSON.stringify(data), ResInitJson)
   },
-  'GET@/list': async (req) => {
+  'GET@/list': async req => {
     const data = await generateList(req.url)
     return new Response(JSON.stringify(data), ResInitJson)
   },

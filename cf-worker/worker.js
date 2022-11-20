@@ -1,7 +1,7 @@
 // https://github.com/LussacZheng/dandanplay-resource-service
 // version: 0.0.5-alpha
-// build: 2022-11-08 21:19:17 GMT+0800
-// wrangler: 2.1.15
+// build: 2022-11-20 18:13:26 GMT+0800
+// wrangler: 2.4.2
 
 var h = { headers: { 'content-type': 'application/json;charset=utf-8' } },
   R = { headers: { 'content-type': 'text/html;charset=utf-8' } }
@@ -76,7 +76,7 @@ function W(e, r, t) {
 }
 function q(e, r, t) {
   let s = e.matchAll(r),
-    n = Array.from(s, (o) => I(o, t))
+    n = Array.from(s, o => I(o, t))
   return n.length === 0 ? null : n
 }
 function I(e, r) {
@@ -130,7 +130,7 @@ var x = 'https://share.dmhy.org',
     Subgroups: /<option value="(\d+)">(.+?)<\/option>/gim,
     Types: /<option value="(\d+)" style="color: [\w#]+">(.+?)<\/option>/gim,
     List: {
-      HasMore: /下一頁/g,
+      HasMore: /href=.*下一頁<\/a>/gim,
       Resources: /<tr class="">(.*?)<\/tr>/gis,
       TypeId: /href="\/topics\/list\/sort_id\/(\d+)"/gim,
       TypeName: /<font color=[\w#]+>(.+)<\/font>/gim,
@@ -173,13 +173,13 @@ function V(e) {
   let r = e.replace(/&amp;/gi, '&'),
     t = i(r, c.Subgroups, ['Id', 'Name'], 'all')
   if (t === null) return []
-  let s = t.map((n) => M(n))
+  let s = t.map(n => M(n))
   return s.shift(), s
 }
 function B(e) {
   let r = i(e, c.Types, ['Id', 'Name'], 'all')
   if (r === null) return []
-  let t = r.map((s) => M(s))
+  let t = r.map(s => M(s))
   return t.unshift({ Id: 0, Name: '\u5168\u90E8' }), t
 }
 function K(e) {
@@ -187,7 +187,7 @@ function K(e) {
     t = i(e, c.List.Resources, [], 'all')
   return (
     t === null ||
-      t.forEach((s) => {
+      t.forEach(s => {
         r.Resources.push(P(s))
       }),
     r
@@ -201,12 +201,12 @@ function Y(e, r, t, s, n) {
     p = i(e, c.List.Resources, [], 'all')
   return p === null
     ? []
-    : (p.forEach((u) => {
+    : (p.forEach(u => {
         let a = P(u),
-          d = r.split(' ').every((v) => a.Title.toLowerCase().includes(v.toLowerCase())),
+          d = r.split(' ').every(v => a.Title.toLowerCase().includes(v.toLowerCase())),
           y = t === 0 ? !0 : a.SubgroupId === t,
           H = s === 0 ? !0 : a.TypeId === s,
-          z = n.some((v) => a.PageUrl === v.PageUrl)
+          z = n.some(v => a.PageUrl === v.PageUrl)
         d && y && H && !z && o.push(a)
       }),
       o)
@@ -264,9 +264,9 @@ function k(e) {
     dev: !/^[\d\.]+$/.test(e.version),
     info: { homepage: e.homepage, description: e.description },
     meta: {
-      implementation: { platform: e.platform, tool: e.tool, version: '2.1.15' },
-      git_commit_hash: '56bbda98151d35da4aaead93f1ecd301b18ad36d',
-      build_at: '2022-11-08T13:19:17Z',
+      implementation: { platform: e.platform, tool: e.tool, version: '2.4.2' },
+      git_commit_hash: 'f0bec12c4b12917fc955c53409dc194cbadac174',
+      build_at: '2022-11-20T10:13:26Z',
     },
     options: {
       instruction: 'https://github.com/LussacZheng/dandanplay-resource-service/tree/main/docs',
@@ -324,7 +324,7 @@ g.get('/type', async () => {
   let e = await T()
   return new Response(JSON.stringify(e), h)
 })
-g.get('/list', async (e) => {
+g.get('/list', async e => {
   let r = await L(e.url)
   return new Response(JSON.stringify(r), h)
 })
