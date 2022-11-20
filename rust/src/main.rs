@@ -10,7 +10,7 @@ use crate::api::{Dmhy, Provider};
 use crate::router::{index, meta, register};
 
 #[derive(Debug, Parser)]
-#[command(about, long_about = None)]
+#[command(version, about, long_about = None)]
 struct Cli {
     /// IP address the API listens on,
     /// such as "0.0.0.0", "127.0.0.1", or "192.168.0.100"
@@ -28,7 +28,7 @@ struct Cli {
     #[arg(short = 'x', long)]
     proxy: Option<String>,
 
-    /// Use verbose output (`-vv` for very verbose output)
+    /// Use verbose output (use `-vv` for very verbose output)
     #[cfg(feature = "log")]
     #[arg(short, long, action = clap::ArgAction::Count)]
     verbose: u8,
@@ -50,7 +50,6 @@ async fn main() -> std::io::Result<()> {
             cli.proxy.clone(),
         )
         .expect("Failed to build a Provider for further request");
-        let config = register(dmhy);
 
         App::new()
             .wrap(Logger::default())
@@ -59,7 +58,7 @@ async fn main() -> std::io::Result<()> {
             .default_service(web::to(|| async {
                 HttpResponse::NotFound().body("Not Found.")
             }))
-            .configure(config)
+            .configure(register(dmhy))
     })
     .bind((cli.host, cli.port))?
     .run()
