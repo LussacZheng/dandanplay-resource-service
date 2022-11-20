@@ -4,7 +4,7 @@
  * remote codes (such as `std/http/server.ts` or `x/rutt/mod.ts`)
  */
 
-import { Routes } from 'https://deno.land/x/rutt@0.0.13/mod.ts';
+import { Routes } from 'https://deno.land/x/rutt@0.0.14/mod.ts';
 
 import pkg from '../package.json' assert { type: 'json' };
 const { name, version, homepage } = pkg;

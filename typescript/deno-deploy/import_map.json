@@ -1,6 +1,6 @@
 {
   "imports": {
-    "$/": "https://deno.land/std@0.161.0/",
+    "$/": "https://deno.land/std@0.165.0/",
     "#/": "https://deno.land/x/",
     "utils": "../packages/utils/dist/index.js",
     "utils/request": "../packages/utils/dist/request.js"

@@ -19,7 +19,7 @@
     "tsx": "*",
     "typescript": "*",
     "utils": "workspace:*",
-    "wrangler": "2.1.15"
+    "wrangler": "^2.4.2"
   },
   "dependencies": {
     "dandanplay-resource-api": "workspace:*",
