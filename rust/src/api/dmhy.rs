@@ -8,8 +8,10 @@ use crate::model::search_option::SearchOptions;
 use crate::model::{Item, List, ListQuery, Resource, UNKNOWN_SUBGROUP_ID, UNKNOWN_TYPE_ID};
 use crate::util::{ElementRefExt, ToInt};
 
-/// Base URL of dmhy.
+/// Base URL of "dmhy".
 const BASE: &str = "https://share.dmhy.org";
+/// Maximum number of the search results returned by "dmhy".
+const MAX_SIZE: usize = 80;
 
 /// URL of the web page for extracting list.
 #[inline]
@@ -96,7 +98,7 @@ impl Scraper for Dmhy {
     fn extract_list(&self, html: String) -> Option<List> {
         let mut result = List {
             has_more: false,
-            resources: Vec::with_capacity(80),
+            resources: Vec::with_capacity(MAX_SIZE),
         };
 
         let document = Html::parse_document(&html);
@@ -119,8 +121,8 @@ impl Scraper for Dmhy {
         query: ListQuery,
         search_options: SearchOptions,
     ) -> Option<List> {
-        let capacity = if search_options.options.limit >= 80 {
-            80
+        let capacity = if search_options.options.limit >= MAX_SIZE {
+            MAX_SIZE
         } else {
             search_options.options.limit
         };
