@@ -47,3 +47,24 @@ impl ElementRefExt for html_scraper::ElementRef<'_> {
         self.text().collect()
     }
 }
+
+/// Returns whether the given `sub` matches a sub-slice of the string `s`.
+///
+/// **Case Insensitive.**
+#[cfg(all(feature = "search-option", not(feature = "search-option-t2s")))]
+#[inline]
+pub fn contains_insensitive(s: &str, sub: &str) -> bool {
+    s.to_ascii_lowercase().contains(&sub.to_ascii_lowercase())
+}
+
+/// Returns whether the given `sub` matches a sub-slice of the string `s`.
+///
+/// **Case Insensitive; Simplified or Traditional Chinese Characters Insensitive.**
+#[cfg(all(feature = "search-option", feature = "search-option-t2s"))]
+#[inline]
+pub fn contains_insensitive(s: &str, sub: &str) -> bool {
+    use character_converter::traditional_to_simplified as t2s;
+    t2s(s)
+        .to_ascii_lowercase()
+        .contains(&t2s(sub).to_ascii_lowercase())
+}

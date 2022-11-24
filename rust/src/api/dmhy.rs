@@ -178,13 +178,10 @@ impl Scraper for Dmhy {
                     }
                 }
                 // is-keyword-not-matched
-                for word in search_options.keyword.split_whitespace() {
-                    if let Some(title) = &resource.title {
+                if let Some(title) = &resource.title {
+                    for word in search_options.keyword.split_whitespace() {
                         // dbg!(title);
-                        if !title
-                            .to_ascii_lowercase()
-                            .contains(&word.to_ascii_lowercase())
-                        {
+                        if !crate::util::contains_insensitive(title, word) {
                             continue 'outer;
                         }
                     }

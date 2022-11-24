@@ -77,10 +77,10 @@ $ cargo build --release
 
 Cargo 提供了 [`features` 机制](https://doc.rust-lang.org/cargo/reference/features.html) 来进行条件编译，所有可选的 features 可以在 [`Cargo.toml`](./Cargo.toml) 的 `[features]` 表中找到。
 
-本项目提供了若干个可选 features ，默认全部启用。你可以在运行或编译时通过 `--all-features`, `--features <FEATURES>`, `--no-default-features` 等参数进行选择。
+本项目提供了若干个可选 features ，你可以在运行或编译时通过 `--all-features`, `-F, --features <FEATURES>`, `--no-default-features` 等参数进行选择。
 例如
 
-- 默认为启用全部 `features`
+- 默认为启用大部分 `features`
 
   ```shell
   cargo run
@@ -92,6 +92,13 @@ Cargo 提供了 [`features` 机制](https://doc.rust-lang.org/cargo/reference/fe
   ```shell
   cargo run --no-default-features -F basic
   cargo build --release --no-default-features -F basic
+  ```
+
+- 如果你需要在使用搜索指令 [`$realtime`](../docs/SearchOptions.md#realtime) 时，令关键字的比较忽略简繁体字的差异
+
+  ```shell
+  cargo run -F search-option-t2s
+  cargo build --release -F search-option-t2s
   ```
 
 - 如果你只想要体积最小的，只包含必要功能的可执行文件
@@ -113,5 +120,4 @@ Cargo 提供了 [`features` 机制](https://doc.rust-lang.org/cargo/reference/fe
 
 ## TODO
 
-- [ ] 支持使用 `$realtime` 搜索指令时的简繁体转换
 - [ ] 添加更多的信息源/发布站
