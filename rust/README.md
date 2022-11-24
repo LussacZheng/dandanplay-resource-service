@@ -68,6 +68,7 @@ $ cargo run -- -h
 
 # 测试
 $ cargo test
+$ cargo test --all-features
 
 # 编译
 $ cargo build --release
