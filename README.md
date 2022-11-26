@@ -44,9 +44,6 @@ API implementations for "dandanplay" resource search service.
 
 从 [Releases 页面](https://github.com/LussacZheng/dandanplay-resource-service/releases) 下载预编译的可执行文件到 本地 或 服务器 ，（重命名后）运行即可。
 
-若不想部署到本地或服务器，可直接部署到 Heroku :  
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/LussacZheng/dandanplay-resource-service)
-
 ```shell
 # 详细说明另见 `golang` 文件夹
 $ dandanplay-resource-service -h
