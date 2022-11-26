@@ -1,0 +1,57 @@
+[package]
+name = "dandanplay-resource-service"
+version = "0.0.5-alpha"
+authors = ["Lussac Zheng <lussaczheng@gmail.com>"]
+edition = "2021"
+rust-version = "1.63"
+
+description = "API implementation for 'dandanplay' resource search service, in Rust."
+readme = "README.md"
+homepage = "https://github.com/LussacZheng/dandanplay-resource-service"
+repository = "https://github.com/LussacZheng/dandanplay-resource-service"
+license = "Apache-2.0"
+keywords = ["dandanplay", "api-service", "web-scraper", "resource-search"]
+categories = ["command-line-utilities"]
+
+build = "build.rs"
+
+# Private for now
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = "0.4"
+env_logger = { version = "0.9", optional = true }
+serde = { version = "1.0", features = ["derive"] }
+clap = { version = "4.0", features = ["derive"] }
+actix-web = "4"
+reqwest = { version = "0.11", features = ["socks"] }
+html_scraper = { package = "scraper", version = "0.13.0" }
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+once_cell = { version = "1.16", optional = true }
+fancy-regex = { version = "0.10.0", optional = true }
+character_converter = { version = "2.1.4", optional = true }
+
+[build-dependencies]
+regex = "1"
+rustc_version = "0.4.0"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[features]
+default = ["basic", "search-option"]
+basic = ["log"]
+# Enable logger for this program.
+log = ["dep:env_logger"]
+# Allow SearchOptions in the keyword of query string.
+search-option = ["dep:fancy-regex", "dep:once_cell"]
+# Ignore simplified or traditional Chinese characters when comparing keywords, for option `$realtime`.
+#   Note: enabling this feature will increase the size of the compiled executable by about 4.5 MiB.
+search-option-t2s = ["search-option", "dep:character_converter"]
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+panic = "abort"
+codegen-units = 1

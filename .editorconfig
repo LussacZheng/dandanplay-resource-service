@@ -20,6 +20,9 @@ max_line_length = 100
 [*.go]
 indent_style = tab
 
+[Cargo.lock]
+indent_size = 1
+
 [*.{bat,cmd}]
 end_of_line = lf
 
