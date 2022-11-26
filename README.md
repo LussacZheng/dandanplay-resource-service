@@ -1,8 +1,11 @@
 # dandanplay-resource-service._dist_
 
-![cfw impl version](https://img.shields.io/badge/cfw--impl-v0.0.5--alpha-f1e05a?logo=cloudflare)
-![deno impl version](https://img.shields.io/badge/deno--impl-v0.0.5--alpha-000000?logo=deno)
-![go impl version](https://img.shields.io/badge/go--impl-v0.0.5--alpha-00add8?logo=go)
+![cfw-impl](https://img.shields.io/badge/impl-cfw-f1e05a?logo=cloudflare)
+![deno-impl](https://img.shields.io/badge/impl-deno-000000?logo=deno)
+![go-impl](https://img.shields.io/badge/impl-go-00add8?logo=go)
+![rust-impl](https://img.shields.io/badge/impl-rust-dea584?logo=rust)
+
+![impl version](https://img.shields.io/badge/version-v0.0.5--alpha-important)
 [![jsDelivr hits](https://img.shields.io/jsdelivr/gh/hm/LussacZheng/dandanplay-resource-service?color=red)](https://data.jsdelivr.com/v1/package/gh/LussacZheng/dandanplay-resource-service@dist/stats/file)
 
 [弹弹play](http://www.dandanplay.com/) 资源搜索节点的 API 实现，基于 Cloudflare Workers 或 Deno Deploy ，使用 TypeScript 语言。
