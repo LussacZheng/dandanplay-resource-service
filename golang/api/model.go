@@ -47,7 +47,7 @@ type ListQuery struct {
  */
 var unknown = map[string]interface{}{
 	// "Title":        "未能成功解析标题",
-	// "TypeId ":      -2,
+	// "TypeId":       -2,
 	// "TypeName":     "未能成功解析类别",
 	"SubgroupId":   -1,
 	"SubgroupName": "未知字幕组",

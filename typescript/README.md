@@ -123,7 +123,7 @@ pnpm i
 
 - 或打包为 独立可执行文件 再运行
 
-  > 注意，如果需要独立可执行文件 (standalone executable)，更建议使用 [Go 实现](../golang/README.md)，此处只是提供一种可行性。
+  > 注意，如果需要独立可执行文件 (standalone executable)，更建议使用 [Go](../golang/README.md) 或 [Rust](../rust/README.md) 实现，此处只是提供一种可行性。
   >
   > 此外，打包时的 Warning [可忽略](https://github.com/denoland/deno/issues/14246)。
 

@@ -3,7 +3,7 @@
 ![cfw-impl](https://img.shields.io/badge/impl-cfw-f1e05a?logo=cloudflare)
 ![deno-impl](https://img.shields.io/badge/impl-deno-000000?logo=deno)
 ![go-impl](https://img.shields.io/badge/impl-go-00add8?logo=go)
-![rust-impl](https://img.shields.io/badge/impl-rust-000000?logo=rust)
+![rust-impl](https://img.shields.io/badge/impl-rust-dea584?logo=rust)
 
 ![GitHub release](https://img.shields.io/github/v/release/LussacZheng/dandanplay-resource-service?include_prereleases&label=version&color=important)
 [![GitHub All Releases](https://img.shields.io/github/downloads/LussacZheng/dandanplay-resource-service/total?logo=github&color=green)](https://github.com/LussacZheng/dandanplay-resource-service/releases)
